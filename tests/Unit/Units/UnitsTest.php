@@ -10,6 +10,7 @@ use Sunhill\Properties\Properties\Exceptions\InvalidNameException;
 use Sunhill\Properties\Properties\AbstractProperty;
 use Sunhill\Properties\Properties\ValidatorBase;
 use Sunhill\Properties\Properties\Exceptions\InvalidValueException;
+use Sunhill\Properties\Facades\Properties;
 
 class UnitsTest extends TestCase
 {
@@ -21,13 +22,8 @@ class UnitsTest extends TestCase
     
     protected function calculate($item, $direction, $value)
     {
-        $units = $this->getUnits();
-        $field = 'calculate_'.$direction;
-        $function = $units[$item][$field];
-        if (!empty($function)) {
-           return $function($value);
-        }
-        return $value;
+        $field = 'calculate'.$direction.'Basic';
+        return Properties::$field($item, $value);
     }
     
     /**
@@ -35,8 +31,8 @@ class UnitsTest extends TestCase
      */
     public function testUnit($name, $base, $unit, $base_unit)
     {
-        $this->assertEquals($base_unit, round($this->calculate($name, 'to', $unit),2));
-        $this->assertEquals($unit, round($this->calculate($name, 'from', $base_unit),2));
+        $this->assertEquals($base_unit, round($this->calculate($name, 'To', $unit),2));
+        $this->assertEquals($unit, round($this->calculate($name, 'From', $base_unit),2));
     }
 
     public static function unitProvider()

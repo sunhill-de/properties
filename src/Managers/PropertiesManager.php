@@ -260,6 +260,9 @@ class PropertiesManager
         $this->checkOrThrowUnit($unit);
         
         $calc = $this->registered_units[$unit]['calculate_to'];
+        if (is_null($calc)) {
+            return $value;
+        }
         
         return $calc($value);
     }
@@ -276,7 +279,9 @@ class PropertiesManager
         $this->checkOrThrowUnit($unit);
 
         $calc = $this->registered_units[$unit]['calculate_from'];
-
+        if (is_null($calc)) {
+            return $value;
+        }
         return $calc($value);        
     }
 }
