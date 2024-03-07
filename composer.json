@@ -1,0 +1,24 @@
+{
+    "name": "sunhill-de/properties",
+    "autoload": {
+        "psr-4": {
+            "sunhill-de\\properties\\": "src/"
+        }
+    },
+    "authors": [
+     {
+         "name": "Klaus Dimde",
+         "email": "klaus@dimde.info"
+     }
+     ],
+     "minimum-stability" : "dev",
+     "require" : {
+                "laravel/framework" : "^10.0",
+                "sunhill/basic": "*"
+     },
+     "require-dev" : {
+                "phpunit/phpunit" : "^10.0",
+                "orchestra/testbench" : "^8.5"
+     }
+ }
+     
