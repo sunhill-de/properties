@@ -61,9 +61,9 @@ class PropertiesManager
      * 
      * @param string $property
      */
-    protected function doRegisterProperty(string $property)
+    protected function doRegisterProperty(string $property, ?string $alias)
     {
-       $name = $property::getInfo('name');
+       $name = is_null($alias)?$property::getInfo('name'):$alias;
        if (isset($this->registered_properties[$name])) {
            throw new PropertyNameAlreadyRegisteredException("The name '$name' of '$property' is already regsitered.");
        }
@@ -75,7 +75,7 @@ class PropertiesManager
      * 
      * @param string $property
      */
-    public function registerProperty(string $property)
+    public function registerProperty(string $property, ?string $alias = null)
     {
         if (!class_exists($property)) {
             throw new PropertyClassDoesntExistException("The class '$property' is not accessible.");
@@ -83,7 +83,7 @@ class PropertiesManager
         if (!is_a($property, AbstractProperty::class, true)) {
             throw new GivenClassNotAPropertyException("The class '$property' is not a descendant of AbstractProperty.");
         }
-        $this->doRegisterProperty($property);
+        $this->doRegisterProperty($property, $alias);
     }
     
     /**

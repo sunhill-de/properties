@@ -24,6 +24,15 @@ use Sunhill\Properties\Facades\InfoMarket;
 use Sunhill\Properties\InfoMarket\Market;
 use Sunhill\Properties\Managers\PropertiesManager;
 use Sunhill\Properties\Facades\Properties;
+use Sunhill\Properties\Types\TypeBoolean;
+use Sunhill\Properties\Types\TypeDate;
+use Sunhill\Properties\Types\TypeDateTime;
+use Sunhill\Properties\Types\TypeEnum;
+use Sunhill\Properties\Types\TypeFloat;
+use Sunhill\Properties\Types\TypeInteger;
+use Sunhill\Properties\Types\TypeText;
+use Sunhill\Properties\Types\TypeTime;
+use Sunhill\Properties\Types\TypeVarchar;
 
 class SunhillServiceProvider extends ServiceProvider
 {
@@ -97,7 +106,18 @@ class SunhillServiceProvider extends ServiceProvider
     
     protected function registerTypes()
     {
-        
+        Properties::registerProperty(TypeBoolean::class);
+        Properties::registerProperty(TypeBoolean::class, 'bool');
+        Properties::registerProperty(TypeDate::class);
+        Properties::registerProperty(TypeDateTime::class);
+        Properties::registerProperty(TypeEnum::class);
+        Properties::registerProperty(TypeFloat::class);
+        Properties::registerProperty(TypeInteger::class);
+        Properties::registerProperty(TypeInteger::class,'int');
+        Properties::registerProperty(TypeText::class);
+        Properties::registerProperty(TypeTime::class);
+        Properties::registerProperty(TypeVarchar::class);
+        Properties::registerProperty(TypeVarchar::class,'string');
     }
     
     protected function registerSemantics()

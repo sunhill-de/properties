@@ -54,6 +54,17 @@ class PropertiesManagerTest extends TestCase
         $test->registerProperty(NonAbstractProperty::class);
     }
     
+    public function testRegisterDoublePropertyWithAlias()
+    {
+        $test = new PropertiesManager();
+        $test->registerProperty(NonAbstractProperty::class);
+        $test->registerProperty(NonAbstractProperty::class,'alias');
+
+        $this->assertTrue(isset($this->getProtectedProperty($test, 'registered_properties')['NonAbstractProperty']));
+        $this->assertTrue(isset($this->getProtectedProperty($test, 'registered_properties')['alias']));
+        
+    }
+    
     public function testRegisterPropertyWithNonAccessibleClass()
     {
         $this->expectException(PropertyClassDoesntExistException::class);
