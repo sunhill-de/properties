@@ -23,6 +23,7 @@ use Sunhill\Properties\Managers\ObjectDataGenerator;
 use Sunhill\Properties\Facades\InfoMarket;
 use Sunhill\Properties\InfoMarket\Market;
 use Sunhill\Properties\Managers\PropertiesManager;
+use Sunhill\Properties\Facades\Properties;
 
 class SunhillServiceProvider extends ServiceProvider
 {
@@ -34,7 +35,64 @@ class SunhillServiceProvider extends ServiceProvider
     
     protected function registerUnits()
     {
+        Properties::registerUnit('none','','none');
+
+        // *********************************** Length ******************************************
+        Properties::registerUnit('meter','m','length');
+        Properties::registerUnit('centimeter','cm','length','meter',
+            function($input) { return $input / 100; },
+            function($input) { return $input * 100; });
+        Properties::registerUnit('millimeter','mm','length','meter',
+            function($input) { return $input / 1000; },
+            function($input) { return $input * 1000; });
+        Properties::registerUnit('kilometer','km','length','meter',
+            function($input) { return $input * 1000; },
+            function($input) { return $input / 1000; });
+
+        // ************************************ weight *****************************************
+        Properties::registerUnit('kilogramm','kg','weight');
+        Properties::registerUnit('gramm','g','weight','kilogramm',
+            function($input) { return $input / 1000; },
+            function($input) { return $input * 1000; });
         
+        // ************************************ Temperature ***************************************
+        Properties::registerUnit('degreecelsius','°C','temperature');
+        Properties::registerUnit('degreekelvin','K','temperature','degreecelsius',
+            function($input) { return $input - 273.15; },
+            function($input) { return $input + 273.15; });
+        Properties::registerUnit('degreefahrenheit','F','temperature','degreecelsius',
+            function($input) { return ($input - 32) * 5/9; },
+            function($input) { return $input * 1.8 + 32; });
+        
+        // ********************************** Speed ************************************************
+        Properties::registerUnit('meterpersecond','m/s','speed');
+        Properties::registerUnit('kilometerperhour','km/h','speed','meterpersecond',
+            function($input) { return $input / 3.6; },
+            function($input) { return $input * 3.6; });
+        
+        // ********************************* Time ****************************************
+        Properties::registerUnit('second','s','duration');
+        Properties::registerUnit('minute','min','duration','second',
+            function($input) { return $input * 60; },
+            function($input) { return $input / 60; });
+        Properties::registerUnit('hour','h','duration','second',
+            function($input) { return $input * 3600; },
+            function($input) { return $input / 3600; });
+        
+        // ******************************** Angle ****************************************
+        Properties::registerUnit('degree','°','angle');
+        
+        // ******************************** Ratio **********************************************
+        Properties::registerUnit('percent','%','ratio');
+        
+        // ********************************* Capacity ****************************************
+        Properties::registerUnit('byte','B','capacity');
+        Properties::registerUnit('kilobyte','KB','capacity','byte',
+            function($input) { return $input * 1000; },
+            function($input) { return $input / 1000; });
+        Properties::registerUnit('megabyte','MB','capacity','byte',
+            function($input) { return $input * 1000000; },
+            function($input) { return $input / 1000000; });
     }
     
     protected function registerTypes()
