@@ -32,6 +32,8 @@ use Sunhill\Properties\Properties\AbstractProperty;
 use Sunhill\Properties\Managers\Exceptions\GivenClassNotAPropertyException;
 use Sunhill\Properties\Managers\Exceptions\PropertyNameAlreadyRegisteredException;
 use Sunhill\Properties\Managers\Exceptions\PropertyNotRegisteredException;
+use Sunhill\Properties\Managers\Exceptions\UnitNameAlreadyRegisteredException;
+use Sunhill\Properties\Managers\Exceptions\UnitNotRegisteredException;
 
 /**
  * The PropertiesManager is accessed via the Properties facade. It's a singelton class
@@ -62,7 +64,7 @@ class PropertiesManager
     protected function doRegisterProperty(string $property)
     {
        $name = $property::getInfo('name');
-       if (isset($this->registerd_properties[$name])) {
+       if (isset($this->registered_properties[$name])) {
            throw new PropertyNameAlreadyRegisteredException("The name '$name' of '$property' is already regsitered.");
        }
        $this->registered_properties[$name] = $property;
@@ -153,6 +155,129 @@ class PropertiesManager
     {
         $key = $this->searchOrThrow($property);
         return $key;        
+    }
+    
+    /**
+     * Stores the currently registered units.
+     *
+     * @var array
+     */
+    protected $registered_units = [];
+    
+    /**
+     * Clears the currently registered units
+     */
+    public function clearRegisteredUnits()
+    {
+        $this->registered_units = [];
+    }
+    
+    public function registerUnit(string $name, string $unit, string $group, string $basic = '', 
+                                 $calculate_to = null, $calculate_from = null)
+    {
+        if (isset($this->registered_units[$name])) {
+            throw new UnitNameAlreadyRegisteredException("The unit '$name' is already registered.");
+        }
+        $this->registered_units[$name] = [
+            'unit'=>$unit,
+            'group'=>$group,
+            'basic'=>($basic == '')?$name:$basic,
+            'calculate_to'=>$calculate_to,
+            'calculate_from'=>$calculate_from            
+        ];
+    }
+    
+    /**
+     * Returns true if the unit is registered otherwise false
+     * 
+     * @param string $property
+     * @return bool
+     */
+    public function isUnitRegistered(string $property): bool    
+    {
+        return isset($this->registered_units[$property]);
+    }
+       
+    /**
+     * Checks if the given unit is registered. If not throws exception.
+     * @param string $unit
+     */
+    protected function checkOrThrowUnit(string $unit)
+    {
+        if (!$this->isUnitRegistered($unit)) {
+            throw new UnitNotRegisteredException("The unit '$unit' is not registered.");
+        }
+    }
+    
+    /**
+     * Return the unit of the given unit name
+     * 
+     * @param string $unit
+     * @return string
+     */    
+    public function getUnit(string $unit): string
+    {
+        $this->checkOrThrowUnit($unit);
+        
+        return $this->registered_units[$unit]['unit'];
+    }
+    
+    /**
+     * Returns the group of the given unit name
+     * 
+     * @param string $unit
+     * @return string
+     */
+    public function getUnitGroup(string $unit): string
+    {
+        $this->checkOrThrowUnit($unit);
+
+        return $this->registered_units[$unit]['group'];        
+    }
+    
+    /**
+     * Returns the basic unit name of the given unit name
+     * 
+     * @param string $unit
+     * @return string
+     */
+    public function getUnitBasic(string $unit): string
+    {
+        $this->checkOrThrowUnit($unit);
+        
+        return $this->registered_units[$unit]['basic'];        
+    }
+    
+    /**
+     * Calculates the given $value to the basic unit 
+     *  
+     * @param string $unit
+     * @param float $value
+     * @return float
+     */
+    public function calculateToBasic(string $unit, float $value): float
+    {
+        $this->checkOrThrowUnit($unit);
+        
+        $calc = $this->registered_units[$unit]['calculate_to'];
+        
+        return $calc($value);
+    }
+    
+    /**
+     * Calculates the given $value from the basic unit
+     * 
+     * @param string $unit
+     * @param float $value
+     * @return float
+     */
+    public function calculateFromBasic(string $unit, float $value): float
+    {
+        $this->checkOrThrowUnit($unit);
+
+        $calc = $this->registered_units[$unit]['calculate_from'];
+
+        return $calc($value);        
     }
 }
  

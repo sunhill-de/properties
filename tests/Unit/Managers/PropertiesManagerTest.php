@@ -24,12 +24,15 @@ use Sunhill\Properties\Properties\PropertyBoolean;
 use Sunhill\Properties\Properties\PropertyDate;
 use Sunhill\Properties\Properties\PropertyObject;
 use Sunhill\Properties\Properties\PropertyArray;
-use Sunhill\Properties\Managers\Exceptions\DuplicateEntryException;
 use Sunhill\Properties\Managers\PropertiesManager;
 use Sunhill\Properties\Tests\TestSupport\NonAbstractProperty;
+
 use Sunhill\Properties\Managers\Exceptions\PropertyClassDoesntExistException;
 use Sunhill\Properties\Managers\Exceptions\GivenClassNotAPropertyException;
 use Sunhill\Properties\Managers\Exceptions\PropertyNotRegisteredException;
+use Sunhill\Properties\Managers\Exceptions\PropertyNameAlreadyRegisteredException;
+use Sunhill\Properties\Managers\Exceptions\UnitNameAlreadyRegisteredException;
+use Sunhill\Properties\Managers\Exceptions\UnitNotRegisteredException;
 
 class PropertiesManagerTest extends TestCase
 {
@@ -42,6 +45,15 @@ class PropertiesManagerTest extends TestCase
         $this->assertTrue(isset($this->getProtectedProperty($test, 'registered_properties')['NonAbstractProperty']));
     }
 
+    public function testRegisterDoubleProperty()
+    {
+        $this->expectException(PropertyNameAlreadyRegisteredException::class);
+        
+        $test = new PropertiesManager();
+        $test->registerProperty(NonAbstractProperty::class);
+        $test->registerProperty(NonAbstractProperty::class);
+    }
+    
     public function testRegisterPropertyWithNonAccessibleClass()
     {
         $this->expectException(PropertyClassDoesntExistException::class);
@@ -109,5 +121,83 @@ class PropertiesManagerTest extends TestCase
         $test->getNameOfProperty('nonexisting');
     }
     
+    public function testRegisterUnit()
+    {
+        $test = new PropertiesManager();
+        $test->registerUnit('test_name','test_unit', 'test_group', 'test_basic');
+        
+        $this->assertTrue(isset($this->getProtectedProperty($test, 'registered_units')['test_name']));
+    }
     
+    public function testRegisterDoubleUnit()
+    {
+        $this->expectException(UnitNameAlreadyRegisteredException::class);
+        
+        $test = new PropertiesManager();
+        $test->registerUnit('test_name','test_unit', 'test_group', 'test_basic');
+        $test->registerUnit('test_name','test_unit', 'test_group', 'test_basic');
+    }
+    
+    public function testUnitRegistred()
+    {
+        $test = new PropertiesManager();
+        $test->registerUnit('test_name','test_unit', 'test_group', 'test_basic');
+        
+        $this->assertTrue($test->isUnitRegistered('test_name'));
+        $this->assertFalse($test->isUnitRegistered('unknown'));
+    }
+    
+    public function testGetUnit()
+    {
+        $test = new PropertiesManager();
+        $test->registerUnit('test_name','test_unit', 'test_group', 'test_basic');        
+        
+        $this->assertEquals('test_unit', $test->getUnit('test_name'));
+    }
+    
+    public function testGetUnit_fail()
+    {
+        $this->expectException(UnitNotRegisteredException::class);
+        
+        $test = new PropertiesManager();
+        $test->registerUnit('test_name','test_unit', 'test_group', 'test_basic');
+        
+        $test->getUnit('unknown');
+    }
+    
+    public function testGetUnitGroup()
+    {
+        $test = new PropertiesManager();
+        $test->registerUnit('test_name','test_unit', 'test_group', 'test_basic');
+
+        $this->assertEquals('test_group', $test->getUnitGroup('test_name'));
+    }
+    
+    public function testGetUnitBasic()
+    {
+        $test = new PropertiesManager();
+        $test->registerUnit('test_name','test_unit', 'test_group', 'test_basic');
+        
+        $this->assertEquals('test_basic', $test->getUnitBasic('test_name'));
+    }
+    
+    public function testCalculateToBasic()
+    {   
+        $test = new PropertiesManager();
+        $test->registerUnit('test_basic','test_basicunit', 'test_group');        
+        $test->registerUnit('test_name','test_unit', 'test_group', 'test_basic',
+            function($input) { return $input * 2; },
+            function($input) { return $input / 2; } );
+        $this->assertEquals(4, $test->calculateToBasic('test_name', 2));        
+    }
+    
+    public function testCalculateFromBasic()
+    {
+        $test = new PropertiesManager();
+        $test->registerUnit('test_basic','test_basicunit', 'test_group');
+        $test->registerUnit('test_name','test_unit', 'test_group', 'test_basic',
+            function($input) { return $input * 2; },
+            function($input) { return $input / 2; } );
+        $this->assertEquals(2, $test->calculateFromBasic('test_name', 4));        
+    }
 }
