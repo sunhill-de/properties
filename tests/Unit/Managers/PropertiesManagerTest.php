@@ -1,35 +1,35 @@
 <?php
 
-namespace Sunhill\ORM\Tests\Unit\Managers;
+namespace Sunhill\Properties\Tests\Unit\Managers;
 
-use Sunhill\ORM\Tests\TestCase;
-use Sunhill\ORM\Managers\ClassManager;
-use Sunhill\ORM\Facades\Classes;
-use Sunhill\ORM\ORMException;
-use Sunhill\ORM\Tests\Testobjects\Dummy;
-use Sunhill\ORM\Tests\Testobjects\DummyChild;
-use Sunhill\ORM\Tests\Testobjects\ReferenceOnly;
-use Sunhill\ORM\Tests\Testobjects\SecondLevelChild;
-use Sunhill\ORM\Tests\Testobjects\TestChild;
-use Sunhill\ORM\Tests\Testobjects\TestParent;
-use Sunhill\ORM\Tests\Testobjects\TestSimpleChild;
-use Sunhill\ORM\Tests\Testobjects\ThirdLevelChild;
-use Sunhill\ORM\Managers\Exceptions\ClassNotORMException;
-use Sunhill\ORM\Managers\Exceptions\ClassNotAccessibleException;
-use Sunhill\ORM\Objects\ORMObject;
-use Sunhill\ORM\Managers\Exceptions\ClassNameForbiddenException;
-use Sunhill\ORM\Properties\PropertyInteger;
-use Sunhill\ORM\Properties\PropertyVarchar;
-use Sunhill\ORM\Properties\PropertyBoolean;
-use Sunhill\ORM\Properties\PropertyDate;
-use Sunhill\ORM\Properties\PropertyObject;
-use Sunhill\ORM\Properties\PropertyArray;
-use Sunhill\ORM\Managers\Exceptions\DuplicateEntryException;
-use Sunhill\ORM\Managers\PropertiesManager;
-use Sunhill\ORM\Tests\TestSupport\NonAbstractProperty;
-use Sunhill\ORM\Managers\Exceptions\PropertyClassDoesntExistException;
-use Sunhill\ORM\Managers\Exceptions\GivenClassNotAPropertyException;
-use Sunhill\ORM\Managers\Exceptions\PropertyNotRegisteredException;
+use Sunhill\Properties\Tests\TestCase;
+use Sunhill\Properties\Managers\ClassManager;
+use Sunhill\Properties\Facades\Classes;
+use Sunhill\Properties\ORMException;
+use Sunhill\Properties\Tests\Testobjects\Dummy;
+use Sunhill\Properties\Tests\Testobjects\DummyChild;
+use Sunhill\Properties\Tests\Testobjects\ReferenceOnly;
+use Sunhill\Properties\Tests\Testobjects\SecondLevelChild;
+use Sunhill\Properties\Tests\Testobjects\TestChild;
+use Sunhill\Properties\Tests\Testobjects\TestParent;
+use Sunhill\Properties\Tests\Testobjects\TestSimpleChild;
+use Sunhill\Properties\Tests\Testobjects\ThirdLevelChild;
+use Sunhill\Properties\Managers\Exceptions\ClassNotORMException;
+use Sunhill\Properties\Managers\Exceptions\ClassNotAccessibleException;
+use Sunhill\Properties\Objects\ORMObject;
+use Sunhill\Properties\Managers\Exceptions\ClassNameForbiddenException;
+use Sunhill\Properties\Properties\PropertyInteger;
+use Sunhill\Properties\Properties\PropertyVarchar;
+use Sunhill\Properties\Properties\PropertyBoolean;
+use Sunhill\Properties\Properties\PropertyDate;
+use Sunhill\Properties\Properties\PropertyObject;
+use Sunhill\Properties\Properties\PropertyArray;
+use Sunhill\Properties\Managers\Exceptions\DuplicateEntryException;
+use Sunhill\Properties\Managers\PropertiesManager;
+use Sunhill\Properties\Tests\TestSupport\NonAbstractProperty;
+use Sunhill\Properties\Managers\Exceptions\PropertyClassDoesntExistException;
+use Sunhill\Properties\Managers\Exceptions\GivenClassNotAPropertyException;
+use Sunhill\Properties\Managers\Exceptions\PropertyNotRegisteredException;
 
 class PropertiesManagerTest extends TestCase
 {

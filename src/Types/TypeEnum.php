@@ -11,9 +11,9 @@
  * Coverage: unknown
  */
 
-namespace Sunhill\ORM\Properties\Types;
+namespace Sunhill\Properties\Types;
 
-use Sunhill\ORM\Properties\AbstractSimpleProperty;
+use Sunhill\Properties\Properties\AbstractSimpleProperty;
 
 class TypeEnum extends AbstractSimpleProperty
 {
@@ -29,7 +29,7 @@ class TypeEnum extends AbstractSimpleProperty
      * Setter for allowed_values
      * 
      * @param int $enum_values
-     * @return \Sunhill\ORM\Properties\Types\TypeVarchar
+     * @return \Sunhill\Properties\Types\TypeVarchar
      */
     public function setEnumValues(array $enum_values)
     {
@@ -51,7 +51,7 @@ class TypeEnum extends AbstractSimpleProperty
      * Checks if the given input value is in allowed_values
      * 
      * {@inheritDoc}
-     * @see \Sunhill\ORM\Properties\ValidatorBase::isValid()
+     * @see \Sunhill\Properties\ValidatorBase::isValid()
      */
     public function isValid($input): bool
     {

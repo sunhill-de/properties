@@ -14,6 +14,6 @@
  * Tests: none
  * Coverage: none
  */
-namespace Sunhill\ORM\Managers\Exceptions;
+namespace Sunhill\Properties\Managers\Exceptions;
 
 class PropertyNameAlreadyRegisteredException extends PropertiesManagerException {}

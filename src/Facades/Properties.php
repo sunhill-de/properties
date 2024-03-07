@@ -13,7 +13,7 @@
  * Coverage: unknown
  */
 
-namespace Sunhill\ORM\Facades;
+namespace Sunhill\Properties\Facades;
 
 use Illuminate\Support\Facades\Facade;
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace Sunhill\ORM\Tests\Unit\Managers;
+namespace Sunhill\Properties\Tests\Unit\Managers;
 
-use Sunhill\ORM\Tests\TestCase;
-use Sunhill\ORM\Storage\AbstractIDStorage;
-use Sunhill\ORM\Tests\TestSupport\TestAbstractIDStorage;
+use Sunhill\Properties\Tests\TestCase;
+use Sunhill\Properties\Storage\AbstractIDStorage;
+use Sunhill\Properties\Tests\TestSupport\TestAbstractIDStorage;
 
 class AbstractIDStorageTest extends TestCase
 {

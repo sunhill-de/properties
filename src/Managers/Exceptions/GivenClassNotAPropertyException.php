@@ -13,6 +13,6 @@
  * Tests: none
  * Coverage: none
  */
-namespace Sunhill\ORM\Managers\Exceptions;
+namespace Sunhill\Properties\Managers\Exceptions;
 
 class GivenClassNotAPropertyException extends PropertiesManagerException {}

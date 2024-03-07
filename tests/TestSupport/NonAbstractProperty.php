@@ -1,7 +1,8 @@
 <?php
-namespace Sunhill\ORM\Tests\TestSupport;
 
-use Sunhill\ORM\Properties\AbstractProperty;
+namespace Sunhill\Properties\Tests\TestSupport;
+
+use Sunhill\Properties\Properties\AbstractProperty;
 
 class NonAbstractProperty extends AbstractProperty
 {

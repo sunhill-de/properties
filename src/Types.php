@@ -1,13 +1,13 @@
 <?php 
-use Sunhill\ORM\Properties\Types\TypeVarchar;
-use Sunhill\ORM\Properties\Types\TypeInteger;
-use Sunhill\ORM\Properties\Types\TypeBoolean;
-use Sunhill\ORM\Properties\Types\TypeDate;
-use Sunhill\ORM\Properties\Types\TypeDateTime;
-use Sunhill\ORM\Properties\Types\TypeEnum;
-use Sunhill\ORM\Properties\Types\TypeFloat;
-use Sunhill\ORM\Properties\Types\TypeText;
-use Sunhill\ORM\Properties\Types\TypeTime;
+use Sunhill\Properties\Properties\Types\TypeVarchar;
+use Sunhill\Properties\Properties\Types\TypeInteger;
+use Sunhill\Properties\Properties\Types\TypeBoolean;
+use Sunhill\Properties\Properties\Types\TypeDate;
+use Sunhill\Properties\Properties\Types\TypeDateTime;
+use Sunhill\Properties\Properties\Types\TypeEnum;
+use Sunhill\Properties\Properties\Types\TypeFloat;
+use Sunhill\Properties\Properties\Types\TypeText;
+use Sunhill\Properties\Properties\Types\TypeTime;
 
 return [
     'boolean'=>TypeBoolean::class,

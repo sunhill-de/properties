@@ -10,12 +10,12 @@
  * Coverage: unknown
  */
 
-namespace Sunhill\ORM\Properties;
+namespace Sunhill\Properties\Properties;
 
-use Sunhill\ORM\Properties\Exceptions\InvalidNameException;
-use Sunhill\ORM\Properties\Exceptions\PropertyNotReadableException;
-use Sunhill\ORM\Properties\Exceptions\UserNotAuthorizedForReadingException;
-use Sunhill\ORM\Properties\Exceptions\NoUserManagerInstalledException;
+use Sunhill\Properties\Properties\Exceptions\InvalidNameException;
+use Sunhill\Properties\Properties\Exceptions\PropertyNotReadableException;
+use Sunhill\Properties\Properties\Exceptions\UserNotAuthorizedForReadingException;
+use Sunhill\Properties\Properties\Exceptions\NoUserManagerInstalledException;
 
 abstract class AbstractRecordProperty extends AbstractProperty
 {

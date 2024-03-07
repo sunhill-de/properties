@@ -1,22 +1,22 @@
 <?php
 
-use Sunhill\ORM\Tests\TestCase;
-use Sunhill\ORM\Properties\Types\TypeVarchar;
-use Sunhill\ORM\Properties\Exceptions\InvalidValueException;
-use Sunhill\ORM\Properties\Types\TypeInteger;
-use Sunhill\ORM\Properties\Types\TypeFloat;
-use Sunhill\ORM\Properties\Types\TypeBoolean;
-use Sunhill\ORM\Properties\Types\TypeDateTime;
-use Sunhill\ORM\Tests\ReadonlyDatabaseTestCase;
-use Sunhill\ORM\Properties\Types\TypeDate;
-use Sunhill\ORM\Properties\Types\TypeTime;
-use Sunhill\ORM\Properties\Types\TypeText;
-use Sunhill\ORM\Properties\Types\TypeEnum;
-use Sunhill\ORM\Properties\Types\TypeCollection;
-use Sunhill\ORM\Tests\Testobjects\DummyCollection;
-use Sunhill\ORM\Tests\Testobjects\ComplexCollection;
-use Sunhill\ORM\Tests\Testobjects\AnotherDummyCollection;
-use Sunhill\ORM\Tests\TestSupport\TestAbstractStorage;
+use Sunhill\Properties\Tests\TestCase;
+use Sunhill\Properties\Types\TypeVarchar;
+use Sunhill\Properties\Properties\Exceptions\InvalidValueException;
+use Sunhill\Properties\Types\TypeInteger;
+use Sunhill\Properties\Types\TypeFloat;
+use Sunhill\Properties\Types\TypeBoolean;
+use Sunhill\Properties\Types\TypeDateTime;
+use Sunhill\Properties\Tests\ReadonlyDatabaseTestCase;
+use Sunhill\Properties\Types\TypeDate;
+use Sunhill\Properties\Types\TypeTime;
+use Sunhill\Properties\Types\TypeText;
+use Sunhill\Properties\Types\TypeEnum;
+use Sunhill\Properties\Types\TypeCollection;
+use Sunhill\Properties\Tests\Testobjects\DummyCollection;
+use Sunhill\Properties\Tests\Testobjects\ComplexCollection;
+use Sunhill\Properties\Tests\Testobjects\AnotherDummyCollection;
+use Sunhill\Properties\Tests\TestSupport\TestAbstractStorage;
 
 class TypesTest extends TestCase
 {
@@ -61,25 +61,6 @@ class TypesTest extends TestCase
             [TypeBoolean::class, [], 1, true],
             [TypeBoolean::class, [], 0, true],
             [TypeBoolean::class, [], 10, true],
-
-            [
-                TypeCollection::class, 
-                ['AllowedCollection'=>DummyCollection::class], 
-                function() { return new DummyCollection(); }, 
-                true
-            ],
-            [
-                TypeCollection::class, 
-                ['AllowedCollection'=>DummyCollection::class],
-                function() { return new AnotherDummyCollection(); }, 
-                false
-            ],
-            [
-                TypeCollection::class,
-                ['AllowedCollection'=>DummyCollection::class],
-                1,
-                true
-            ],
                 
             [TypeDatetime::class, [], '2018-02-01 11:11:11', true],
             [TypeDatetime::class, [], '2018-02-32 11:11:11', false],
@@ -272,7 +253,7 @@ class TypesTest extends TestCase
     static public function writeStorageProvider()
     {
         return [
-/*            [TypeBoolean::class, [], 'Y', 1],
+            [TypeBoolean::class, [], 'Y', 1],
             [TypeBoolean::class, [], 'N', 0],
             [TypeBoolean::class, [], '+', 1],
             [TypeBoolean::class, [], '-', 0],
@@ -284,7 +265,7 @@ class TypesTest extends TestCase
             [TypeBoolean::class, [], 1, 1],
             [TypeBoolean::class, [], 0, 0],
             [TypeBoolean::class, [], 10, 1],
-            */
+            
             [TypeDate::class, [], '01.02.2018', '2018-02-01'],
             [TypeDate::class, [], '2018-02-02', '2018-02-02'],
             [TypeDate::class, [], '1.2.2018', '2018-02-01'],

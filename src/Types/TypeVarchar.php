@@ -11,10 +11,10 @@
  * Coverage: unknown
  */
 
-namespace Sunhill\ORM\Properties\Types;
+namespace Sunhill\Properties\Types;
 
-use Sunhill\ORM\Properties\Exceptions\InvalidParameterException;
-use Sunhill\ORM\Properties\AbstractSimpleProperty;
+use Sunhill\Properties\Exceptions\InvalidParameterException;
+use Sunhill\Properties\Properties\AbstractSimpleProperty;
 
 class TypeVarchar extends AbstractSimpleProperty
 {
@@ -40,7 +40,7 @@ class TypeVarchar extends AbstractSimpleProperty
      * Setter for max_length
      * 
      * @param int $max_length
-     * @return \Sunhill\ORM\Properties\Types\TypeVarchar
+     * @return \Sunhill\Properties\Types\TypeVarchar
      */
     public function setMaxLen(int $max_length)
     {
@@ -62,7 +62,7 @@ class TypeVarchar extends AbstractSimpleProperty
      * Setter for length_exceed_policy
      * 
      * @param string $policy
-     * @return \Sunhill\ORM\Properties\Types\TypeVarchar
+     * @return \Sunhill\Properties\Types\TypeVarchar
      * @throws InvalidParameterException when $policy is not cur or invalid
      */
     public function setLengthExceedPolicy(string $policy)
@@ -91,7 +91,7 @@ class TypeVarchar extends AbstractSimpleProperty
      * is loinger than max_lenbgt
      * 
      * {@inheritDoc}
-     * @see \Sunhill\ORM\Properties\ValidatorBase::isValid()
+     * @see \Sunhill\Properties\ValidatorBase::isValid()
      */
     public function isValid($input): bool
     {
@@ -102,7 +102,7 @@ class TypeVarchar extends AbstractSimpleProperty
      * Cuts the input string to a maximum length
      * 
      * {@inheritDoc}
-     * @see \Sunhill\ORM\Properties\ValidatorBase::doConvertToInput()
+     * @see \Sunhill\Properties\ValidatorBase::doConvertToInput()
      */
     protected function formatForStorage($input)
     {

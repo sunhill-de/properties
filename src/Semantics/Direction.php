@@ -10,9 +10,9 @@
  * Coverage: unknown
  */
 
-namespace Sunhill\ORM\Properties\Semantics;
+namespace Sunhill\Properties\Semantics;
 
-use Sunhill\ORM\Properties\Types\TypeFloat;
+use Sunhill\Properties\Types\TypeFloat;
 
 class Direction extends TypeFloat
 {

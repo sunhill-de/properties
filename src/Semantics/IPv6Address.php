@@ -10,7 +10,7 @@
  * Coverage: unknown
  */
 
-namespace Sunhill\ORM\Properties\Semantics;
+namespace Sunhill\Properties\Semantics;
 
 class IPv6Address extends NetworkAddress
 {
@@ -40,7 +40,7 @@ class IPv6Address extends NetworkAddress
      * First check if the given value is an ingteger at all all. afterwards check the boundaries
      *
      * {@inheritDoc}
-     * @see \Sunhill\ORM\Properties\ValidatorBase::isValid()
+     * @see \Sunhill\Properties\\ValidatorBase::isValid()
      */
     public function isValid($input): bool
     {

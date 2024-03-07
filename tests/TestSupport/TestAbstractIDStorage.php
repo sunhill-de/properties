@@ -1,8 +1,8 @@
 <?php
 
-namespace Sunhill\ORM\Tests\TestSupport;
+namespace Sunhill\Properties\Tests\TestSupport;
 
-use Sunhill\ORM\Storage\AbstractIDStorage;
+use Sunhill\Properties\Storage\AbstractIDStorage;
 
 class TestAbstractIDStorage extends AbstractIDStorage
 {

@@ -10,9 +10,9 @@
  * Coverage: unknown
  */
 
-namespace Sunhill\ORM\Properties\Semantics;
+namespace Sunhill\Properties\Semantics;
 
-use Sunhill\ORM\Properties\Types\TypeVarchar;
+use Sunhill\Properties\Types\TypeVarchar;
 
 class FirstName extends Name
 {

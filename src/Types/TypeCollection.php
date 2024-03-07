@@ -11,11 +11,11 @@
  * Coverage: unknown
  */
 
-namespace Sunhill\ORM\Properties\Types;
+namespace Sunhill\Properties\Types;
 
-use Sunhill\ORM\Properties\Exceptions\InvalidParameterException;
-use Sunhill\ORM\Facades\Collections;
-use Sunhill\ORM\Properties\AbstractSimpleProperty;
+use Sunhill\Properties\Exceptions\InvalidParameterException;
+use Sunhill\Properties\Facades\Collections;
+use Sunhill\Properties\Properties\AbstractSimpleProperty;
 
 class TypeCollection extends AbstractSimpleProperty
 {
@@ -81,7 +81,7 @@ class TypeCollection extends AbstractSimpleProperty
      * a boolean
      * 
      * {@inheritDoc}
-     * @see \Sunhill\ORM\Properties\ValidatorBase::isValid()
+     * @see \Sunhill\Properties\ValidatorBase::isValid()
      */
     public function isValid($input): bool
     {
@@ -93,7 +93,7 @@ class TypeCollection extends AbstractSimpleProperty
      * Translates the given input to 1 or 0
      * 
      * {@inheritDoc}
-     * @see \Sunhill\ORM\Properties\ValidatorBase::doConvertToInput()
+     * @see \Sunhill\Properties\ValidatorBase::doConvertToInput()
      */
     protected function doConvertToInput($input)
     {

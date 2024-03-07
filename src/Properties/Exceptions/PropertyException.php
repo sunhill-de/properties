@@ -11,15 +11,15 @@
  * Coverage: unknown
  */
 
-namespace Sunhill\ORM\Properties\Exceptions;
+namespace Sunhill\Properties\Properties\Exceptions;
 
-use Sunhill\ORM\ORMException;
+use Sunhill\Properties\PropertiesException;
 
 /**
  * a basic exception class that deal with properties
  * @author lokal
  *
  */
-class PropertyException extends ORMException 
+class PropertyException extends PropertiesException 
 {
 }

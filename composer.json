@@ -2,7 +2,8 @@
     "name": "sunhill-de/properties",
     "autoload": {
         "psr-4": {
-            "sunhill-de\\properties\\": "src/"
+            "Sunhill\\Properties\\": "src/",
+            "Sunhill\\Properties\\Tests\\": "tests/"
         }
     },
     "authors": [

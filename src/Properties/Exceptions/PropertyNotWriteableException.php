@@ -11,7 +11,7 @@
  * Coverage: unknown
  */
 
-namespace Sunhill\ORM\Properties\Exceptions;
+namespace Sunhill\Properties\Properties\Exceptions;
 
 /**
  * An exception that is raised, when the value of a propery is written that is not writeable

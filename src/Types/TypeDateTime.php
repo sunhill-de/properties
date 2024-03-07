@@ -11,9 +11,9 @@
  * Coverage: unknown
  */
 
-namespace Sunhill\ORM\Properties\Types;
+namespace Sunhill\Properties\Types;
 
-use Sunhill\ORM\Properties\AbstractSimpleProperty;
+use Sunhill\Properties\Properties\AbstractSimpleProperty;
 
 class TypeDateTime extends AbstractSimpleProperty
 {
@@ -23,7 +23,7 @@ class TypeDateTime extends AbstractSimpleProperty
      * First check if the given value is an ingteger at all all. afterwards check the boundaries
      * 
      * {@inheritDoc}
-     * @see \Sunhill\ORM\Properties\ValidatorBase::isValid()
+     * @see \Sunhill\Properties\ValidatorBase::isValid()
      */
     public function isValid($input): bool
     {
@@ -48,7 +48,7 @@ class TypeDateTime extends AbstractSimpleProperty
      * Cuts the input string to a maximum length
      * 
      * {@inheritDoc}
-     * @see \Sunhill\ORM\Properties\ValidatorBase::doConvertToInput()
+     * @see \Sunhill\Properties\ValidatorBase::doConvertToInput()
      */
     protected function formatFromInput($input)
     {

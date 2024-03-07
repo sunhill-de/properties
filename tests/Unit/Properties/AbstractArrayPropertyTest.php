@@ -1,7 +1,7 @@
 <?php
 
-use Sunhill\ORM\Tests\TestCase;
-use Sunhill\ORM\Properties\AbstractArrayProperty;
+use Sunhill\Properties\Tests\TestCase;
+use Sunhill\Properties\Properties\AbstractArrayProperty;
 
 class NonAbstractArrayProperty extends AbstractArrayProperty
 {

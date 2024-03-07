@@ -11,7 +11,7 @@
  * Coverage: unknown
  */
 
-namespace Sunhill\ORM\Properties\Types;
+namespace Sunhill\Properties\Types;
 
 class TypeFloat extends TypeNumeric
 {

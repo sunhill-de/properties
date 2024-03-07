@@ -10,10 +10,9 @@
  * Coverage: unknown
  */
 
-namespace Sunhill\ORM\Properties\Semantics;
+namespace Sunhill\Properties\Semantics;
 
-use Sunhill\ORM\Properties\Types\TypeInteger;
-use Sunhill\ORM\Properties\Types\TypeDate;
+use Sunhill\Properties\Types\TypeDate;
 
 class PointInTime extends TypeDate
 {

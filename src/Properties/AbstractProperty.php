@@ -10,23 +10,23 @@
  * Coverage: unknown
  */
 
-namespace Sunhill\ORM\Properties;
+namespace Sunhill\Properties\Properties;
 
-use Sunhill\ORM\Properties\Exceptions\InvalidNameException;
-use Sunhill\ORM\Properties\Exceptions\PropertyNotReadableException;
-use Sunhill\ORM\Properties\Exceptions\UserNotAuthorizedForReadingException;
-use Sunhill\ORM\Properties\Exceptions\NoUserManagerInstalledException;
-use Sunhill\ORM\Properties\Exceptions\PropertyNotWriteableException;
-use Sunhill\ORM\Properties\Exceptions\UserNotAuthorizedForWritingException;
-use Sunhill\ORM\Properties\Types\AbstractType;
-use Sunhill\ORM\Storage\AbstractStorage;
-use Sunhill\ORM\Properties\Exceptions\NoStorageSetException;
-use Sunhill\ORM\Properties\Exceptions\PropertyException;
-use Sunhill\ORM\Properties\Exceptions\InvalidValueException;
+use Sunhill\Properties\Properties\Exceptions\InvalidNameException;
+use Sunhill\Properties\Properties\Exceptions\PropertyNotReadableException;
+use Sunhill\Properties\Properties\Exceptions\UserNotAuthorizedForReadingException;
+use Sunhill\Properties\Properties\Exceptions\NoUserManagerInstalledException;
+use Sunhill\Properties\Properties\Exceptions\PropertyNotWriteableException;
+use Sunhill\Properties\Properties\Exceptions\UserNotAuthorizedForWritingException;
+use Sunhill\Properties\Properties\Types\AbstractType;
+use Sunhill\Properties\Storage\AbstractStorage;
+use Sunhill\Properties\Properties\Exceptions\NoStorageSetException;
+use Sunhill\Properties\Properties\Exceptions\PropertyException;
+use Sunhill\Properties\Properties\Exceptions\InvalidValueException;
 use Illuminate\Support\Facades\Log;
-use Sunhill\ORM\Properties\Exceptions\UserNotAuthorizedForModifyException;
-use Sunhill\ORM\Properties\Exceptions\InvalidTypeOrSemanticException;
-use Sunhill\ORM\Properties\Exceptions\PropertyKeyDoesntExistException;
+use Sunhill\Properties\Properties\Exceptions\UserNotAuthorizedForModifyException;
+use Sunhill\Properties\Properties\Exceptions\InvalidTypeOrSemanticException;
+use Sunhill\Properties\Properties\Exceptions\PropertyKeyDoesntExistException;
 
 abstract class AbstractProperty
 {
@@ -42,7 +42,7 @@ abstract class AbstractProperty
      * Setter for $storage
      * 
      * @param AbstractStorage $storage
-     * @return \Sunhill\ORM\Properties\AbstractProperty
+     * @return \Sunhill\Properties\Properties\AbstractProperty
      * 
      * @test AbstractPropertyTest::testSetStorage()
      */
@@ -368,7 +368,7 @@ abstract class AbstractProperty
     /**
      * Returns the value in a human readable form 
      * 
-     * @return \Sunhill\ORM\Properties\unknown
+     * @return \Sunhill\Properties\Properties\unknown
      * 
      * @tests AbstractPropertyTest::testFormatForHuman
      */
@@ -730,7 +730,7 @@ abstract class AbstractProperty
      * terminal item (pseudo child, see requestTerminalItem. Otherwise try to pass
      * The request to a child.
      * @param array $path
-     * @return \Sunhill\ORM\Properties\Property|NULL
+     * @return \Sunhill\Properties\Properties\Property|NULL
      */
     public function requestItem(array $path)
     {
@@ -755,7 +755,7 @@ abstract class AbstractProperty
      *
      * @param string $method
      * @param array $params
-     * @return mixed|NULL|\Sunhill\ORM\Properties\Property
+     * @return mixed|NULL|\Sunhill\Properties\Properties\Property
      *
      * Test: /Unit/Properties/PropertyTest::testAdditionalGetter
      * Test: /Unit/Properties/PropertyTest::testUnknownMethod

@@ -13,9 +13,9 @@
  * PSR-State: completed
  */
 
-namespace Sunhill\ORM\Storage;
+namespace Sunhill\Properties\Storage;
 
-use Sunhill\ORM\Storage\Exceptions\PropertyNotFoundException;
+use Sunhill\Properties\Storage\Exceptions\PropertyNotFoundException;
 
 abstract class AbstractCachedStorage extends AbstractStorage
 {
@@ -209,7 +209,7 @@ abstract class AbstractCachedStorage extends AbstractStorage
     /**
      * Only if dirty call doCommit()
      * {@inheritDoc}
-     * @see \Sunhill\ORM\Storage\AbstractStorage::commit()
+     * @see \Sunhill\Properties\Storage\AbstractStorage::commit()
      */
     public function commit()
     {

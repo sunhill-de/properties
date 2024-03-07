@@ -1,8 +1,8 @@
 <?php
 
-namespace Sunhill\ORM\Tests\TestSupport;
+namespace Sunhill\Properties\Tests\TestSupport;
 
-use Sunhill\ORM\Storage\AbstractStorage;
+use Sunhill\Properties\Storage\AbstractStorage;
 
 class TestAbstractStorage extends AbstractStorage
 {

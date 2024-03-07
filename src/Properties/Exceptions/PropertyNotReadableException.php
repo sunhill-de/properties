@@ -11,7 +11,7 @@
  * Coverage: unknown
  */
 
-namespace Sunhill\ORM\Properties\Exceptions;
+namespace Sunhill\Properties\Properties\Exceptions;
 
 /**
  * An exception that is raised, when a user is not authorized to read a property's value

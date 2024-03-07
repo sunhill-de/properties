@@ -11,9 +11,9 @@
  * Coverage: unknown
  */
 
-namespace Sunhill\ORM\Properties\Types;
+namespace Sunhill\Properties\Types;
 
-use Sunhill\ORM\Properties\AbstractSimpleProperty;
+use Sunhill\Properties\Properties\AbstractSimpleProperty;
 
 class TypeText extends AbstractSimpleProperty
 {
@@ -22,7 +22,7 @@ class TypeText extends AbstractSimpleProperty
      * Is only has to be scalar 
      * 
      * {@inheritDoc}
-     * @see \Sunhill\ORM\Properties\ValidatorBase::isValid()
+     * @see \Sunhill\Properties\ValidatorBase::isValid()
      */
     public function isValid($input): bool
     {

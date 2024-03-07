@@ -10,9 +10,9 @@
  * Coverage: unknown
  */
 
-namespace Sunhill\ORM\Properties\Semantics;
+namespace Sunhill\Properties\Semantics;
 
-use Sunhill\ORM\Properties\Types\TypeInteger;
+use Sunhill\Properties\Types\TypeInteger;
 
 class Duration extends TypeInteger
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Sunhill\ORM\Tests\Unit\Managers;
+namespace Sunhill\Properties\Tests\Unit\Managers;
 
-use Sunhill\ORM\Storage\AbstractCachedStorage;
-use Sunhill\ORM\Tests\TestCase;
+use Sunhill\Properties\Storage\AbstractCachedStorage;
+use Sunhill\Properties\Tests\TestCase;
 
 class TestAbstractCachedStorage extends AbstractCachedStorage
 {

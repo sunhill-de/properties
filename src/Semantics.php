@@ -1,19 +1,19 @@
 <?php 
 
-use Sunhill\ORM\Semantic\Name;
-use Sunhill\ORM\Properties\Semantics\FirstName;
-use Sunhill\ORM\Properties\Semantics\LastName;
-use Sunhill\ORM\Properties\Semantics\Age;
-use Sunhill\ORM\Properties\Semantics\Duration;
-use Sunhill\ORM\Properties\Semantics\PointInTime;
-use Sunhill\ORM\Properties\Semantics\Timestamp;
-use Sunhill\ORM\Properties\Semantics\IDString;
-use Sunhill\ORM\Properties\Semantics\IPv4Address;
-use Sunhill\ORM\Properties\Semantics\IPv6Address;
-use Sunhill\ORM\Properties\Semantics\MACAddress;
-use Sunhill\ORM\Properties\Semantics\Domain;
-use Sunhill\ORM\Properties\Semantics\EMail;
-use Sunhill\ORM\Properties\Semantics\URL;
+use Sunhill\Properties\Semantic\Name;
+use Sunhill\Properties\Properties\Semantics\FirstName;
+use Sunhill\Properties\Properties\Semantics\LastName;
+use Sunhill\Properties\Properties\Semantics\Age;
+use Sunhill\Properties\Properties\Semantics\Duration;
+use Sunhill\Properties\Properties\Semantics\PointInTime;
+use Sunhill\Properties\Properties\Semantics\Timestamp;
+use Sunhill\Properties\Properties\Semantics\IDString;
+use Sunhill\Properties\Properties\Semantics\IPv4Address;
+use Sunhill\Properties\Properties\Semantics\IPv6Address;
+use Sunhill\Properties\Properties\Semantics\MACAddress;
+use Sunhill\Properties\Properties\Semantics\Domain;
+use Sunhill\Properties\Properties\Semantics\EMail;
+use Sunhill\Properties\Properties\Semantics\URL;
 
 return [
     'age'=>Age::class,

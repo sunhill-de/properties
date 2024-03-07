@@ -1,6 +1,6 @@
 <?php
 
-namespace Sunhill\ORM\Tests\TestSupport;
+namespace Sunhill\Properties\Tests\TestSupport;
 
 class TestUserManager
 {

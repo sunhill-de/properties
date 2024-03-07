@@ -12,9 +12,9 @@
  * PSR-State: completed
  */
 
-namespace Sunhill\ORM\Storage;
+namespace Sunhill\Properties\Storage;
 
-use Sunhill\ORM\Storage\Exceptions\IDNotSetException;
+use Sunhill\Properties\Storage\Exceptions\IDNotSetException;
 
 abstract class AbstractIDStorage extends AbstractCachedStorage
 {

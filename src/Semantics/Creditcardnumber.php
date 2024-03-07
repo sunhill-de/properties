@@ -10,7 +10,7 @@
  * Coverage: unknown
  */
 
-namespace Sunhill\ORM\Properties\Semantics;
+namespace Sunhill\Properties\Semantics;
 
 class Creditcardnumber extends IDString
 {
@@ -41,7 +41,7 @@ class Creditcardnumber extends IDString
      * 
      *
      * {@inheritDoc}
-     * @see \Sunhill\ORM\Properties\ValidatorBase::isValid()
+     * @see \Sunhill\Properties\\ValidatorBase::isValid()
      */
     public function isValid($input): bool
     {

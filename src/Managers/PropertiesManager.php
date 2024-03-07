@@ -15,23 +15,23 @@
  * Coverage: unknown
  * PSR-State: complete
  */
-namespace Sunhill\ORM\Managers;
+namespace Sunhill\Properties\Managers;
 
-use Sunhill\ORM\Facades\Storage;
-use Sunhill\ORM\Query\BasicQuery;
-use Sunhill\ORM\Managers\Exceptions\InvalidAttributeIDException;
+use Sunhill\Properties\Facades\Storage;
+use Sunhill\Properties\Query\BasicQuery;
+use Sunhill\Properties\Managers\Exceptions\InvalidAttributeIDException;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Sunhill\ORM\Properties\Exceptions\InvalidNameException;
-use Sunhill\ORM\Managers\Exceptions\InvalidTypeException;
-use Sunhill\ORM\Managers\Exceptions\NotAnORMClassException;
-use Sunhill\ORM\Facades\Classes;
-use Sunhill\ORM\Managers\Exceptions\PropertyClassDoesntExistException;
-use Sunhill\ORM\Properties\AbstractProperty;
-use Sunhill\ORM\Managers\Exceptions\GivenClassNotAPropertyException;
-use Sunhill\ORM\Managers\Exceptions\PropertyNameAlreadyRegisteredException;
-use Sunhill\ORM\Managers\Exceptions\PropertyNotRegisteredException;
+use Sunhill\Properties\Properties\Exceptions\InvalidNameException;
+use Sunhill\Properties\Managers\Exceptions\InvalidTypeException;
+use Sunhill\Properties\Managers\Exceptions\NotAnORMClassException;
+use Sunhill\Properties\Facades\Classes;
+use Sunhill\Properties\Managers\Exceptions\PropertyClassDoesntExistException;
+use Sunhill\Properties\Properties\AbstractProperty;
+use Sunhill\Properties\Managers\Exceptions\GivenClassNotAPropertyException;
+use Sunhill\Properties\Managers\Exceptions\PropertyNameAlreadyRegisteredException;
+use Sunhill\Properties\Managers\Exceptions\PropertyNotRegisteredException;
 
 /**
  * The PropertiesManager is accessed via the Properties facade. It's a singelton class

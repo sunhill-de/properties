@@ -10,7 +10,7 @@
  * Coverage: unknown
  */
 
-namespace Sunhill\ORM\Properties\Semantics;
+namespace Sunhill\Properties\Semantics;
 
 class SHA1 extends IDString
 {
@@ -50,7 +50,7 @@ class SHA1 extends IDString
      * Checks if the given string is a valid sha1 string
      *
      * {@inheritDoc}
-     * @see \Sunhill\ORM\Properties\ValidatorBase::isValid()
+     * @see \Sunhill\Properties\\ValidatorBase::isValid()
      */
     public function isValid($input): bool
     {

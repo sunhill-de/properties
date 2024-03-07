@@ -11,10 +11,10 @@
  * Coverage: unknown
  */
 
-namespace Sunhill\ORM\Properties\Types;
+namespace Sunhill\Properties\Types;
 
-use Sunhill\ORM\Properties\Exceptions\InvalidParameterException;
-use Sunhill\ORM\Properties\AbstractSimpleProperty;
+use Sunhill\Properties\Exceptions\InvalidParameterException;
+use Sunhill\Properties\Properties\AbstractSimpleProperty;
 
 abstract class TypeNumeric extends AbstractSimpleProperty
 {
@@ -49,7 +49,7 @@ abstract class TypeNumeric extends AbstractSimpleProperty
      * Setter for maximum
      * 
      * @param int $maximum
-     * @return \Sunhill\ORM\Properties\Types\TypeVarchar
+     * @return \Sunhill\Properties\Types\TypeVarchar
      */
     public function setMaximum(int $maximum)
     {
@@ -72,7 +72,7 @@ abstract class TypeNumeric extends AbstractSimpleProperty
      * Setter for Minimum
      *
      * @param int $Minimum
-     * @return \Sunhill\ORM\Properties\Types\TypeVarchar
+     * @return \Sunhill\Properties\Types\TypeVarchar
      */
     public function setMinimum(int $minimum)
     {
@@ -95,7 +95,7 @@ abstract class TypeNumeric extends AbstractSimpleProperty
      * Setter for out_of_bound_policy
      * 
      * @param string $policy
-     * @return \Sunhill\ORM\Properties\Types\TypeVarchar
+     * @return \Sunhill\Properties\Types\TypeVarchar
      * @throws InvalidParameterException when $policy is not cur or invalid
      */
     public function setOutOfBoundsPolicy(string $policy)
@@ -125,7 +125,7 @@ abstract class TypeNumeric extends AbstractSimpleProperty
      * First check if the given value is an ingteger at all all. afterwards check the boundaries
      * 
      * {@inheritDoc}
-     * @see \Sunhill\ORM\Properties\ValidatorBase::isValid()
+     * @see \Sunhill\Properties\ValidatorBase::isValid()
      */
     public function isValid($input): bool
     {
@@ -150,7 +150,7 @@ abstract class TypeNumeric extends AbstractSimpleProperty
      * Cuts the input string to a maximum length
      * 
      * {@inheritDoc}
-     * @see \Sunhill\ORM\Properties\ValidatorBase::doConvertToInput()
+     * @see \Sunhill\Properties\ValidatorBase::doConvertToInput()
      */
     protected function doConvertToInput($input)
     {

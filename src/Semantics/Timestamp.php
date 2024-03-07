@@ -10,9 +10,9 @@
  * Coverage: unknown
  */
 
-namespace Sunhill\ORM\Properties\Semantics;
+namespace Sunhill\Properties\Semantics;
 
-use Sunhill\ORM\Properties\Types\TypeDateTime;
+use Sunhill\Properties\Types\TypeDateTime;
 
 class Timestamp extends TypeDateTime
 {

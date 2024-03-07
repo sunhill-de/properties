@@ -12,6 +12,8 @@
  * Tests: none
  * Coverage: none
  */
-namespace Sunhill\ORM\Managers\Exceptions;
+namespace Sunhill\Properties\Managers\Exceptions;
 
-class PropertiesManagerException extends ORMManagerException {}
+use Sunhill\Basic\SunhillException;
+
+class PropertiesManagerException extends SunhillException {}

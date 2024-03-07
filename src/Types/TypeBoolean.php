@@ -11,9 +11,9 @@
  * Coverage: unknown
  */
 
-namespace Sunhill\ORM\Properties\Types;
+namespace Sunhill\Properties\Types;
 
-use Sunhill\ORM\Properties\AbstractSimpleProperty;
+use Sunhill\Properties\Properties\AbstractSimpleProperty;
 
 class TypeBoolean extends AbstractSimpleProperty
 {
@@ -23,7 +23,7 @@ class TypeBoolean extends AbstractSimpleProperty
      * a boolean
      * 
      * {@inheritDoc}
-     * @see \Sunhill\ORM\Properties\ValidatorBase::isValid()
+     * @see \Sunhill\Properties\ValidatorBase::isValid()
      */
     public function isValid($input): bool
     {
@@ -39,7 +39,7 @@ class TypeBoolean extends AbstractSimpleProperty
      * Translates the given input to 1 or 0
      * 
      * {@inheritDoc}
-     * @see \Sunhill\ORM\Properties\ValidatorBase::doConvertToInput()
+     * @see \Sunhill\Properties\ValidatorBase::doConvertToInput()
      */
     protected function formatForStorage($input)
     {

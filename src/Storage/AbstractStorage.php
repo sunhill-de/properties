@@ -13,7 +13,7 @@
  * PSR-State: completed
  */
 
-namespace Sunhill\ORM\Storage;
+namespace Sunhill\Properties\Storage;
 
 abstract class AbstractStorage
 {

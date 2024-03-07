@@ -11,9 +11,9 @@
  * Coverage: unknown
  */
 
-namespace Sunhill\ORM\Properties\Types;
+namespace Sunhill\Properties\Types;
 
-use Sunhill\ORM\Properties\Exceptions\InvalidParameterException;
+use Sunhill\Properties\Exceptions\InvalidParameterException;
 
 class TypeTime extends TypeDateTime
 {
@@ -33,7 +33,7 @@ class TypeTime extends TypeDateTime
      * Formats the time in a human readable format
      * 
      * {@inheritDoc}
-     * @see \Sunhill\ORM\Properties\Types\TypeDateTime::formatForHuman()
+     * @see \Sunhill\Properties\Types\TypeDateTime::formatForHuman()
      */
     protected function formatForHuman($input)
     {
@@ -43,7 +43,7 @@ class TypeTime extends TypeDateTime
     /**
      * Returns the access type (in this case 'time')
      * {@inheritDoc}
-     * @see \Sunhill\ORM\Properties\Types\TypeDateTime::getAccessType()
+     * @see \Sunhill\Properties\Types\TypeDateTime::getAccessType()
      */
     public function getAccessType(): string
     {

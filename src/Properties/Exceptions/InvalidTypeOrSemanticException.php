@@ -12,7 +12,7 @@
  * Coverage: unknown
  */
 
-namespace Sunhill\ORM\Properties\Exceptions;
+namespace Sunhill\Properties\Properties\Exceptions;
 
 /**
  * An exception that is raised, if a inavlid type and/or semangtic was passed

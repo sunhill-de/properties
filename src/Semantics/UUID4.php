@@ -10,7 +10,7 @@
  * Coverage: unknown
  */
 
-namespace Sunhill\ORM\Properties\Semantics;
+namespace Sunhill\Properties\Semantics;
 
 class UUID4 extends IDString
 {
@@ -50,7 +50,7 @@ class UUID4 extends IDString
      * Checks if the given string is a valid email address
      *
      * {@inheritDoc}
-     * @see \Sunhill\ORM\Properties\ValidatorBase::isValid()
+     * @see \Sunhill\Properties\\ValidatorBase::isValid()
      */
     public function isValid($input): bool
     {
