@@ -26,4 +26,15 @@ class TypeInteger extends TypeNumeric
         return 'integer';
     }
     
+    /**
+     * This method must be overwritten by the derrived class to define its infos
+     * Test: /Unit/Objects/PropertyCollection_infoTest
+     */
+    protected static function setupInfos()
+    {
+        static::addInfo('name', 'integer');
+        static::addInfo('description', 'The basic type integer.', true);
+        static::addInfo('type', 'basic');
+    }
+    
 }

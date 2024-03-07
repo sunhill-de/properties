@@ -49,5 +49,16 @@ class TypeTime extends TypeDateTime
     {
         return 'time';
     }
-        
+    
+    /**
+     * This method must be overwritten by the derrived class to define its infos
+     * Test: /Unit/Objects/PropertyCollection_infoTest
+     */
+    protected static function setupInfos()
+    {
+        static::addInfo('name', 'time');
+        static::addInfo('description', 'The basic type time.', true);
+        static::addInfo('type', 'basic');
+    }
+    
 }

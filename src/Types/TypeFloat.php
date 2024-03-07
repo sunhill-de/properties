@@ -51,4 +51,16 @@ class TypeFloat extends TypeNumeric
     {
         return round($input, $this->precision);
     }
+    
+    /**
+     * This method must be overwritten by the derrived class to define its infos
+     * Test: /Unit/Objects/PropertyCollection_infoTest
+     */
+    protected static function setupInfos()
+    {
+        static::addInfo('name', 'float');
+        static::addInfo('description', 'The basic type float.', true);
+        static::addInfo('type', 'basic');
+    }
+    
 }
