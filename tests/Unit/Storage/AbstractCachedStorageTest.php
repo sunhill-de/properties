@@ -42,7 +42,7 @@ class TestAbstractCachedStorage extends AbstractCachedStorage
         return true;
     }
     
-    public function getIsInitialized(string $name): bool
+    protected function doGetIsInitialized(string $name): bool
     {
         return true;
     }
@@ -81,6 +81,7 @@ class AbstractCachedStorageTest extends TestCase
     public function testReadValue()
     {
         $test = new TestAbstractCachedStorage();
+        $test->already_stored = true;
         $this->assertEquals('ABC', $test->getValue('test_str'));
     }
     
