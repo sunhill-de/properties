@@ -142,11 +142,17 @@ abstract class AbstractStorage
         
     }
 
+    abstract protected function doGetIsInitialized(string $name): bool;
+    
     /**
      * Returns if the value was already initialized with a value
      * 
      * @return bool
      */
-    abstract public function getIsInitialized(string $name): bool;
+    public function getIsInitialized(string $name): bool
+    {
+        $this->prepareGetValue($name);
+        return $this->doGetIsInitialized($name);
+    }
     
 }

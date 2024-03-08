@@ -93,7 +93,7 @@ abstract class AbstractIDStorage extends AbstractCachedStorage
         $this->updateToID($this->getID());
     }
  
-    public function getIsInitialized(string $name): bool
+    protected function doGetIsInitialized(string $name): bool
     {
         return isset($this->values[$name]);
     }
