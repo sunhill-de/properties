@@ -66,7 +66,7 @@ abstract class AbstractSimpleProperty extends AbstractProperty
      *
      * Test: Unit/Properties/PropertyTest::testDefault
      */
-    public function setDefault($default): Property
+    public function setDefault($default): AbstractSimpleProperty
     {
         if (!isset($default)) {
             $this->defaults_null = true;
@@ -124,7 +124,7 @@ abstract class AbstractSimpleProperty extends AbstractProperty
      *
      * Test: Unit/Properties/PropertyTest::testDefault
      */
-    public function nullable(bool $value = true): Property
+    public function nullable(bool $value = true): AbstractSimpleProperty
     {
         $this->nullable = $value;
         if (!$this->defaults_null && !is_null($this->default)) {
@@ -141,7 +141,7 @@ abstract class AbstractSimpleProperty extends AbstractProperty
      *
      * Test: Unit/Properties/PropertyTest::testDefault
      */
-    public function setNullable(bool $value = true): Property
+    public function setNullable(bool $value = true): AbstractSimpleProperty
     {
         return $this->nullable($value);
     }
@@ -153,7 +153,7 @@ abstract class AbstractSimpleProperty extends AbstractProperty
      *
      * Test: Unit/Properties/PropertyTest::testDefault
      */
-    public function notNullable(): Property
+    public function notNullable(): AbstractSimpleProperty
     {
         return $this->nullable(false);
     }
