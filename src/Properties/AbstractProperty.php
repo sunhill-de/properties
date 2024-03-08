@@ -7,7 +7,7 @@
  * Localization: complete
  * Documentation: complete
  * Tests: Unit/Properties/AbstractPropertyTest.php
- * Coverage: unknown
+ * Coverage: 87.82 (2024-03-08)
  */
 
 namespace Sunhill\Properties\Properties;
@@ -702,7 +702,7 @@ abstract class AbstractProperty
     {
         $result = [];
         $result['semantic'] = $this->getSemantic();
-        $result['semantic_group'] = $this->getSemanticGroup();
+        $result['semantic_keywords'] = $this->getSemanticKeywords();
         $result['unit'] = $this->getUnit();
         $result['type'] = $this->getAccessType();
         $result['update'] = $this->getUpdate();
@@ -783,33 +783,6 @@ abstract class AbstractProperty
         throw new PropertyException(static::class.": Unknown method '$method' called");
     }
     
-    /**
-     * Looks in the registered types. If the type is found returns its namespace otherwise null
-     * 
-     * @param string $type
-     * @return string|NULL
-     */
-    protected function getTypeNamespace(string $type): ?string
-    {
-        $types = inlcude('Types.php');
-        $type = strtolower($type);
-        
-        return isset($types[$type])?$types[$type]:null;
-    }
-    
-    /**
-     * Looks in the registered semantics. If the semangic it found returns its namespaxce otherwise null
-     * 
-     * @param string $semantic
-     * @return string|NULL
-     */
-    protected function getSemanticNamespace(string $semantic): ?string
-    {
-        $semantics = include('Semantics.php');
-        $semnatic = strtolower($semantic);
-        
-        return isset($semantics[$semantic])?$semantics[$semantic]:null;
-    }
     
     /**
      * Returns a blank property with the given name or type
@@ -820,12 +793,10 @@ abstract class AbstractProperty
      */
     protected function getProperty(string $name, string $type_or_semantic = 'string'): AbstractProperty
     {
-       $namespace = $this->getTypeNamespace($type_or_semantic)??$this->getSemanticNamespace($type_or_semantic);
-       
-       if (empty($namespace)) {
-            throw new InvalidTypeOrSemanticException("The given '$type_or_semantic' is neither a type nor a semantic");          
+        if (!Properties::isPropertyRegistered($type_or_semantic)) {
+            throw new InvalidTypeOrSemanticException("The given '$type_or_semantic' is not registered");          
        }
-       
+       $namespace = Properties::getNamespaceOfProperty($type_or_semantic);
        $property = new $namespace();
        $property->setName($name);
        
