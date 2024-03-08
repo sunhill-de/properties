@@ -85,6 +85,9 @@ abstract class AbstractCachedStorage extends AbstractStorage
      */
     private function loadOnDemand()
     {
+        if (!$this->isAlreadyStored()) {
+            return; // When not stored then there is no reading possible
+        }
         // Storage already loaded?
         if (!$this->storageIsLoaded()) {
             $this->doReadFromUnderlying(); // No, load it
