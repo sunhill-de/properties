@@ -43,7 +43,7 @@ class TestAbstractStorage extends AbstractStorage
         return true;
     }
     
-    public function getIsInitialized(string $name): bool
+    protected function doGetIsInitialized(string $name): bool
     {
         return true;
     }
