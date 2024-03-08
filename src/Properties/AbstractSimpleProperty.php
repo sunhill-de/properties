@@ -169,9 +169,26 @@ abstract class AbstractSimpleProperty extends AbstractProperty
     {
         return $this->nullable;
     }
-    
+  
+    protected function handleNullValue()
+    {
+        if (!$this->getNullable()) {
+            parent::handleNullValue();
+        }
+    }
+        
     protected function handleUninitialized()
     {
+        if ($default = $this->getDefault()) {
+            if ($default == DefaultNull::class) {
+                $this->setValue(null);
+                return null;
+            } else {
+                $this->setValue($default);
+                return $default;
+            }
+        }
+        parent::handleUninitialized();
     }
     
     

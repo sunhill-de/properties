@@ -7,6 +7,11 @@ use Sunhill\Properties\Properties\AbstractSimpleProperty;
 class NonAbstractSimpleProperty extends AbstractSimpleProperty
 {
     
+    public function __construct()
+    {
+        $this->setName('test_int2');
+    }
+    
     public function isValid($value): bool
     {
         return is_int($value);    

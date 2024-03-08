@@ -313,8 +313,7 @@ abstract class AbstractProperty
      */
     protected function doGetValue()
     {
-//        if ($this->getStorage()->getIsInitialized($this->getName())) {
-        if (true) {
+        if ($this->getStorage()->getIsInitialized($this->getName())) {
             return $this->formatFromStorage($this->getStorage()->getValue($this->getName()));
         } else {
             return $this->handleUninitialized();
@@ -620,10 +619,19 @@ abstract class AbstractProperty
         } else {
             $this->checkForWriting();
         }
-        $this->validateInput($value);
+        if (is_null($value)) {
+            $this->handleNullValue();
+        } else {
+            $this->validateInput($value);
+        }
         return $this->doSetValue($value);
     }
  
+    protected function handleNullValue()
+    {
+        throw new InvalidValueException("Null is not allowed as a value");
+    }
+    
     public function commit()
     {
         $this->checkForStorage('commit');
