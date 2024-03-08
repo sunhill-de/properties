@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Log;
 use Sunhill\Properties\Properties\Exceptions\UserNotAuthorizedForModifyException;
 use Sunhill\Properties\Properties\Exceptions\InvalidTypeOrSemanticException;
 use Sunhill\Properties\Properties\Exceptions\PropertyKeyDoesntExistException;
+use Sunhill\Properties\Facades\Properties;
 
 abstract class AbstractProperty
 {
@@ -340,7 +341,12 @@ abstract class AbstractProperty
      */
     protected function formatForHuman($input)
     {
-        return $input;        
+        if (($unit = $this->getUnit()) == 'none') {
+            return $input;
+        } else {
+            $unit = Properties::getUnit($this->getUnit());
+            return $input.' '.$unit;
+        }
     }
     
     /**

@@ -49,7 +49,7 @@ class TypeFloat extends TypeNumeric
     
     protected function formatForHuman($input)
     {
-        return round($input, $this->precision);
+        return parent::formatForHuman(round($input, $this->precision));
     }
     
     /**
