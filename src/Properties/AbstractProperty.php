@@ -13,12 +13,12 @@
 namespace Sunhill\Properties\Properties;
 
 use Sunhill\Properties\Properties\Exceptions\InvalidNameException;
+use Sunhill\Properties\Properties\Exceptions\UninitializedValueException;
 use Sunhill\Properties\Properties\Exceptions\PropertyNotReadableException;
 use Sunhill\Properties\Properties\Exceptions\UserNotAuthorizedForReadingException;
 use Sunhill\Properties\Properties\Exceptions\NoUserManagerInstalledException;
 use Sunhill\Properties\Properties\Exceptions\PropertyNotWriteableException;
 use Sunhill\Properties\Properties\Exceptions\UserNotAuthorizedForWritingException;
-use Sunhill\Properties\Properties\Types\AbstractType;
 use Sunhill\Properties\Storage\AbstractStorage;
 use Sunhill\Properties\Properties\Exceptions\NoStorageSetException;
 use Sunhill\Properties\Properties\Exceptions\PropertyException;
@@ -313,7 +313,17 @@ abstract class AbstractProperty
      */
     protected function doGetValue()
     {
-        return $this->formatFromStorage($this->getStorage()->getValue($this->getName()));
+//        if ($this->getStorage()->getIsInitialized($this->getName())) {
+        if (true) {
+            return $this->formatFromStorage($this->getStorage()->getValue($this->getName()));
+        } else {
+            return $this->handleUninitialized();
+        }
+    }
+    
+    protected function handleUninitialized()
+    {
+        throw new UninitializedValueException("Reading access to uninitialized property: ".$this->getName());    
     }
     
     /**
