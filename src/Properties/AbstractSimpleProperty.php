@@ -169,5 +169,10 @@ abstract class AbstractSimpleProperty extends AbstractProperty
     {
         return $this->nullable;
     }
-        
+    
+    protected function handleUninitialized()
+    {
+    }
+    
+    
 }

@@ -18,7 +18,7 @@ use Sunhill\Properties\Properties\Exceptions\InvalidValueException;
 use Sunhill\Properties\Properties\Exceptions\PropertyKeyDoesntExistException;
 use Sunhill\Properties\Tests\TestSupport\NonAbstractProperty;
 
-class AbstractPropertyStorageTest extends TestCase
+class StorageTest extends TestCase
 {
      
     public function testSetStorage()

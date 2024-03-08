@@ -18,7 +18,7 @@ use Sunhill\Properties\Properties\Exceptions\InvalidValueException;
 use Sunhill\Properties\Properties\Exceptions\PropertyKeyDoesntExistException;
 use Sunhill\Properties\Tests\TestSupport\NonAbstractProperty;
 
-class AbstractPropertyInfomarketTest extends TestCase
+class InfomarketTest extends TestCase
 {
      
     public function testGetMetadata()

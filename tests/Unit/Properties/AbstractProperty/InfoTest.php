@@ -18,7 +18,7 @@ use Sunhill\Properties\Properties\Exceptions\InvalidValueException;
 use Sunhill\Properties\Properties\Exceptions\PropertyKeyDoesntExistException;
 use Sunhill\Properties\Tests\TestSupport\NonAbstractProperty;
 
-class AbstractPropertyInfoTest extends TestCase
+class InfoTest extends TestCase
 {
      
     public function testUnknownMethod()
