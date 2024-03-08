@@ -46,4 +46,15 @@ class URL extends IDString
         return filter_var($input, FILTER_VALIDATE_URL);
     }
     
+    /**
+     * This method must be overwritten by the derrived class to define its infos
+     * Test: /Unit/Objects/PropertyCollection_infoTest
+     */
+    protected static function setupInfos()
+    {
+        static::addInfo('name', 'url');
+        static::addInfo('description', 'A internet url.', true);
+        static::addInfo('type', 'semantic');
+    }
+    
 }

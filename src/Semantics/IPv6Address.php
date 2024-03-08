@@ -46,5 +46,16 @@ class IPv6Address extends NetworkAddress
     {
         return filter_var($input, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
     }
+  
+    /**
+     * This method must be overwritten by the derrived class to define its infos
+     * Test: /Unit/Objects/PropertyCollection_infoTest
+     */
+    protected static function setupInfos()
+    {
+        static::addInfo('name', 'ipv6address');
+        static::addInfo('description', 'The IPv6 address of a network device.', true);
+        static::addInfo('type', 'semantic');
+    }
     
 }

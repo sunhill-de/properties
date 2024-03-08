@@ -36,5 +36,16 @@ class IPv4Address extends NetworkAddress
     {
         return filter_var($input, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
     }
+ 
+    /**
+     * This method must be overwritten by the derrived class to define its infos
+     * Test: /Unit/Objects/PropertyCollection_infoTest
+     */
+    protected static function setupInfos()
+    {
+        static::addInfo('name', 'ipv4address');
+        static::addInfo('description', 'The IPv4 address of a network device.', true);
+        static::addInfo('type', 'semantic');
+    }
     
 }

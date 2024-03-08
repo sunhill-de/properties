@@ -36,5 +36,26 @@ class Pressure extends TypeFloat
     {
         return ['pressure'];
     }
+   
+    /**
+     * Returns the unique id string for the unit of this property
+     *
+     * @return string
+     */
+    public function getUnit(): string
+    {
+        return 'pascal';
+    }
+    
+    /**
+     * This method must be overwritten by the derrived class to define its infos
+     * Test: /Unit/Objects/PropertyCollection_infoTest
+     */
+    protected static function setupInfos()
+    {
+        static::addInfo('name', 'pressure');
+        static::addInfo('description', 'The pressure of something.', true);
+        static::addInfo('type', 'semantic');
+    }
     
 }

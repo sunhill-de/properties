@@ -47,4 +47,15 @@ class MACAddress extends NetworkAddress
         return filter_var($input, FILTER_VALIDATE_MAC);
     }
     
+    /**
+     * This method must be overwritten by the derrived class to define its infos
+     * Test: /Unit/Objects/PropertyCollection_infoTest
+     */
+    protected static function setupInfos()
+    {
+        static::addInfo('name', 'macaddress');
+        static::addInfo('description', 'The mac address of an network device.', true);
+        static::addInfo('type', 'semantic');
+    }
+    
 }

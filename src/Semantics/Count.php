@@ -42,4 +42,15 @@ class Count extends TypeInteger
         return ['count'];
     }
      
+    /**
+     * This method must be overwritten by the derrived class to define its infos
+     * Test: /Unit/Objects/PropertyCollection_infoTest
+     */
+    protected static function setupInfos()
+    {
+        static::addInfo('name', 'count');
+        static::addInfo('description', 'The count of items.', true);
+        static::addInfo('type', 'semantic');
+    }
+    
 }

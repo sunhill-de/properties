@@ -36,5 +36,16 @@ class Airtemperature extends Temperature
     {
         return ['temperature','weather'];
     }
+ 
+    /**
+     * This method must be overwritten by the derrived class to define its infos
+     * Test: /Unit/Objects/PropertyCollection_infoTest
+     */
+    protected static function setupInfos()
+    {
+        static::addInfo('name', 'airtemperature');
+        static::addInfo('description', 'The air temperature (weather).', true);
+        static::addInfo('type', 'semantic');
+    }
     
 }

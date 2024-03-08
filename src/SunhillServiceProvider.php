@@ -33,6 +33,33 @@ use Sunhill\Properties\Types\TypeInteger;
 use Sunhill\Properties\Types\TypeText;
 use Sunhill\Properties\Types\TypeTime;
 use Sunhill\Properties\Types\TypeVarchar;
+use Sunhill\Properties\Semantics\Age;
+use Sunhill\Properties\Semantics\Airpressure;
+use Sunhill\Properties\Semantics\Airtemperature;
+use Sunhill\Properties\Semantics\Temperature;
+use Sunhill\Properties\Semantics\Capacity;
+use Sunhill\Properties\Semantics\Count;
+use Sunhill\Properties\Semantics\Creditcardnumber;
+use Sunhill\Properties\Semantics\Direction;
+use Sunhill\Properties\Semantics\Domain;
+use Sunhill\Properties\Semantics\Duration;
+use Sunhill\Properties\Semantics\EMail;
+use Sunhill\Properties\Semantics\FirstName;
+use Sunhill\Properties\Semantics\IDString;
+use Sunhill\Properties\Semantics\Illuminance;
+use Sunhill\Properties\Semantics\IPv4Address;
+use Sunhill\Properties\Semantics\IPv6Address;
+use Sunhill\Properties\Semantics\LastName;
+use Sunhill\Properties\Semantics\MACAddress;
+use Sunhill\Properties\Semantics\MD5;
+use Sunhill\Properties\Semantics\Name;
+use Sunhill\Properties\Semantics\PointInTime;
+use Sunhill\Properties\Semantics\Pressure;
+use Sunhill\Properties\Semantics\SHA1;
+use Sunhill\Properties\Semantics\Speed;
+use Sunhill\Properties\Semantics\Timestamp;
+use Sunhill\Properties\Semantics\URL;
+use Sunhill\Properties\Semantics\UUID4;
 
 class SunhillServiceProvider extends ServiceProvider
 {
@@ -102,6 +129,16 @@ class SunhillServiceProvider extends ServiceProvider
         Properties::registerUnit('megabyte','MB','capacity','byte',
             function($input) { return $input * 1000000; },
             function($input) { return $input / 1000000; });
+        
+        // ****************************** Pressure ***************************************
+        Properties::registerUnit('pascal', 'Pa', 'pressure');
+        Properties::registerUnit('hectopascal', 'hPa', 'pressure', 'pascal',
+            function($input) { return $input * 100; },
+            function($input) { return $input / 100; }
+        );
+        
+        Properties::registerUnit('lux', 'lx', 'light');
+        
     }
     
     protected function registerTypes()
@@ -122,7 +159,33 @@ class SunhillServiceProvider extends ServiceProvider
     
     protected function registerSemantics()
     {
-        
+        Properties::registerProperty(Age::class);        
+        Properties::registerProperty(Airpressure::class);
+        Properties::registerProperty(Airtemperature::class);
+        Properties::registerProperty(Capacity::class);
+        Properties::registerProperty(Count::class);
+        Properties::registerProperty(Creditcardnumber::class);
+        Properties::registerProperty(Direction::class);
+        Properties::registerProperty(Domain::class);
+        Properties::registerProperty(Duration::class);
+        Properties::registerProperty(EMail::class);
+        Properties::registerProperty(FirstName::class);
+        Properties::registerProperty(IDString::class);
+        Properties::registerProperty(Illuminance::class);
+        Properties::registerProperty(IPv4Address::class);
+        Properties::registerProperty(IPv6Address::class);
+        Properties::registerProperty(LastName::class);
+        Properties::registerProperty(MACAddress::class);
+        Properties::registerProperty(MD5::class);
+        Properties::registerProperty(Name::class);
+        Properties::registerProperty(PointInTime::class);
+        Properties::registerProperty(Pressure::class);
+        Properties::registerProperty(SHA1::class);
+        Properties::registerProperty(Speed::class);        
+        Properties::registerProperty(Temperature::class);
+        Properties::registerProperty(Timestamp::class);
+        Properties::registerProperty(URL::class);
+        Properties::registerProperty(UUID4::class);        
     }
     
     public function boot()

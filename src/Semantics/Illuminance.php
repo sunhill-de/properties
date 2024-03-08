@@ -37,4 +37,25 @@ class Illuminance extends TypeFloat
         return ['illuminance'];
     }
     
+    /**
+     * Returns the unique id string for the unit of this property
+     *
+     * @return string
+     */
+    public function getUnit(): string
+    {
+        return 'lux';
+    }
+    
+    /**
+     * This method must be overwritten by the derrived class to define its infos
+     * Test: /Unit/Objects/PropertyCollection_infoTest
+     */
+    protected static function setupInfos()
+    {
+        static::addInfo('name', 'illuminance');
+        static::addInfo('description', 'The illuminance of light.', true);
+        static::addInfo('type', 'semantic');
+    }
+    
 }

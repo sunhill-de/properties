@@ -27,4 +27,15 @@ class LastName extends Name
         return 'last_name';
     }
     
+    /**
+     * This method must be overwritten by the derrived class to define its infos
+     * Test: /Unit/Objects/PropertyCollection_infoTest
+     */
+    protected static function setupInfos()
+    {
+        static::addInfo('name', 'lastname');
+        static::addInfo('description', 'The last name of a person.', true);
+        static::addInfo('type', 'semantic');
+    }
+    
 }

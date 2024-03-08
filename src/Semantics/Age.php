@@ -47,4 +47,15 @@ class Age extends TypeInteger
         return 'second';
     }
     
+    /**
+     * This method must be overwritten by the derrived class to define its infos
+     * Test: /Unit/Objects/PropertyCollection_infoTest
+     */
+    protected static function setupInfos()
+    {
+        static::addInfo('name', 'age');
+        static::addInfo('description', 'The age of a person, thing, etc.', true);
+        static::addInfo('type', 'semantic');
+    }
+    
 }

@@ -69,4 +69,16 @@ class Capacity extends TypeInteger
             return $input.' Byte';
         }
     }
+    
+    /**
+     * This method must be overwritten by the derrived class to define its infos
+     * Test: /Unit/Objects/PropertyCollection_infoTest
+     */
+    protected static function setupInfos()
+    {
+        static::addInfo('name', 'capacity');
+        static::addInfo('description', 'The capacity (computer).', true);
+        static::addInfo('type', 'semantic');
+    }
+    
 }

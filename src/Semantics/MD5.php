@@ -57,4 +57,15 @@ class MD5 extends IDString
         return preg_match('/^[a-f0-9]{32}$/', $input);
     }
     
+    /**
+     * This method must be overwritten by the derrived class to define its infos
+     * Test: /Unit/Objects/PropertyCollection_infoTest
+     */
+    protected static function setupInfos()
+    {
+        static::addInfo('name', 'md5');
+        static::addInfo('description', 'The MD5 hash of someting.', true);
+        static::addInfo('type', 'semantic');
+    }
+    
 }

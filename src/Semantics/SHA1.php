@@ -57,4 +57,15 @@ class SHA1 extends IDString
         return preg_match('/^[a-f0-9]{40}$/', $input);
     }
     
+    /**
+     * This method must be overwritten by the derrived class to define its infos
+     * Test: /Unit/Objects/PropertyCollection_infoTest
+     */
+    protected static function setupInfos()
+    {
+        static::addInfo('name', 'sha1');
+        static::addInfo('description', 'The SHA1 hash of something.', true);
+        static::addInfo('type', 'semantic');
+    }
+    
 }

@@ -57,4 +57,15 @@ class Domain extends IDString
         return filter_var($input, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME);
     }
     
+    /**
+     * This method must be overwritten by the derrived class to define its infos
+     * Test: /Unit/Objects/PropertyCollection_infoTest
+     */
+    protected static function setupInfos()
+    {
+        static::addInfo('name', 'domain');
+        static::addInfo('description', 'A internet domain.', true);
+        static::addInfo('type', 'semantic');
+    }
+    
 }

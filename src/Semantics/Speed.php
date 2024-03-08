@@ -37,4 +37,24 @@ class Speed extends TypeFloat
         return ['speed'];
     }
     
+    /**
+     * Returns the unique id string for the unit of this property
+     *
+     * @return string
+     */
+    public function getUnit(): string
+    {
+        return 'meterpersecond';
+    }
+    /**
+     * This method must be overwritten by the derrived class to define its infos
+     * Test: /Unit/Objects/PropertyCollection_infoTest
+     */
+    protected static function setupInfos()
+    {
+        static::addInfo('name', 'speed');
+        static::addInfo('description', 'The speed of something.', true);
+        static::addInfo('type', 'semantic');
+    }
+    
 }

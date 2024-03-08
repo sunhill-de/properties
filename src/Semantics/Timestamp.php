@@ -36,5 +36,16 @@ class Timestamp extends TypeDateTime
     {
         return ['time'];
     }
-     
+
+    /**
+     * This method must be overwritten by the derrived class to define its infos
+     * Test: /Unit/Objects/PropertyCollection_infoTest
+     */
+    protected static function setupInfos()
+    {
+        static::addInfo('name', 'timestamp');
+        static::addInfo('description', 'A timestamp.', true);
+        static::addInfo('type', 'semantic');
+    }
+    
 }
