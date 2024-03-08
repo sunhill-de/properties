@@ -18,7 +18,15 @@
                         "options" : {
                                 "symlink" : true
                         }
-                }],
+                },{
+                        "type" : "path",
+                        "url" : "../basic",
+                        "options" : {
+                                "symlink" : true
+                        }
+                }
+                
+                ],
      "minimum-stability" : "dev",
      "require" : {
                 "laravel/framework" : "^10.0",
