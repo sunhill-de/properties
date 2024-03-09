@@ -1,27 +1,70 @@
 <?php
 
-use Sunhill\Properties\Semantic\Name;
 use Sunhill\Properties\Tests\TestCase;
-use Sunhill\Properties\Properties\Property;
-use Sunhill\Properties\Properties\Exceptions\PropertyException;
-use Sunhill\Properties\Units\None;
-use Sunhill\Properties\Objects\ORMObject;
-use Sunhill\Properties\Properties\Exceptions\InvalidNameException;
-use Sunhill\Properties\Properties\AbstractProperty;
-use Sunhill\Properties\Tests\TestSupport\TestAbstractIDStorage;
-use Sunhill\Properties\Properties\AbstractRecordProperty;
+use Sunhill\Properties\Tests\TestSupport\NonAbstractRecordProperty;
+use Sunhill\Properties\Tests\TestSupport\NonAbstractProperty;
+use Sunhill\Properties\Facades\Properties;
+use Sunhill\Properties\Properties\Exceptions\CantProcessPropertyException;
 
-class NonAbstractRecordProperty extends AbstractRecordProperty
+class AddElementTest extends TestCase
 {
-    public function isValid($test): bool
+    
+    public function testAddByObject()
     {
+        $test = new NonAbstractRecordProperty();
+        $element = new NonAbstractProperty();
         
+        $this->callProtectedMethod($test, 'addElement', ['test',$element]);
+        
+        $this->assertEquals('test',$element->getName());
+        $this->assertEquals($test,$element->getOwner());
     }
     
-    
-}
+    public function testAddByClassname()
+    {
+        $test = new NonAbstractRecordProperty();
 
-class AbstractRecordPropertyTest extends TestCase
-{
-     
+        $element = $this->callProtectedMethod($test, 'addElement', ['test',NonAbstractProperty::class]);
+
+        $this->assertEquals('test',$element->getName());
+        $this->assertEquals($test,$element->getOwner());        
+    }
+    
+    public function testAddByPropertyName()
+    {
+        $test = new NonAbstractRecordProperty();
+        
+        Properties::shouldReceive('isPropertyRegistered')->once()->with('test_property')->andReturn(true);
+        Properties::shouldReceive('getPropertyNamespace')->once()->with('test_property')->andReturn(NonAbstractProperty::class);
+        
+        $element = $this->callProtectedMethod($test, 'addElement', ['test', 'test_property']);
+
+        $this->assertEquals('test',$element->getName());
+        $this->assertEquals($test,$element->getOwner());        
+    }
+    
+    public function testFailedObject()
+    {
+        $test = new NonAbstractRecordProperty();
+        $this->expectException(CantProcessPropertyException::class);        
+
+        $this->callProtectedMethod($test, 'addElement', ['test', new \StdClass()]);        
+    }
+    
+    public function testFailedClassname()
+    {
+        $test = new NonAbstractRecordProperty();
+        $this->expectException(CantProcessPropertyException::class);
+
+        $this->callProtectedMethod($test, 'addElement', ['test', \StdClass::class]);        
+    }
+    
+    public function testFailedPropertyName()
+    {
+        $test = new NonAbstractRecordProperty();
+        $this->expectException(CantProcessPropertyException::class);
+        
+        $this->callProtectedMethod($test, 'addElement', ['test', 'unknown']);        
+    }
+    
 }
