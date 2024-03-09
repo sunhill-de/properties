@@ -10,6 +10,21 @@ class NonAbstractRecordProperty extends AbstractRecordProperty
     {
         return false;
     }
+  
+    protected function initializeElements()
+    {
+        $element1 = new NonAbstractProperty();
+        $element1->setName('elementA');
+        $element1->setOwner($this);
         
+        $element2 = new NonAbstractProperty();
+        $element2->setName('elementB');
+        $element2->setOwner($this);
+        
+        $this->elements['elementA'] = $element1;
+        $this->elements['elementB'] = $element2;
+    }
+    
+    
 }
 

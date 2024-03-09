@@ -16,7 +16,7 @@ use Sunhill\Properties\Properties\Exceptions\CantProcessPropertyException;
 use Sunhill\Properties\Properties\Exceptions\DuplicateElementNameException;
 use Sunhill\Properties\Facades\Properties;
 
-abstract class AbstractRecordProperty extends AbstractProperty
+abstract class AbstractRecordProperty extends AbstractProperty implements \Iterator
 {
  
     protected $elements = [];
@@ -103,4 +103,53 @@ abstract class AbstractRecordProperty extends AbstractProperty
         return 'record';
     }
         
+// ****************************** Iterator **************************************
+    protected $current = 0;
+    
+    public function current(): mixed
+    {
+        return $this->elements[$this->key()];
+    }
+    
+    public function key(): mixed
+    {
+        return array_keys($this->elements)[$this->current];        
+    }
+    
+    public function next(): void
+    {
+        $this->current++;
+    }
+    
+    public function rewind(): void
+    {
+        $this->current = 0;
+    }
+    
+    public function valid(): bool
+    {
+        return $this->current < count($this->elements);
+    }
+    
+// ************************ getElements ***********************************
+    public function getElementNames()
+    {
+        return array_keys($this->elements);
+    }
+    
+    public function getOwnElementNames()
+    {
+        return array_keys($this->elements);        
+    }
+    
+    public function getElements()
+    {
+        return array_values($this->elements);
+    }
+    
+    public function getOwnElements()
+    {
+        return array_values($this->elements);
+    }
+    
 }
