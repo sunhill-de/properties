@@ -14,6 +14,7 @@ namespace Sunhill\Properties\Properties;
 
 use Sunhill\Properties\Properties\Exceptions\CantProcessPropertyException;
 use Sunhill\Properties\Properties\Exceptions\DuplicateElementNameException;
+use Sunhill\Properties\Properties\Exceptions\PropertyDoesntExistException;
 use Sunhill\Properties\Facades\Properties;
 
 abstract class AbstractRecordProperty extends AbstractProperty implements \Iterator
@@ -150,6 +151,38 @@ abstract class AbstractRecordProperty extends AbstractProperty implements \Itera
     public function getOwnElements()
     {
         return array_values($this->elements);
+    }
+    
+    public function hasElement(string $name)
+    {
+        return isset($this->elements[$name]);
+    }
+    
+// ************************** transparent element handling *****************************
+    public function __get(string $name)
+    {
+        if (!$this->hasElement($name) && !$this->handleUnkownRead($name)) {            
+            throw new PropertyDoesntExistException("The property '$name' doesnt exist.");
+        }
+        return $this->elements[$name]->getValue();
+    }
+    
+    protected function handleUnkownRead(string $name)
+    {
+        return false;    
+    }
+    
+    public function __set(string $name, $value)
+    {
+        if (!$this->hasElement($name) && !$this->handleUnkownWrite($name, $value)) {
+            throw new PropertyDoesntExistException("The property '$name' doesnt exist.");
+        }
+        $this->elements[$name]->setValue($value);
+    }
+    
+    protected function handleUnkownWrite(string $name, $value)
+    {
+        return false;
     }
     
 }
