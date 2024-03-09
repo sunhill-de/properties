@@ -185,4 +185,20 @@ abstract class AbstractRecordProperty extends AbstractProperty implements \Itera
         return false;
     }
     
+// ***************************** Infomarket *******************************************
+    /**
+     * Try to pass the request to a child element. If none is found return null
+     * @param string $name
+     * @param array $path
+     * @return NULL
+     */
+    protected function passItemRequest(string $name, array $path)
+    {
+        if ($this->hasElement($name)) {
+            return $this->elements[$name]->requestItem($path);
+        }
+        return parent::passItemRequest($name, $path);
+    }
+    
+    
 }
