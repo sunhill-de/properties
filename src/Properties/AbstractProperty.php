@@ -31,6 +31,50 @@ use Sunhill\Properties\Facades\Properties;
 
 abstract class AbstractProperty
 {
+
+    /**
+     * Stores the current owner of this property (if any)
+     * 
+     * @var unknown
+     */
+    protected $owner;
+    
+    /**
+     * Sets the current owner of this property
+     * 
+     * @param AbstractProperty $owner
+     * @return AbstractProperty
+     */
+    public function setOwner(AbstractProperty $owner): AbstractProperty
+    {
+        $this->owner = $owner;
+        
+        return $this;
+    }
+    
+    /**
+     * Returns the current owner of this property or null
+     * 
+     * @return AbstractProperty|NULL
+     */
+    public function getOwner(): ?AbstractProperty
+    {
+        return $this->owner;
+    }
+    
+    /**
+     * Return the path of this element (the names of all ancestors until this element)
+     * 
+     * @return string
+     */
+    public function getPath(): string
+    {
+        if (is_null($this->getOwner())) {
+            return $this->getName()??'undefined';
+        } else {
+            return $this->getOwner()->getPath().'.'.($this->getName()??'undefined');
+        }
+    }
     
     /**
      * Stores the current storage
