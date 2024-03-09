@@ -7,6 +7,7 @@ use Sunhill\Properties\Facades\Properties;
 use Sunhill\Properties\Properties\Exceptions\CantProcessPropertyException;
 use Sunhill\Properties\Properties\AbstractSimpleProperty;
 use Sunhill\Properties\Properties\AbstractRecordProperty;
+use Sunhill\Properties\Properties\Exceptions\PropertyDoesntExistException;
 
 class GetValueProperty extends AbstractSimpleProperty
 {
@@ -73,7 +74,23 @@ class GetValueTest extends TestCase
         $test->elementA = 55;
         
         $this->assertEquals(55, $test->elementA);
-        $this->assertEquals(5, $test->elementB);
-        
+        $this->assertEquals(5, $test->elementB);        
     }
+    
+    public function testGetUnkownValue()
+    {
+        $test = new GetValueRecordProperty();
+        $this->expectException(PropertyDoesntExistException::class);
+        
+        $a =  $test->elementZ;        
+    }
+    
+    public function testSetUnkownValue()
+    {
+        $test = new GetValueRecordProperty();
+        $this->expectException(PropertyDoesntExistException::class);
+        
+        $test->elementZ = 10;
+    }
+    
 }

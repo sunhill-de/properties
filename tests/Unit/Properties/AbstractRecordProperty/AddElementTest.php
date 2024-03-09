@@ -5,6 +5,7 @@ use Sunhill\Properties\Tests\TestSupport\NonAbstractRecordProperty;
 use Sunhill\Properties\Tests\TestSupport\NonAbstractProperty;
 use Sunhill\Properties\Facades\Properties;
 use Sunhill\Properties\Properties\Exceptions\CantProcessPropertyException;
+use Sunhill\Properties\Properties\Exceptions\DuplicateElementNameException;
 
 class AddElementTest extends TestCase
 {
@@ -41,6 +42,17 @@ class AddElementTest extends TestCase
 
         $this->assertEquals('test',$element->getName());
         $this->assertEquals($test,$element->getOwner());        
+    }
+    
+    public function testFailedDueDupplicate()
+    {
+        $test = new NonAbstractRecordProperty();
+        $element = new NonAbstractProperty();
+        
+        $this->expectException(DuplicateElementNameException::class);
+        
+        $this->callProtectedMethod($test, 'addElement', ['test',$element]);
+        $this->callProtectedMethod($test, 'addElement', ['test',$element]);
     }
     
     public function testFailedObject()
