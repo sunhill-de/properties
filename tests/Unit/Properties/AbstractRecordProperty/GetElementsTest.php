@@ -44,5 +44,12 @@ class GetElementsTest extends TestCase
         
         $this->assertEquals('elementA', $elements[0]->getName());
     }
+
+    public function testHasElement()
+    {
+        $test = new NonAbstractRecordProperty();
+        
+        $this->assertTrue($test->hasElement('elementA'));
+    }
     
 }
