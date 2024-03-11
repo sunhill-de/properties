@@ -27,3 +27,4 @@ Homestead.json
 .phpunit.cache/
 /.settings/
 *.lock
+.buildpath
