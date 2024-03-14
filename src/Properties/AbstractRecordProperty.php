@@ -103,7 +103,17 @@ abstract class AbstractRecordProperty extends AbstractProperty implements \Itera
     {
         return 'record';
     }
-        
+    
+    /**
+     * A direct assign to a record property is always invalid
+     * {@inheritDoc}
+     * @see \Sunhill\Properties\Properties\AbstractProperty::isValid()
+     */
+    public function isValid($input): bool
+    {
+        return false;
+    }
+    
 // ****************************** Iterator **************************************
     protected $current = 0;
     
