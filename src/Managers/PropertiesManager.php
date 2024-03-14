@@ -284,5 +284,6 @@ class PropertiesManager
         }
         return $calc($value);        
     }
+    
 }
  

@@ -853,14 +853,16 @@ abstract class AbstractProperty
      * @param string $type_or_semantic
      * @return AbstractProperty
      */
-    protected function getProperty(string $name, string $type_or_semantic = 'string'): AbstractProperty
+    protected function createProperty(string $type_or_semantic = 'string', string $name = ''): AbstractProperty
     {
         if (!Properties::isPropertyRegistered($type_or_semantic)) {
             throw new InvalidTypeOrSemanticException("The given '$type_or_semantic' is not registered");          
        }
        $namespace = Properties::getNamespaceOfProperty($type_or_semantic);
        $property = new $namespace();
-       $property->setName($name);
+       if (!empty($name)) {
+            $property->setName($name);
+       }
        
        return $property;
     }
