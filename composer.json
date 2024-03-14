@@ -1,5 +1,5 @@
 {
-    "name": "sunhill-de/properties",
+    "name": "sunhill/properties",
     "autoload": {
         "psr-4": {
             "Sunhill\\Properties\\": "src/",
