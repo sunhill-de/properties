@@ -4,30 +4,36 @@
         "psr-4": {
             "Sunhill\\Properties\\": "src/",
             "Sunhill\\Properties\\Tests\\": "tests/"
+		}
+	},
+	"authors" : [{
+			"name" : "Klaus Dimde",
+			"email" : "klaus@dimde.info"
+		}
+	],
+	"repositories" : [{
+			"type" : "path",
+			"url" : "../pm",
+			"options" : {
+				"symlink" : true
+			}
+		}
+	],
+	"minimum-stability" : "dev",
+	"require" : {
+		"laravel/framework" : "^10.0",
+		"sunhill/basic" : "*",
+		"sunhill/pm" : "*"
+	},
+	"require-dev" : {
+		"phpunit/phpunit" : "^10.0",
+		"orchestra/testbench" : "^8.5"
+	},
+        "extra" : {
+                "laravel" : {
+                        "providers" : [
+                                "Sunhill\\Properties\\SunhillPropertiesServiceProvider"
+                        ]
+                }
         }
-    },
-    "authors": [
-     {
-         "name": "Klaus Dimde",
-         "email": "klaus@dimde.info"
-     }
-     ],
-    "repositories" : [{
-                        "type" : "path",
-                        "url" : "../pm",
-                        "options" : {
-                                "symlink" : true
-                        }
-                }],
-     "minimum-stability" : "dev",
-     "require" : {
-                "laravel/framework" : "^10.0",
-                "sunhill/basic": "*",
-                "sunhill/pm":"*"
-     },
-     "require-dev" : {
-                "phpunit/phpunit" : "^10.0",
-                "orchestra/testbench" : "^8.5"
-     }
- }
-     
+}

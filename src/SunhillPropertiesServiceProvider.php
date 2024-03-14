@@ -61,7 +61,7 @@ use Sunhill\Properties\Semantics\Timestamp;
 use Sunhill\Properties\Semantics\URL;
 use Sunhill\Properties\Semantics\UUID4;
 
-class SunhillServiceProvider extends ServiceProvider
+class SunhillPropertiesServiceProvider extends ServiceProvider
 {
     public function register()
     {

@@ -5,7 +5,7 @@ namespace Sunhill\Properties\Tests;
 use Sunhill\Basic\Tests\SunhillOrchestraTestCase;
 use Sunhill\Basic\Tests\SunhillTestCase;
 use Sunhill\Basic\SunhillBasicServiceProvider;
-use Sunhill\Properties\SunhillServiceProvider;
+use Sunhill\Properties\SunhillPropertiesServiceProvider;
 
 class TestCase extends SunhillOrchestraTestCase
 {
@@ -19,7 +19,7 @@ class TestCase extends SunhillOrchestraTestCase
     {
         return [
             SunhillBasicServiceProvider::class,
-            SunhillServiceProvider::class,
+            SunhillPropertiesServiceProvider::class,
          ];
     }
     
