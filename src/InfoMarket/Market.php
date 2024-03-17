@@ -26,6 +26,8 @@ class Market extends AbstractRecordProperty
      * 
      * @param string $path
      * @return bool
+     * 
+     * @test Unit/InfoMarket/MarketTest::testPathExists()
      */
     public function pathExists(string $path): bool
     {
