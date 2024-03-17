@@ -62,7 +62,7 @@ class MarketTest extends TestCase
     {
         $test = new TestMarket();
         
-        $metadata = $test->requestMetadata(')
+        $metadata = $test->requestMetadata('marketeer1.element2');
     }
     
     public function testRequestMetadatas()
