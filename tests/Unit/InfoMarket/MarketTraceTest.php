@@ -23,13 +23,28 @@ class MarketTraceTest extends TestCase
     }
     
     /**
+     * @dataProvider UntracableProvider
+     * @param string $key
+     */
+    public function testUntracable(string $key)
+    {
+        $this->expectException(PathNotTraceableException::class);
+        $test = new TestMarket();
+        $test->trace('marketeer3.'.$key);        
+    }
+    
+    public static function UntracableProvider()
+    {
+        return [
+            ['textkey'],
+        ];    
+    }
+    
+    /**
      * @dataProvider TraceTypesProvider
      */
-    public function testTraceTypes(string $key, bool $pass = true)
+    public function testTraceTypes(string $key)
     {
-        if (!$pass) {
-            $this->expectException(PathNotTraceableException::class);
-        }
         $test = new TestMarket();
         $this->assertFalse($test->isTraced('marketeer3.'.$key));
         $test->trace('marketeer3.'.$key);
@@ -41,11 +56,8 @@ class MarketTraceTest extends TestCase
     /**
      * @dataProvider TraceTypesProvider
      */
-    public function testFirstTrace(string $key, bool $pass = true, $values)
+    public function testFirstTrace(string $key, $values)
     {
-        if (!$pass) {
-            $this->expectException(PathNotTraceableException::class);
-        }
         $test = new TestMarket();
         $test->trace('marketeer3.'.$key);
         $test->updateTraces(1000);
@@ -56,11 +68,8 @@ class MarketTraceTest extends TestCase
     /**
      * @dataProvider TraceTypesProvider
      */
-    public function testUpdateTraceNoChange(string $key, bool $pass = true)
+    public function testUpdateTraceNoChange(string $key)
     {
-        if (!$pass) {
-            $this->expectException(PathNotTraceableException::class);
-        }
         $test = new TestMarket();
         $test->trace('marketeer3.'.$key);
         $test->updateTraces(1000);
@@ -71,43 +80,43 @@ class MarketTraceTest extends TestCase
     /**
      * @dataProvider TraceTypesProvider
      */
-    public function testUpdateTraceWithChange(string $key, bool $pass = true, $values)
+    public function testUpdateTraceWithChange(string $key, $values)
     {
-        if (!$pass) {
-            $this->expectException(PathNotTraceableException::class);
-        }
         $test = new TestMarket();
         $test->trace('marketeer3'.$key);
         $test->updateTraces(1000);
-        $test->putValue('marketeer3.'.$key,$values[]);
+        $test->putValue('marketeer3.'.$key,$values[2000]);
         $test->updateTraces(2000);
-        $this->assertEquals('newvalue', $test->getLastValue('marketeer3.stringkey'));
-        $this->assertEquals(2000, $test->getLastChange('marketeer3.stringkey'));
+        $this->assertEquals($values[2000], $test->getLastValue('marketeer3.'.$key));
+        $this->assertEquals(2000, $test->getLastChange('marketeer3.'.$key));
     }
     
     /**
      * @dataProvider TraceTypesProvider
      */
-    public function testGetValueAt(string $key, bool $pass = true, $values)
+    public function testGetValueAt(string $key, $values)
     {
-        if (!$pass) {
-            $this->expectException(PathNotTraceableException::class);
-        }
         $test = $this->setupTrace($key, $values);
+        $this->assertEquals($values[1000], $test->getValueAt(1000));
+        $this->assertEquals($values[1000], $test->getValueAt(1500));
+        $this->assertEquals($values[2000], $test->getValueAt(2000));
+    }
+
+    public function testGetFirstValue(string $key, $values)
+    {
+        $test = $this->setupTrace($key, $values);
+        $this->assertEquals($values[1000], $test->getFirstValue());
     }
     
     public static function TraceTypesProvider()
     {
-        'stringkey'=>'ValueA','floatkey'=>3.2,'intkey'=>3,'boolkey'=>1,'textkey'=>'Lorep ipsum',
-        'datekey'=>'2023-12-24','timekey'=>'11:12:13','datetimekey'=>'2023-12-24 11:12:13'];
         return [
-            ['stringkey', true, [1000=>'ValueA',2000=>'ValueB',3000=>'ValueC']],
-            ['floatkey', true, [1000=>3.2, 2000=>2.2, 3000=>1.2]],
-            ['intkey', true],
-            ['textkey', false],
-            ['datekey', true],
-            ['timekey', true],
-            ['datetimekey', true]
+            ['stringkey', [1000=>'ValueA',2000=>'ValueB',3000=>'ValueC']],
+            ['floatkey', [1000=>3.2, 2000=>2.2]],
+            ['intkey', [1000=>3, 2000=>4, 3000=>5, 4000=>6]],
+            ['datekey', [1000=>'2023-12-24', 2000=>4, 3000=>5]],
+            ['timekey', [1000=>'11:12:13', 2000=>4, 3000=>5]],
+            ['datetimekey', [1000=>'2023-12-24 11:12:13', 2000=>4, 3000=>5]]
         ];    
     }
     
