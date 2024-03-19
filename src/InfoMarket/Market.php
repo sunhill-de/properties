@@ -125,4 +125,54 @@ class Market extends AbstractRecordProperty
         
     }
     
+    /**
+     * Tries to write the value $value to the path $path. It raises an exception if 
+     * the path doesn't exist or is not writeable
+     * 
+     * @param string $path
+     * @param unknown $value
+     */
+    public function putValue(string $path, $value)
+    {
+        
+    }
+    
+    public function putValues(array $paths_and_values)
+    {
+        
+    }
+    
+    public function isTraced(string $path): bool
+    {
+        
+    }
+    
+    public function trace(string $path)
+    {
+        
+    }
+    
+    public function untrace(string $path)
+    {
+        
+    }
+    
+    public function updateTraces(int $stamp = 0)
+    {
+        if (!$stamp) {
+            $stamp = now();
+        }
+    }
+    
+    public function getLastValue(string $path)
+    {
+        
+    }
+    
+    public function getLastChange(string $path)
+    {
+        
+    }
+    
+    
 }

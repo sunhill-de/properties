@@ -11,6 +11,7 @@ class TestMarket extends Market
     {
         $this->addElement('marketeer1', new TestMarketeer1());
         $this->addElement('marketeer2', new TestMarketeer2());
+        $this->addElement('marketeer3', new TestMarketeer3());
     }
     
 }
