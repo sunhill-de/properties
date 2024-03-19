@@ -5,13 +5,17 @@ namespace Sunhill\Properties\Tests\Unit\InfoMarket;
 use Sunhill\Properties\Tests\TestCase;
 use Sunhill\Properties\InfoMarket\Market;
 use Sunhill\Properties\InfoMarket\Exceptions\PathNotFoundException;
+use Sunhill\Properties\InfoMarket\Exceptions\MarketeerHasNoNameException;
+use Sunhill\Properties\InfoMarket\Exceptions\CantProcessMarketeerException;
 
 class MarketTest extends TestCase
 {
  
+    use GetMarket;
+        
     public function testPathExists()
     {
-        $test = new TestMarket();
+        $test = $this->getMarket();
         
         $this->assertTrue($test->pathExists('marketeer1.element1'));
         $this->assertTrue($test->pathExists('marketeer2.key3.element2'));
@@ -22,21 +26,28 @@ class MarketTest extends TestCase
     
     public function testSimpleRequestValue()
     {
-        $test = new TestMarket();
+        $test = $this->getMarket();
         
         $this->assertEquals('ValueA',$test->requestValue('marketeer1.element1'));
     }
     
+    public function testSimpleRequestValueAsJson()
+    {
+        $test = $this->getMarket();
+        
+        $this->assertEquals('"ValueA"',$test->requestValue('marketeer1.element1','json'));
+    }
+    
     public function testComplexRequestValue()
     {
-        $test = new TestMarket();
+        $test = $this->getMarket();
         
-        $this->assertEquals('value2', $test->requestValue('marketeer2.key3.element2'));
+        $this->assertEquals('valueB', $test->requestValue('marketeer2.key3.element2'));
     }
     
     public function testRequestValues()
     {
-        $test = new TestMarket();
+        $test = $this->getMarket();
         
         $values = $test->requestValues(['marketeer1.element1','marketeer2.key3.element1']);
         
@@ -44,25 +55,55 @@ class MarketTest extends TestCase
         $this->assertEquals('ValueA',$values['marketeer2.key3.element1']);
     }
     
+    public function testRequestValuesAsJson()
+    {
+        $test = $this->getMarket();
+        
+        $values = $test->requestValues(['marketeer1.element1','marketeer2.key3.element1'],'json');
+        
+        $this->assertEquals('{"marketeer1.element1":"ValueA","marketeer2.key3.element1":"ValueA"}', $values);
+    }
+    
     public function testRequestUnknownValue()
     {
-        $test = new TestMarket();
+        $test = $this->getMarket();
+        
         $this->expectException(PathNotFoundException::class);
         $test->requestValue('marketeer1.unknown');        
     }
     
     public function testRequestUnknownValues()
     {
-        $test = new TestMarket();
+        $test = $this->getMarket();
         $this->expectException(PathNotFoundException::class);
         $values = $test->requestValues(['marketeer1.element1','marketeer2.unknown.element1']);
     }
     
     public function testRequestMetadata()
     {
-        $test = new TestMarket();
+        $test = $this->getMarket();
+        
+        $metadata = $test->requestMetadata('marketeer1.element2','array');
+        
+        $this->assertEquals('string', $metadata['type']);
+    }
+    
+    public function testRequestMetadataAsStdclass()
+    {
+        $test = $this->getMarket();
         
         $metadata = $test->requestMetadata('marketeer1.element2');
+        
+        $this->assertEquals('string', $metadata->type);
+    }
+    
+    public function testRequestMetadataAsJson()
+    {
+        $test = $this->getMarket();
+        
+        $metadata = $test->requestMetadata('marketeer1.element2','json');
+        
+        $this->assertTrue(strpos($metadata, '"type":"string"') > 0);
     }
     
     public function testRequestMetadatas()

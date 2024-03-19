@@ -10,9 +10,11 @@ use Sunhill\Properties\InfoMarket\Exceptions\PathNotTraceableException;
 class MarketTraceTest extends TestCase
 {
  
+    use GetMarket;
+    
     protected function setupTrace(string $key, $values)
     {
-        $test = new TestMarket();
+        $test = $this->getMarket();
         $test->trace('marketeer3.'.$key);
         foreach ($values as $time => $value) {
             $test->putValue('marketeer3.'.$key, $value);
@@ -29,7 +31,7 @@ class MarketTraceTest extends TestCase
     public function testUntracable(string $key)
     {
         $this->expectException(PathNotTraceableException::class);
-        $test = new TestMarket();
+        $test = $this->getMarket();
         $test->trace('marketeer3.'.$key);        
     }
     
@@ -45,7 +47,7 @@ class MarketTraceTest extends TestCase
      */
     public function testTraceTypes(string $key)
     {
-        $test = new TestMarket();
+        $test = $this->getMarket();
         $this->assertFalse($test->isTraced('marketeer3.'.$key));
         $test->trace('marketeer3.'.$key);
         $this->assertTrue($test->isTraced('marketeer3.'.$key));
@@ -58,7 +60,7 @@ class MarketTraceTest extends TestCase
      */
     public function testFirstTrace(string $key, $values)
     {
-        $test = new TestMarket();
+        $test = $this->getMarket();
         $test->trace('marketeer3.'.$key);
         $test->updateTraces(1000);
         $this->assertEquals($values[0][1000], $test->getLastValue('marketeer3.'.$key));
@@ -70,7 +72,7 @@ class MarketTraceTest extends TestCase
      */
     public function testUpdateTraceNoChange(string $key)
     {
-        $test = new TestMarket();
+        $test = $this->getMarket();
         $test->trace('marketeer3.'.$key);
         $test->updateTraces(1000);
         $test->updateTraces(2000);
@@ -82,7 +84,7 @@ class MarketTraceTest extends TestCase
      */
     public function testUpdateTraceWithChange(string $key, $values)
     {
-        $test = new TestMarket();
+        $test = $this->getMarket();
         $test->trace('marketeer3'.$key);
         $test->updateTraces(1000);
         $test->putValue('marketeer3.'.$key,$values[2000]);
