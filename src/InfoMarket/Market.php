@@ -16,11 +16,88 @@
 
 namespace Sunhill\Properties\InfoMarket;
 
-use Sunhill\Properties\Properties\AbstractRecordProperty;
+use Sunhill\Properties\InfoMarket\Exceptions\CantProcessMarketeerException;
+use Sunhill\Properties\InfoMarket\Exceptions\MarketeerHasNoNameException;
+use Sunhill\Properties\Properties\AbstractProperty;
+use Sunhill\Properties\InfoMarket\Exceptions\PathNotFoundException;
+use Sunhill\Properties\InfoMarket\Exceptions\UnknownFormatException;
 
-class Market extends AbstractRecordProperty
+class Market 
 {
  
+    protected $marketeers = [];
+
+    /** 
+     * Tries to translate the given marketeer into a object of a marketeer
+     * 
+     * @param unknown $marketeer
+     * @return unknown
+     */
+    protected function handleMarketeer($marketeer)
+    {
+        if (is_a($marketeer, Marketeer::class)) {
+            return $marketeer;
+        }
+        if (class_exists($marketeer)) {
+            return new $marketeer();
+        }
+        if (is_scalar($marketeer)) {
+            throw new CantProcessMarketeerException("The marketeer '$marketeer' can't be processed to a marketeer.");
+        } else {
+            throw new CantProcessMarketeerException("The given marketeer can't be processed to a marketeer.");            
+        }
+    }
+    
+    /**
+     * Registers a new marketeer in this market
+     * 
+     * @param unknown $marketeer
+     * @param string $name
+     */
+    public function registerMarketeer($marketeer, string $name = '')
+    {
+        $marketeer = $this->handleMarketeer($marketeer);
+        if (empty($name)) {
+            $name = $marketeer->getName();
+        }
+        if (empty($name)) {
+            throw new MarketeerHasNoNameException("The given marketeer has no default name and no name was given.");
+        }
+        
+        $this->marketeers[$name] = $marketeer;
+    }
+    
+    /**
+     * Returns if the market provides the given marketeer
+     * 
+     * @param string $marketeer
+     * @return bool
+     */
+    public function hasMarketeer(string $marketeer): bool
+    {
+        return isset($this->marketeers[$marketeer]);
+    }
+    
+    protected function searchProperty(string $path): ?AbstractProperty
+    {
+        $parts = explode('.', $path);
+        $first = array_shift($parts);
+        
+        if (!$this->hasMarketeer($first)) {
+            return null;
+        }
+        
+        return $this->marketeers[$first]->requestItem($parts);    
+    }
+    
+    protected function getProperty(string $path): AbstractProperty
+    {
+        if (empty($property = $this->searchProperty($path))) {
+            throw new PathNotFoundException("The path '$path' was not found.");
+        }
+        return $property;
+    }
+    
     /**
      * Returns if the given path exists. 
      * 
@@ -31,16 +108,34 @@ class Market extends AbstractRecordProperty
      */
     public function pathExists(string $path): bool
     {
-        
+        return !empty($this->searchProperty($path));
+    }
+    
+    protected function processFormat($input, string $format)
+    {
+        switch ($format) {
+            case 'raw':
+                return $input;
+            case 'json':
+                return json_encode($input);
+            case 'stdclass':
+                return json_decode(json_encode($input), false);
+            case 'array':
+                return json_decode(json_encode($input), true);
+            default:
+                throw new UnknownFormatException("The format '$format' is not known.");
+        }        
     }
     
     /**
      * Returns just the value of the given element or raises an exception if none exists
      * @param string $path
      */
-    public function requestValue(string $path)
+    public function requestValue(string $path, string $format = 'raw')
     {
+        $value = $this->getProperty($path)->getValue();
         
+        return $this->processFormat($value, $format);
     }
     
     /**
@@ -51,9 +146,14 @@ class Market extends AbstractRecordProperty
      * @param array $paths
      * @return array
      */
-    public function requestValues(array $paths): array
+    public function requestValues(array $paths, string $format = 'raw')
     {
-        
+        $result = [];
+        foreach ($paths as $path) {
+            $result[$path] = $this->requestValue($path, 'raw');
+        }
+    
+        return $this->processFormat($result, $format);        
     }
     
     /**
@@ -67,9 +167,11 @@ class Market extends AbstractRecordProperty
      * - json = The metadata should be returned as a json string
      * @return array
      */
-    public function requestMetadata(string $path, string $format = 'stdclass'): array
+    public function requestMetadata(string $path, string $format = 'stdclass')
     {
+        $value = $this->getProperty($path)->getMetadata();
         
+        return $this->processFormat($value, $format);
     }
     
     /**
