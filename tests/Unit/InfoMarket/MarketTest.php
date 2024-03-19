@@ -79,7 +79,7 @@ class MarketTest extends TestCase
         $values = $test->requestValues(['marketeer1.element1','marketeer2.unknown.element1']);
     }
     
-    public function testRequestMetadata()
+    public function testRequestMetadataAsArray()
     {
         $test = $this->getMarket();
         
@@ -106,9 +106,31 @@ class MarketTest extends TestCase
         $this->assertTrue(strpos($metadata, '"type":"string"') > 0);
     }
     
-    public function testRequestMetadatas()
+    public function testRequestMetadatasAsArray()
     {
+        $test = $this->getMarket();
         
+        $metadatas = $test->requestMetadatas(['marketeer1.element1','marketeer2.key3.element1'], 'array');
+        
+        $this->assertEquals('string', $metadatas['marketeer1.element1']['type']);
+    }
+    
+    public function testRequestMetadatasAsStdclass()
+    {
+        $test = $this->getMarket();
+        
+        $metadatas = $test->requestMetadatas(['marketeer1.element1','marketeer2.key3.element1'], 'stdclass');
+        
+        $this->assertEquals('string', $metadatas->{"marketeer1.element1"}->type);
+    }
+    
+    public function testRequestMetadatasAsJson()
+    {
+        $test = $this->getMarket();
+        
+        $metadatas = $test->requestMetadatas(['marketeer1.element1','marketeer2.key3.element1'], 'json');
+        
+        $this->assertTrue(strpos($metadatas, '"type":"string"') > 0);
     }
     
     public function testRequestData()

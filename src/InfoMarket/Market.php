@@ -187,9 +187,14 @@ class Market
      * - json = The metadata should be returned as a json string
      * @return array
      */
-    public function requestMetadatas(array $paths, string $format = 'stdclass'): array
+    public function requestMetadatas(array $paths, string $format = 'stdclass')
     {
+        $result = [];
+        foreach ($paths as $path) {
+            $result[$path] = $this->requestMetadata($path);
+        }
         
+        return $this->processFormat($result, $format);        
     }
     
     /**
