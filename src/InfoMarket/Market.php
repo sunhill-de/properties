@@ -208,9 +208,15 @@ class Market
      * - json = The metadata should be returned as a json string
      * @return array
      */
-    public function requestData(string $path, string $format = 'stdclass'): array
+    public function requestData(string $path, string $format = 'stdclass')
     {
+        $property = $this->getProperty($path);
         
+        $value = $property->getMetadata();
+        $value['value'] = $property->getValue();
+        $value['human_value'] = $property->getHumanValue();
+        
+        return $this->processFormat($value, $format);
     }
     
     /**
@@ -227,9 +233,14 @@ class Market
      * - json = The metadata should be returned as a json string
      * @return array
      */
-    public function requestDatas(array $paths, string $format = 'stdclass'): array
+    public function requestDatas(array $paths, string $format = 'stdclass')
     {
+        $result = [];
+        foreach ($paths as $path) {
+            $result[$path] = $this->requestData($path);
+        }
         
+        return $this->processFormat($result, $format);        
     }
     
     /**

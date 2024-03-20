@@ -133,8 +133,66 @@ class MarketTest extends TestCase
         $this->assertTrue(strpos($metadatas, '"type":"string"') > 0);
     }
     
-    public function testRequestData()
+    public function testRequestDataAsStdClass()
     {
+        $test = $this->getMarket();
+
+        $metadata = $test->requestData('marketeer1.element2','stdclass');
+
+        $this->assertEquals('valueB',$metadata->value);        
+    }
+    
+    public function testRequestDataAsArray()
+    {
+        $test = $this->getMarket();
+        
+        $metadata = $test->requestData('marketeer1.element2','array');
+
+        $this->assertEquals('valueB',$metadata['value']);
         
     }
+    
+    public function testRequestDataAsJson()
+    {
+        $test = $this->getMarket();
+        
+        $metadata = $test->requestData('marketeer1.element2','json');
+        
+        $this->assertTrue(strpos($metadata, '"value":"valueB"') > 0);        
+    }
+
+    public function testRequestDatasAsArray()
+    {
+        $test = $this->getMarket();
+        
+        $metadatas = $test->requestDatas(['marketeer1.element1','marketeer2.key3.element1'], 'array');
+        
+        $this->assertEquals('ValueA', $metadatas['marketeer1.element1']['human_value']);
+        $this->assertEquals('ValueA', $metadatas['marketeer1.element1']['value']);
+        $this->assertEquals('string', $metadatas['marketeer1.element1']['type']);
+    }
+    
+    public function testRequestDatasAsStdclass()
+    {
+        $test = $this->getMarket();
+        
+        $metadatas = $test->requestDatas(['marketeer1.element1','marketeer2.key3.element1'], 'stdclass');
+        
+        $this->assertEquals('ValueA', $metadatas->{"marketeer1.element1"}->human_value);
+        $this->assertEquals('ValueA', $metadatas->{"marketeer1.element1"}->value);
+        $this->assertEquals('string', $metadatas->{"marketeer1.element1"}->type);
+    }
+    
+    public function testRequestDatasAsJson()
+    {
+        $test = $this->getMarket();
+        
+        $metadatas = $test->requestDatas(['marketeer1.element1','marketeer2.key3.element1'], 'json');
+        
+        $this->assertTrue(strpos($metadatas, '"human_value":"ValueA"') > 0);
+        $this->assertTrue(strpos($metadatas, '"value":"ValueA"') > 0);
+        $this->assertTrue(strpos($metadatas, '"type":"string"') > 0);
+    }
+    
+    
 }
