@@ -194,5 +194,22 @@ class MarketTest extends TestCase
         $this->assertTrue(strpos($metadatas, '"type":"string"') > 0);
     }
     
+    public function testPutValue()
+    {
+        $test = $this->getMarket();
+        
+        $test->putValue('marketeer3.stringkey', 'newvalue');
+        
+        $this->assertEquals('newvalue', $test->requestValue('marketeer3.stringkey'));
+    }
     
+    public function testPutValues()
+    {
+        $test = $this->getMarket();
+        
+        $test->putValues(['marketeer3.stringkey'=>'newvalue','marketeer3.intkey'=>123]);
+        
+        $this->assertEquals('newvalue', $test->requestValue('marketeer3.stringkey'));
+        $this->assertEquals(123, $test->requestValue('marketeer3.intkey'));
+    }
 }

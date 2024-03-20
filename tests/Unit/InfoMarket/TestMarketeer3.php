@@ -19,7 +19,7 @@ class TestMarketeer3 extends Marketeer
     
     protected function initializeElements()
     {
-        $storage = new TestStorage1();
+        $storage = new TestStorage3();
         $this->addElement('stringkey', $this->createProperty('string'))->setStorage($storage);
         $this->addElement('floatkey', $this->createProperty('float'))->setStorage($storage);
         $this->addElement('intkey', $this->createProperty('integer'))->setStorage($storage);
