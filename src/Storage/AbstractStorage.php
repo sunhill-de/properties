@@ -15,8 +15,80 @@
 
 namespace Sunhill\Properties\Storage;
 
+use Illuminate\Support\Facades\Cache;
+
 abstract class AbstractStorage
 {
+    
+    /**
+     * The cache id is an (optional) prefix for the caching mechanism. If set all read and write actions
+     * go through the cache.
+     * 
+     * @var string
+     */
+    protected $cache_id = '';
+    
+    /**
+     * Stores how long the values should be cached (if at all as defined above)
+     * 
+     * @var integer
+     */
+    protected $cache_time = 60; // 1 Minute
+    
+    /**
+     * Sets an cache id. This can be done from external or in the storage itself for example in the 
+     * constructor 
+     * 
+     * @param string $id
+     * @return self
+     */
+    public function setCacheID(string $id): self
+    {
+        $this->cache_id = $id;
+        return $this;
+    }
+    
+    /**
+     * Returns the cache id
+     * 
+     * @return string
+     */
+    public function getCacheID(): string
+    {
+        return $this->cache_id;    
+    }
+    
+    /**
+     * Sets the current caching time
+     * 
+     * @param int $int
+     * @return self
+     */
+    public function setCacheTime(int $int): self
+    {
+        $this->cache_time = $int;
+        return $this;
+    }
+    
+    /**
+     * Returns the current caching time
+     * 
+     * @return int
+     */
+    public function getCacheTime(): int
+    {
+        return $this->cache_time;    
+    }
+    
+    /**
+     * Returns if this storage is cachable at all.
+     * 
+     * @return bool
+     */
+    public function isCachable(): bool
+    {
+        return !empty($this->cache_id);
+    }
     
     /**
      * Returns the required read capability or null if there is none
@@ -59,8 +131,17 @@ abstract class AbstractStorage
      */
     public function getValue(string $name)
     {
+        if ($this->isCachable()) {
+            if (Cache::has($this->getCacheID().'.'.$name)) {
+                return Cache::get($this->getCacheID().'.'.$name);
+            }
+        }
         $this->prepareGetValue($name);
-        return $this->doGetValue($name);
+        $value = $this->doGetValue($name);
+        if ($this->isCachable()) {
+            Cache::put($this->getCacheID().'.'.$name, $value, $this->cache_time);
+        }
+        return $value;
     }
     
     /**
@@ -112,8 +193,11 @@ abstract class AbstractStorage
      * @param unknown $value
      */
     public function setValue(string $name, $value)
-    {
+    {        
         $this->doSetValue($name, $value);
+        if ($this->isCachable()) {
+            Cache::put($this->getCacheID().'.'.$name, $value, $this->cache_time);
+        }
         $this->postprocessSetValue($name, $value);
     }
     

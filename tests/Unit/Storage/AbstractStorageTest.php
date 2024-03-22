@@ -4,6 +4,7 @@ namespace Sunhill\Properties\Tests\Unit\Managers;
 
 use Sunhill\Properties\Tests\TestCase;
 use Sunhill\Properties\Tests\TestSupport\Storages\TestAbstractStorage;
+use Illuminate\Support\Facades\Cache;
 
 class AbstractStorageTest extends TestCase
 {
@@ -26,5 +27,63 @@ class AbstractStorageTest extends TestCase
         $test = new TestAbstractStorage();
         $test->setValue('test', 'NEWVALUE');
         $this->assertEquals('NEWVALUE', $test->getValue('test'));
+    }
+    
+    public function testCacheMissWhileReading()
+    {
+        Cache::flush();
+        
+        $test = new TestAbstractStorage();
+        $test->setCacheID('teststorage');
+        $test->getValue('test');
+        
+        $this->assertEquals('TESTVALUE', Cache::get('teststorage.test'));
+    }
+    
+    public function testCacheHitWhileReading()
+    {
+        Cache::flush();
+        
+        $test = new TestAbstractStorage();
+        Cache::put('teststorage.test','cachedvalue');
+        $test->setCacheID('teststorage');
+        
+        $this->assertEquals('cachedvalue', $test->getValue('test'));
+        
+    }
+    
+    public function testCacheUpdateWhileWriting()
+    {
+        Cache::flush();
+        
+        $test = new TestAbstractStorage();
+        $test->setCacheID('teststorage');
+        $test->setValue('new', 'NEWVALUE');
+        $this->assertEquals('NEWVALUE', Cache::get('teststorage.new'));
+    }
+        
+    public function testCacheUpdateWhileUpdating()
+    {
+        Cache::flush();
+        
+        $test = new TestAbstractStorage();
+        $test->setCacheID('teststorage');
+        $test->getValue('test');
+        $this->assertEquals('TESTVALUE', Cache::get('teststorage.test'));
+        
+        $test->setValue('test', 'NEWVALUE');
+        $this->assertEquals('NEWVALUE', Cache::get('teststorage.test'));
+    }
+    
+    public function testCacheOutdate()
+    {
+        Cache::flush();
+        
+        $test = new TestAbstractStorage();
+        $test->setCacheID('teststorage')->setCacheTime(1); // Set caching time to 1 second
+        Cache::put('teststorage.test','cached',1);
+        sleep(2);
+        $this->assertEquals('TESTVALUE', $test->getValue('test'));
+        
     }
 }
