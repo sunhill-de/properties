@@ -145,7 +145,7 @@ class SemanticsTest extends TestCase
             [Temperature::class, [], 'A', false],
             
             [Timestamp::class, [], '2024-03-07 15:29:00', true],
-            [Timestamp::class, [], 'A', false],
+            [Timestamp::class, [], 'ABC', false],
             
             [URL::class, [], 'https://example.com', true],
             [URL::class, [], 'https://example.com/test.html', true],
