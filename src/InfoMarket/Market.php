@@ -252,45 +252,16 @@ class Market
      */
     public function putValue(string $path, $value)
     {
+        $property = $this->getProperty($path);
         
+        $property->setValue($value);
     }
     
     public function putValues(array $paths_and_values)
     {
-        
-    }
-    
-    public function isTraced(string $path): bool
-    {
-        
-    }
-    
-    public function trace(string $path)
-    {
-        
-    }
-    
-    public function untrace(string $path)
-    {
-        
-    }
-    
-    public function updateTraces(int $stamp = 0)
-    {
-        if (!$stamp) {
-            $stamp = now();
+        foreach ($paths_and_values as $path => $value) {
+            $this->putValue($path, $value);
         }
     }
-    
-    public function getLastValue(string $path)
-    {
-        
-    }
-    
-    public function getLastChange(string $path)
-    {
-        
-    }
-    
     
 }
