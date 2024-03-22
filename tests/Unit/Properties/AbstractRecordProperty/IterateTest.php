@@ -1,10 +1,7 @@
 <?php
 
 use Sunhill\Properties\Tests\TestCase;
-use Sunhill\Properties\Tests\TestSupport\NonAbstractRecordProperty;
-use Sunhill\Properties\Tests\TestSupport\NonAbstractProperty;
-use Sunhill\Properties\Facades\Properties;
-use Sunhill\Properties\Properties\Exceptions\CantProcessPropertyException;
+use Sunhill\Properties\Tests\TestSupport\Properties\NonAbstractRecordProperty;
 
 class IterateTest extends TestCase
 {

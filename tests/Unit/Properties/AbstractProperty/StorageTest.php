@@ -1,11 +1,6 @@
 <?php
 
-use Sunhill\Properties\Semantic\Name;
 use Sunhill\Properties\Tests\TestCase;
-use Sunhill\Properties\Properties\Exceptions\PropertyException;
-use Sunhill\Properties\Properties\Exceptions\InvalidNameException;
-use Sunhill\Properties\Properties\AbstractProperty;
-use Sunhill\Properties\Tests\TestSupport\TestAbstractIDStorage;
 use Sunhill\Properties\Properties\Exceptions\NoStorageSetException;
 use Sunhill\Properties\Properties\Exceptions\PropertyNotReadableException;
 use Sunhill\Properties\Properties\Exceptions\UserNotAuthorizedForReadingException;
@@ -15,8 +10,8 @@ use Sunhill\Properties\Properties\Exceptions\PropertyNotWriteableException;
 use Sunhill\Properties\Properties\Exceptions\UserNotAuthorizedForWritingException;
 use Sunhill\Properties\Properties\Exceptions\UserNotAuthorizedForModifyException;
 use Sunhill\Properties\Properties\Exceptions\InvalidValueException;
-use Sunhill\Properties\Properties\Exceptions\PropertyKeyDoesntExistException;
-use Sunhill\Properties\Tests\TestSupport\NonAbstractProperty;
+use Sunhill\Properties\Tests\TestSupport\Properties\NonAbstractProperty;
+use Sunhill\Properties\Tests\TestSupport\Storages\TestAbstractIDStorage;
 
 class StorageTest extends TestCase
 {

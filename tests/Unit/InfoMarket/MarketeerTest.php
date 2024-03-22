@@ -33,6 +33,8 @@ use Sunhill\Properties\Managers\Exceptions\PropertyNotRegisteredException;
 use Sunhill\Properties\Managers\Exceptions\PropertyNameAlreadyRegisteredException;
 use Sunhill\Properties\Managers\Exceptions\UnitNameAlreadyRegisteredException;
 use Sunhill\Properties\Managers\Exceptions\UnitNotRegisteredException;
+use Sunhill\Properties\Tests\TestSupport\Marketeers\TestMarketeer1;
+use Sunhill\Properties\Tests\TestSupport\Marketeers\TestMarketeer2;
 
 class MarketeerTest extends TestCase
 {

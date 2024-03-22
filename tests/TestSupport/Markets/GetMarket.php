@@ -1,6 +1,6 @@
 <?php
 
-namespace Sunhill\Properties\Tests\Unit\InfoMarket;
+namespace Sunhill\Properties\Tests\TestSupport\Markets;
 
 use Sunhill\Properties\InfoMarket\Market;
 use Sunhill\Properties\Tests\Unit\InfoMarket\TestMarketeer1;
@@ -13,9 +13,9 @@ trait GetMarket
     protected function getMarket()
     {
         $market = new Market();
-        $market->registerMarketeer(new TestMarketeer1(), 'marketeer1');
-        $market->registerMarketeer(new TestMarketeer2(), 'marketeer2');
-        $market->registerMarketeer(new TestMarketeer3(), 'marketeer3');
+        $market->registerMarketeer(new \Sunhill\Properties\Tests\TestSupport\Marketeers\TestMarketeer1(), 'marketeer1');
+        $market->registerMarketeer(new \Sunhill\Properties\Tests\TestSupport\Marketeers\TestMarketeer2(), 'marketeer2');
+        $market->registerMarketeer(new \Sunhill\Properties\Tests\TestSupport\Marketeers\TestMarketeer3(), 'marketeer3');
         
         return $market;
     }

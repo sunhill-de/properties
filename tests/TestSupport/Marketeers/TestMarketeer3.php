@@ -1,6 +1,6 @@
 <?php
 
-namespace Sunhill\Properties\Tests\Unit\InfoMarket;
+namespace Sunhill\Properties\Tests\TestSupport\Marketeers;
 
 use Sunhill\Properties\InfoMarket\Marketeer;
 use Sunhill\Properties\Storage\SimpleStorage;

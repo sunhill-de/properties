@@ -3,8 +3,7 @@
 namespace Sunhill\Properties\Tests\Unit\Managers;
 
 use Sunhill\Properties\Tests\TestCase;
-use Sunhill\Properties\Storage\AbstractIDStorage;
-use Sunhill\Properties\Tests\TestSupport\TestAbstractIDStorage;
+use Sunhill\Properties\Tests\TestSupport\Storages\TestAbstractIDStorage;
 
 class AbstractIDStorageTest extends TestCase
 {

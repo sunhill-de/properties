@@ -3,8 +3,7 @@
 namespace Sunhill\Properties\Tests\Unit\Managers;
 
 use Sunhill\Properties\Tests\TestCase;
-use Sunhill\Properties\Storage\AbstractStorage;
-use Sunhill\Properties\Tests\TestSupport\TestAbstractStorage;
+use Sunhill\Properties\Tests\TestSupport\Storages\TestAbstractStorage;
 
 class AbstractStorageTest extends TestCase
 {

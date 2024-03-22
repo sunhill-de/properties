@@ -1,6 +1,6 @@
 <?php
 
-namespace Sunhill\Properties\Tests\TestSupport;
+namespace Sunhill\Properties\Tests\TestSupport\Storages;
 
 use Sunhill\Properties\Storage\AbstractStorage;
 

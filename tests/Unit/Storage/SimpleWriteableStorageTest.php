@@ -3,11 +3,8 @@
 namespace Sunhill\Properties\Tests\Unit\Managers;
 
 use Sunhill\Properties\Tests\TestCase;
-use Sunhill\Properties\Storage\AbstractStorage;
-use Sunhill\Properties\Tests\TestSupport\TestAbstractStorage;
 use Sunhill\Properties\Storage\Exceptions\FieldNotAvaiableException;
-use Sunhill\Properties\Tests\TestSupport\DummySimpleStorage;
-use Sunhill\Properties\Tests\TestSupport\DummySimpleWriteableStorage;
+use Sunhill\Properties\Tests\TestSupport\Storages\DummySimpleWriteableStorage;
 
 class SimpleWriteableStorageTest extends TestCase
 {

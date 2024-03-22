@@ -7,16 +7,11 @@ use Sunhill\Properties\Types\TypeInteger;
 use Sunhill\Properties\Types\TypeFloat;
 use Sunhill\Properties\Types\TypeBoolean;
 use Sunhill\Properties\Types\TypeDateTime;
-use Sunhill\Properties\Tests\ReadonlyDatabaseTestCase;
 use Sunhill\Properties\Types\TypeDate;
 use Sunhill\Properties\Types\TypeTime;
 use Sunhill\Properties\Types\TypeText;
 use Sunhill\Properties\Types\TypeEnum;
-use Sunhill\Properties\Types\TypeCollection;
-use Sunhill\Properties\Tests\Testobjects\DummyCollection;
-use Sunhill\Properties\Tests\Testobjects\ComplexCollection;
-use Sunhill\Properties\Tests\Testobjects\AnotherDummyCollection;
-use Sunhill\Properties\Tests\TestSupport\TestAbstractStorage;
+use Sunhill\Properties\Tests\TestSupport\Storages\TestAbstractStorage;
 
 class TypesTest extends TestCase
 {
