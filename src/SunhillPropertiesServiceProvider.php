@@ -67,6 +67,9 @@ class SunhillPropertiesServiceProvider extends ServiceProvider
     {
         $this->app->singleton(PropertiesManager::class, function () { return new PropertiesManager(); } );
         $this->app->alias(PropertiesManager::class,'properties');        
+    
+        $this->app->singleton(Market::class, function () { return new Market(); } );
+        $this->app->alias(Market::class,'infomarket');
     }
     
     protected function registerUnits()
