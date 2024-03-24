@@ -31,7 +31,7 @@ class TypeText extends AbstractSimpleProperty
 
     public function getAccessType(): string
     {
-        return 'string';
+        return 'text';
     }
     
     /**
