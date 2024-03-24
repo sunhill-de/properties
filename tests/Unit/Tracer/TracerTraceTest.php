@@ -3,17 +3,27 @@
 namespace Sunhill\Properties\Tests\Unit\Tracer;
 
 use Sunhill\Properties\Tests\TestCase;
-use Sunhill\Properties\InfoMarket\Exceptions\PathNotTraceableException;
 use Sunhill\Properties\Tests\TestSupport\Markets\GetMarket;
+use Sunhill\Properties\Tracer\Tracer;
+use Sunhill\Properties\Tracer\Exceptions\PathNotTraceableException;
 
 class TracerTraceTest extends TestCase
 {
     
     use GetMarket;
     
+    protected function getTracer()
+    {
+        $market = $this->getMarket();
+        $test = new Tracer();
+        $test->setMarket($market);
+        
+        return $test;
+    }
+    
     protected function setupTrace(string $key, $values)
     {
-        $test = $this->getMarket();
+        
         $test->trace('marketeer3.'.$key);
         foreach ($values as $time => $value) {
             $test->putValue('marketeer3.'.$key, $value);
@@ -26,14 +36,14 @@ class TracerTraceTest extends TestCase
     /**
      * @dataProvider UntracableProvider
      * @param string $key
-     
+    */     
     public function testUntracable(string $key)
     {
         $this->expectException(PathNotTraceableException::class);
-        $test = $this->getMarket();
+        $test = $this->getTracer();
         $test->trace('marketeer3.'.$key);
     }
-    */
+    
     public static function UntracableProvider()
     {
         return [
