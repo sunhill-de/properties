@@ -28,3 +28,4 @@ Homestead.json
 /.settings/
 *.lock
 .buildpath
+/tests/temp/*
