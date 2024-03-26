@@ -15,6 +15,7 @@ namespace Sunhill\Properties\Properties;
 use Sunhill\Properties\Properties\Exceptions\InvalidParameterException;
 use Mockery\Matcher\Type;
 use Sunhill\Properties\Facades\Properties;
+use Sunhill\Properties\Properties\Exceptions\InvalidValueException;
 
 abstract class AbstractArrayProperty extends AbstractProperty implements \ArrayAccess,\Countable,\Iterator
 {
@@ -73,9 +74,55 @@ abstract class AbstractArrayProperty extends AbstractProperty implements \ArrayA
      */
     public function setAllowedElementTypes($type_or_types): self
     {
-        $this->allowed_element_types = array_merge($this->allowed_element_types, $this->checkElementType($type_or_types));
+        if (!empty($type_or_types)) {
+            $this->allowed_element_types = array_merge($this->allowed_element_types, $this->checkElementType($type_or_types));
+        }
         return $this;
     }
+ 
+    abstract protected function doOffsetSet(mixed $offset, mixed $value): void;
+    
+    protected function checkElementAgainstAllowed($value, string $type)
+    {
+        if (is_a($value, $type)) {
+            return true;
+        }
+        $tester = new $type();
+        return $tester->isValid($value);
+    }
+    
+    protected function checkElement($value)
+    {
+        if (empty($this->allowed_element_types)) {
+            return true; // everything is allowed
+        }
+        foreach ($this->allowed_element_types as $allowed_type) {
+            if ($this->checkElementAgainstAllowed($value, $allowed_type)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public function offsetSet(mixed $offset, mixed $value): void
+    {
+        if (!$this->checkElement($value)) {
+            if (is_scalar($value)) {
+                throw new InvalidValueException("The passed value '$value' is not an allowed element type for this array.");
+            } else {
+                throw new InvalidValueException("The passed value is not an allowed element type for this array.");
+            }
+        }
+        $this->doOffsetSet($offset, $value);
+    }
+     
+    abstract protected function doOffsetGet(mixed $offset): mixed;
+    
+    public function offsetGet(mixed $offset): mixed
+    {
+        return $this->doOffsetget($offset);
+    }
+    
     
     public function getAccessType(): string
     {

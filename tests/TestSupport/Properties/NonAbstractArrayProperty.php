@@ -7,24 +7,30 @@ use Sunhill\Properties\Properties\AbstractArrayProperty;
 class NonAbstractArrayProperty extends AbstractArrayProperty
 {
     
+    protected $elements = [];
+    
     public function count(): int
     {
-        return 2;
+        return count($this->elements);
     }
     
     public function offsetExists(mixed $offset): bool
     {
-        
+        return isset($this->elements[$offset]);
     }
     
-    public function offsetGet(mixed $offset): mixed
+    protected function doOffsetGet(mixed $offset): mixed
     {
-        
+        return $this->elements[$offset];
     }
     
-    public function offsetSet(mixed $offset, mixed $value): void
+    protected function doOffsetSet(mixed $offset, mixed $value): void
     {
-        
+        if (empty($offset)) {
+            $this->elements[] = $value;            
+        } else {
+            $this->elements[$offset] = $value;
+        }
     }
     
     public function offsetUnset(mixed $offset): void
