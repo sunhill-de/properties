@@ -20,25 +20,37 @@ use Sunhill\Properties\InfoMarket\Market;
 use Sunhill\Properties\Tracer\Exceptions\PathAlreadyTracedException;
 use Sunhill\Properties\Tracer\Exceptions\PathNotTracedException;
 use Sunhill\Properties\InfoMarket\Exceptions\PathNotFoundException;
+use Sunhill\Properties\Facades\InfoMarket;
 
 abstract class AbstractTracerBackend
 {
     
-    /**
-     * Stores the current market. Passed by the tracer facade
-     * 
-     * @var Market
-     */
-    protected $market;
+    protected $data_cache = [];
     
-    /**
-     * The constructor. Just takes the current market from the facade
-     * 
-     * @param Market $market
-     */
-    public function __construct(Market $market)
+    protected function getData(string $key)
     {
-        $this->market = $market;    
+        return InfoMarket::requestData($key);    
+    }
+    
+    protected function putCache(string $key, $data)
+    {
+        $this->data_cache[$key] = $data;
+    }
+    
+    protected function getCache(string $key)
+    {
+        if (!isset($this->data_cache[$key])) {
+            $data = $this->getData($key);
+            $this->putCache($key, $data);
+            return $data;
+        } else {
+            return $this->data_cache[$key];
+        }
+    }
+    
+    protected function flushCache()
+    {
+        $this->data_cache = [];    
     }
     
     /**
@@ -46,22 +58,44 @@ abstract class AbstractTracerBackend
      * 
      * @param string $path
      */
-    abstract protected function doTrace(string $path);
+    abstract protected function doTrace(string $path, \StdClass $data, int $first_stamp);
+    
+    private function checkPathExists(string $path)
+    {
+        if (!InfoMarket::pathExists($path)) {
+            throw new PathNotFoundException("The path '$path' does not exist.");
+        }        
+    }
+    
+    private function handleDefaultStamp(int $stamp): int
+    {
+        if (empty($stamp)) {
+            return time();
+        }
+    }
+    
+    private function getValue(string $path)
+    {
+        return $this->getCache($path)->value;    
+    }
     
     /**
      * Tells the tracer backend to trace the passed path in the future.
      * It raises an exception when this path is already traced
      * 
-     * @param string $path
+     * @param string $path The path that should be traced
+     * @param int $stamp The timestamp of the first value (default = now())
      */
-    public function trace(string $path)
+    public function trace(string $path, int $stamp = 0)
     {
         if ($this->isTraced($path)) {
             throw new PathAlreadyTracedException("The path '$path' is already traced.");
         }
-        if (!$this->market->pathExists($path)) {
-            throw new PathNotFoundException("The path '$path' does not exist.");
-        }
+        $this->checkPathExists($path);
+        $stamp = $this->handleDefaultStamp($stamp);
+        $data = $this->getCache($path);
+        
+        $this->doTrace($path, $data, $stamp);
     }
     
     /**
@@ -82,6 +116,7 @@ abstract class AbstractTracerBackend
         if (!$this->isTraced($path)) {
             throw new PathNotTracedException("The path '$path' is already traced.");
         }        
+        $this->doUntrace($path);
     }
 
     abstract protected function getIsTraced(string $path): bool;
@@ -93,17 +128,13 @@ abstract class AbstractTracerBackend
      */
     public function isTraced(string $path)
     {
-        if (!$this->market->pathExists($path)) {
-            throw new PathNotFoundException("The path '$path' does not exist.");
-        }
+        $this->checkPathExists($path);
         return $this->getIsTraced($path);
     }
     
     public function updateTraces(int $timestamp = 0)
     {
-        if (!$timestamp) {
-            $timestamp = now();
-        }
+        $timestamp = $this->handleDefaultStamp($timestamp);
     }
     
     public function getLastValue(string $path)

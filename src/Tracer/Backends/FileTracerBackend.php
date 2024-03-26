@@ -36,14 +36,18 @@ class FileTracerBackend extends AbstractTracerBackend
         return $this->tracer_dir;
     }
     
-    protected function doTrace(string $path)
+    protected function doTrace(string $path, \StdClass $data, int $first_stamp)
     {
-        
+       $value = $data->value;
+       if (($file = fopen($this->getTracerDir().'/'.$path,'x'))) {
+           fputs($file, "$first_stamp $value");
+           fclose($file);
+       }
     }
     
     protected function doUntrace(string $path)
     {
-        
+        unlink($this->getTracerDir().'/'.$path);
     }
     
     protected function getIsTraced(string $path): bool
