@@ -6,7 +6,7 @@ use Sunhill\Properties\Storage\AbstractStorage;
 
 class TestAbstractStorage extends AbstractStorage
 {
-    public $values = ['test'=>'TESTVALUE'];
+    public $values = ['test'=>'TESTVALUE','array_val'=>['ABC','DEF']];
     
     public function getReadCapability(string $name): ?string
     {
@@ -21,6 +21,11 @@ class TestAbstractStorage extends AbstractStorage
     protected function doGetValue(string $name)
     {
         return $this->values[$name];
+    }
+    
+    protected function doGetIndexedValue(string $name, mixed $index): mixed
+    {
+        return $this->values[$name][$index];    
     }
     
     public function getWriteCapability(string $name): ?string
@@ -50,6 +55,15 @@ class TestAbstractStorage extends AbstractStorage
     protected function doSetValue(string $name, $value)
     {
         $this->values[$name] = $value;
+    }
+    
+    protected function doSetIndexedValue(string $name, $index, $value)
+    {
+        if (is_null($index)) {
+            $this->values[$name][] = $value;
+        } else {
+            $this->values[$name][$index] = $value;
+        }
     }
     
     public function isDirty(): bool

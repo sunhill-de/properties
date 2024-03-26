@@ -83,7 +83,26 @@ class AbstractStorageTest extends TestCase
         $test->setCacheID('teststorage')->setCacheTime(1); // Set caching time to 1 second
         Cache::put('teststorage.test','cached',1);
         sleep(2);
-        $this->assertEquals('TESTVALUE', $test->getValue('test'));
-        
+        $this->assertEquals('TESTVALUE', $test->getValue('test'));        
+    }
+    
+    public function testArrayAccess()
+    {
+        $test = new TestAbstractStorage();
+        $this->assertEquals('DEF',$test->getIndexedValue('array_val',1));
+    }
+     
+    public function testArrayOverwrite()
+    {
+        $test = new TestAbstractStorage();
+        $test->setIndexedValue('array_val',1,'XYZ');
+        $this->assertEquals('XYZ',$test->getIndexedValue('array_val',1));        
+    }
+    
+    public function testArrayAppend()
+    {
+        $test = new TestAbstractStorage();
+        $test->setIndexedValue('array_val',null,'XYZ');
+        $this->assertEquals('XYZ',$test->getIndexedValue('array_val',2));
     }
 }

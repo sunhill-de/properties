@@ -122,6 +122,16 @@ abstract class AbstractStorage
     {
         
     }
+
+    protected function searchCache(string $cache_name)
+    {
+        if ($this->isCachable()) {
+            if (Cache::has($this->getCacheID().'.'.$cache_name)) {
+                return Cache::get($this->getCacheID().'.'.$cache_name);
+            }
+        }
+        return false;
+    }
     
     /**
      * Gets the given value
@@ -131,15 +141,28 @@ abstract class AbstractStorage
      */
     public function getValue(string $name)
     {
-        if ($this->isCachable()) {
-            if (Cache::has($this->getCacheID().'.'.$name)) {
-                return Cache::get($this->getCacheID().'.'.$name);
-            }
+        if ($value = $this->searchCache($name)) {
+            return $value;
         }
         $this->prepareGetValue($name);
         $value = $this->doGetValue($name);
         if ($this->isCachable()) {
             Cache::put($this->getCacheID().'.'.$name, $value, $this->cache_time);
+        }
+        return $value;
+    }
+ 
+    abstract protected function doGetIndexedValue(string $name, mixed $index): mixed;
+    
+    public function getIndexedValue(string $name, mixed $index)
+    {
+        if ($value = $this->searchCache($name.'.'.$index)) {
+            return $value;
+        }
+        $this->prepareGetValue($name);
+        $value = $this->doGetIndexedValue($name, $index);
+        if ($this->isCachable()) {
+            Cache::put($this->getCacheID().'.'.$name.'.'.$index, $value, $this->cache_time);            
         }
         return $value;
     }
@@ -199,6 +222,11 @@ abstract class AbstractStorage
             Cache::put($this->getCacheID().'.'.$name, $value, $this->cache_time);
         }
         $this->postprocessSetValue($name, $value);
+    }
+    
+    public function setIndexedValue(string $name, $index, $value)
+    {
+        $this->doSetIndexedValue($name, $index, $value);    
     }
     
     /**
