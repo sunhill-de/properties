@@ -67,11 +67,19 @@ abstract class AbstractTracerBackend
         }        
     }
     
+    private function checkPathTraced(string $path)
+    {
+        if (!$this->isTraced($path)) {
+            throw new PathNotTracedException("The path '$path' is not traced.");
+        }        
+    }
+    
     private function handleDefaultStamp(int $stamp): int
     {
         if (empty($stamp)) {
             return time();
         }
+        return $stamp;
     }
     
     private function getValue(string $path)
@@ -113,9 +121,7 @@ abstract class AbstractTracerBackend
      */
     public function untrace(string $path)
     {
-        if (!$this->isTraced($path)) {
-            throw new PathNotTracedException("The path '$path' is already traced.");
-        }        
+        $this->checkPathTraced($path);
         $this->doUntrace($path);
     }
 
@@ -132,34 +138,61 @@ abstract class AbstractTracerBackend
         return $this->getIsTraced($path);
     }
     
+    abstract protected function updateTracee(string $tracee, int $stamp);
+    
     public function updateTraces(int $timestamp = 0)
     {
         $timestamp = $this->handleDefaultStamp($timestamp);
+        
+        $tracies = $this->getTracedElements();
+        foreach ($tracies as $tracee) {
+            $this->updateTracee($tracee, $timestamp);
+        }
     }
+    
+    abstract protected function doGetTracedElements(): array;
+    
+    public function getTracedElements(): array
+    {
+        return $this->doGetTracedElements();    
+    }
+    
+    abstract protected function getLastPair(string $path): \StdClass;
     
     public function getLastValue(string $path)
     {
-        
+        $this->checkPathTraced($path);
+        $pair = $this->getLastPair($path);
+        return $pair->value;
     }
     
     public function getLastChange(string $path)
     {
-        
+        $this->checkPathTraced($path);
+        $pair = $this->getLastPair($path);
+        return $pair->stamp;        
     }
     
     public function getValueAt(string $path,int $timestamp)
     {
+        $this->checkPathTraced($path);
         
     }
     
+    abstract protected function getFirstPair(string $path): \StdClass;
+    
     public function getFirstValue(string $path)
     {
-        
+        $this->checkPathTraced($path);
+        $pair = $this->getFirstPair($path);
+        return $pair->value;        
     }
     
     public function getFirstChange(string $path)
     {
-        
+        $this->checkPathTraced($path);
+        $pair = $this->getFirstPair($path);
+        return $pair->stamp;        
     }
     
     public function getRangeStatistics(string $path, int $start, int $end): \StdClass

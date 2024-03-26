@@ -36,11 +36,15 @@ class FileTracerBackend extends AbstractTracerBackend
         return $this->tracer_dir;
     }
     
+    private function writeEntry($file, $stamp, $value)
+    {
+        fputs($file, $stamp." ".$value."\n");
+    }
+    
     protected function doTrace(string $path, \StdClass $data, int $first_stamp)
     {
-       $value = $data->value;
        if (($file = fopen($this->getTracerDir().'/'.$path,'x'))) {
-           fputs($file, "$first_stamp $value");
+           $this->writeEntry($file, $first_stamp, $data->value);
            fclose($file);
        }
     }
@@ -55,4 +59,58 @@ class FileTracerBackend extends AbstractTracerBackend
         return file_exists($this->getTracerDir().'/'.$path);
     }
     
+    protected function doGetTracedElements(): array
+    {
+        $result = [];
+        
+        $dir = dir($this->getTracerDir());
+        
+        while (false !== ($entry = $dir->read())) {
+            
+            if  ($entry[0] != '.') {
+                $result[] = $entry;
+            }
+        }
+        
+        $dir->close();
+        
+        sort($result);
+        return $result;
+    }
+    
+    protected function readAllValues(string $path): array
+    {
+        return array_map(function($element) {
+            $result = new \StdClass();
+            list($result->stamp,$result->value) = explode(' ',trim($element));
+            return $result;
+        }, file($this->getTracerDir().'/'.$path));
+    }
+    
+    protected function getFirstPair(string $path): \StdClass
+    {
+        $all = $this->readAllValues($path);
+        return $all[0];
+    }
+    
+    protected function getLastPair(string $path): \StdClass
+    {
+        $all = $this->readAllValues($path);
+        return $all[count($all)-1];
+    }
+    
+    private function putValue(string $tracee, int $stamp, $value)
+    {
+        if (($file = fopen($this->getTracerDir().'/'.$tracee,'a+'))) {
+            $this->writeEntry($file, $stamp, $value);
+            fclose($file);
+        }
+    }
+    
+    protected function updateTracee(string $tracee, int $stamp)
+    {
+        $this->flushCache();
+        $data = $this->getCache($tracee);
+        $this->putValue($tracee, $stamp, $data->value);
+    }
 }
