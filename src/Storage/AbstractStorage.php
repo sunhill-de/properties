@@ -197,6 +197,7 @@ abstract class AbstractStorage
     
     public function getElementCount(string $name): int
     {
+        $this->prepareGetValue($name);
         return $this->doGetElementCount($name);    
     }
     
