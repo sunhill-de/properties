@@ -152,8 +152,36 @@ abstract class AbstractStorage
         return $value;
     }
  
+    /**
+     * Gets from the array element $name the entry identified by $index
+     * This routine does not check, if the element is an array at all. This has do be done by
+     * the owning property
+     * 
+     * @param string $name
+     * @param mixed $index integer or string
+     * @return mixed
+     */
     abstract protected function doGetIndexedValue(string $name, mixed $index): mixed;
     
+    /**
+     * Gets from the array element $name the count of entries
+     * This routine does not check, if the element is an array at all. This has do be done by
+     * the owning property
+     * 
+     * @param string $name
+     * @return int
+     */
+    abstract protected function doGetElementCount(string $name): int;
+
+    /**
+     * Gets from the array element $name the entry identified by $index
+     * This routine does not check, if the element is an array at all. This has do be done by
+     * the owning property. This routine does check, if the entry is already cached
+     * 
+     * @param string $name
+     * @param mixed $index
+     * @return boolean|mixed|mixed
+     */
     public function getIndexedValue(string $name, mixed $index)
     {
         if ($value = $this->searchCache($name.'.'.$index)) {
@@ -165,6 +193,11 @@ abstract class AbstractStorage
             Cache::put($this->getCacheID().'.'.$name.'.'.$index, $value, $this->cache_time);            
         }
         return $value;
+    }
+    
+    public function getElementCount(string $name): int
+    {
+        return $this->doGetElementCount($name);    
     }
     
     /**
@@ -199,6 +232,15 @@ abstract class AbstractStorage
     abstract protected function doSetValue(string $name, $value);
     
     /**
+     * Sets in the array property $name the element identified by $index with $value
+     *
+     * @param string $name
+     * @param unknown $index
+     * @param unknown $value
+     */
+    abstract protected function doSetIndexedValue(string $name, $index, $value);
+    
+    /**
      * Perfoms action after setting the value
      * 
      * @param string $name
@@ -223,7 +265,14 @@ abstract class AbstractStorage
         }
         $this->postprocessSetValue($name, $value);
     }
-    
+
+    /**
+     * Sets in the array property $name the element identified by $index with $value
+     * 
+     * @param string $name
+     * @param unknown $index
+     * @param unknown $value
+     */
     public function setIndexedValue(string $name, $index, $value)
     {
         $this->doSetIndexedValue($name, $index, $value);    

@@ -28,6 +28,11 @@ class TestAbstractStorage extends AbstractStorage
         return $this->values[$name][$index];    
     }
     
+    protected function doGetElementCount(string $name): int
+    {
+        return count($this->values[$name]);    
+    }
+    
     public function getWriteCapability(string $name): ?string
     {
         return null;

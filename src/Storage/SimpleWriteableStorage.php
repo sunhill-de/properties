@@ -45,4 +45,16 @@ abstract class SimpleWriteableStorage extends SimpleStorage
         return isset($this->values[$name]);
     }
     
+    protected function doSetIndexedValue(string $name, $index, $value)
+    {
+        if (!isset($this->values[$name])) {
+            $this->values[$name] = [];
+        }
+        if (is_null($index)) {
+            $this->values[$name][] = $value;
+        } else {
+            $this->values[$name][$index] = $value;            
+        }
+    }
+    
 }

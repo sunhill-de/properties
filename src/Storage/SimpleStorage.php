@@ -15,6 +15,7 @@
 namespace Sunhill\Properties\Storage;
 
 use Sunhill\Properties\Storage\Exceptions\FieldNotAvaiableException;
+use Sunhill\Properties\Storage\Exceptions\FieldNotAnArrayException;
 
 abstract class SimpleStorage extends AbstractStorage
 {
@@ -58,6 +59,27 @@ abstract class SimpleStorage extends AbstractStorage
         return $this->values[$name];
     }
     
+    protected function doGetIndexedValue(string $name, mixed $index): mixed
+    {
+        if (!isset($this->values[$name])) {
+            throw new FieldNotAvaiableException("The field '$name' is not avaiable.");            
+        }
+        if (!is_array($this->values[$name])) {
+            throw new FieldNotAnArrayException("The field '$name' is not an array.");
+        }
+        return $this->values[$name][$index];
+    }
+    
+    protected function doGetElementCount(string $name): int
+    {
+        if (!isset($this->values[$name])) {
+            throw new FieldNotAvaiableException("The field '$name' is not avaiable.");
+        }
+        if (!is_array($this->values[$name])) {
+            throw new FieldNotAnArrayException("The field '$name' is not an array.");
+        }
+        return count($this->values[$name]);
+    }
     /**
      * Prepares the retrievement of the value
      * 
@@ -110,7 +132,12 @@ abstract class SimpleStorage extends AbstractStorage
      */
     protected function doSetValue(string $name, $value)
     {
-        // Should 
+        // Should not be called
+    }
+    
+    protected function doSetIndexedValue(string $name, $index, $value)
+    {
+        // Should not be called
     }
     
     /**

@@ -107,6 +107,16 @@ abstract class AbstractCachedStorage extends AbstractStorage
         return $this->values[$name];
     }
     
+    protected function doGetIndexedValue(string $name, mixed $index): mixed
+    {
+        return $this->values[$name][$index];
+    }
+    
+    protected function doGetElementCount(string $name): int
+    {
+        return count($this->values[$name]);
+    }
+        
     /**
      * Prepares the retrievement of the value
      * 
@@ -167,6 +177,44 @@ abstract class AbstractCachedStorage extends AbstractStorage
     }
     
     /**
+     * Handles the value change of a already initialized array property
+     *
+     * @param string $name
+     * @param unknown $value
+     */
+    private function handleInitializedArrayValue(string $name, $index, $value)
+    {
+        if (is_null($index)) {
+            if (!$this->isModified($name)) { // Not already shadowed
+                $this->shadows[$name] = $this->values[$name]; // No, than store old value to shadow
+            }
+            $this->values[] = $value;
+            return;
+        }
+        if ($this->values[$name][$index] <> $value) { // Is there any change?
+            if (!$this->isModified($name)) { // Not already shadowed
+                $this->shadows[$name] = $this->values[$name]; // No, than store old value to shadow
+            }
+            $this->values[$name][$index] = $value; // Store value
+        }
+    }
+    
+    /**
+     * Handles th value change of a uninitialized array property
+     *
+     * @param string $name
+     * @param unknown $value
+     */
+    private function handleUninitializedArrayValue(string $name, $index, $value)
+    {
+        if (is_null($index)) {
+            $this->values[$name] = [$value];            
+        } else {
+            $this->values[$name] = [$index => $value];
+        }
+    }
+    
+    /**
      * Performs the setting of the value
      * 
      * @param string $name
@@ -183,6 +231,20 @@ abstract class AbstractCachedStorage extends AbstractStorage
             $this->handleInitializedValue($name, $value);
         } else {
             $this->handleUninitializedValue($name, $value);            
+        }
+    }
+    
+    protected function doSetIndexedValue(string $name, $index, $value)
+    {
+        if ($this->isAlreadyStored()) {
+            $this->loadOnDemand();
+            $this->checkPropertyExists($name);
+        }
+        
+        if ($this->isInitialized($name)) {
+            $this->handleInitializedArrayValue($name, $index, $value);
+        } else {
+            $this->handleUninitializedArrayValue($name, $index, $value);
         }
     }
     

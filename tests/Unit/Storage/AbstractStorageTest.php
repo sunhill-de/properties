@@ -105,4 +105,10 @@ class AbstractStorageTest extends TestCase
         $test->setIndexedValue('array_val',null,'XYZ');
         $this->assertEquals('XYZ',$test->getIndexedValue('array_val',2));
     }
+    
+    public function testArrayCount()
+    {
+        $test = new TestAbstractStorage();
+        $this->assertEquals(2, $test->getElementCount('array_val'));
+    }
 }

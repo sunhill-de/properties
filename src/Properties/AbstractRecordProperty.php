@@ -17,7 +17,7 @@ use Sunhill\Properties\Properties\Exceptions\DuplicateElementNameException;
 use Sunhill\Properties\Properties\Exceptions\PropertyDoesntExistException;
 use Sunhill\Properties\Facades\Properties;
 
-abstract class AbstractRecordProperty extends AbstractProperty implements \Iterator
+class AbstractRecordProperty extends AbstractProperty implements \Iterator
 {
  
     protected $elements = [];

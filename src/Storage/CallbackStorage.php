@@ -46,6 +46,16 @@ abstract class CallbackStorage extends AbstractStorage
         return method_exists($this, $method);
     }
     
+    private function getMethodName(string $name, string $method, string $message): string
+    {
+        $method = $method.'_'.$name;
+        
+        if (!method_exists($this, $method)) {            
+            throw new FieldNotAvaiableException(str_replace(':name',$method, $message));
+        } 
+        return $method;
+    }
+    
     /**
      * Performs the retrievement of the value
      * 
@@ -53,12 +63,20 @@ abstract class CallbackStorage extends AbstractStorage
      */
     protected function doGetValue(string $name)
     {
-        $method = 'get_'.$name;
-        
-        if (!method_exists($this, $method)) {
-            throw new FieldNotAvaiableException("The field '$name' is not avaiable.");
-        }
+        $method = $this->getMethodName($name,'get',"The field :name doesn't exist or doesn't provide a read method.");
         return $this->$method();
+    }
+    
+    protected function doGetIndexedValue(string $name, mixed $index): mixed
+    {
+        $method = $this->getMethodName($name,'get',"The field :name doesn't exist or doesn't provide a read method.");
+        return $this->$method($index);
+    }
+    
+    protected function doGetElementCount(string $name): int
+    {
+        $method = $this->getMethodName($name,'get',"The field :name doesn't exist or doesn't provide a element count method.");
+        return $this->$method();        
     }
     
     /**
@@ -110,12 +128,14 @@ abstract class CallbackStorage extends AbstractStorage
      */
     protected function doSetValue(string $name, $value)
     {
-        $method = 'set_'.$name;
-        
-        if (!method_exists($this, $method)) {
-            throw new FieldNotAvaiableException("The field '$name' is not avaiable.");
-        }
+        $method = $this->getMethodName($name,'set',"The field :name doesn't exist or doesn't provide a write method.");
         return $this->$method($value);
+    }
+
+    protected function doSetIndexedValue(string $name, $index, $value)
+    {
+        $method = $this->getMethodName($name,'set',"The field :name doesn't exist or doesn't provide a write method.");
+        return $this->$method($index, $value);        
     }
     
     /**
