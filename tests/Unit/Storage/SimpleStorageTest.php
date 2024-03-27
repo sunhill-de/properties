@@ -23,4 +23,15 @@ class SimpleStorageTest extends TestCase
         $help = $test->getValue('NonExisting');
     }
     
+    public function testReadArrayValue()
+    {
+        $test = new DummySimpleStorage();
+        $this->assertEquals('DEF', $test->getIndexedValue('keyC', 1));
+    }
+    
+    public function testArrayCount()
+    {
+        $test = new DummySimpleStorage();
+        $this->assertEquals(2, $test->getElementCount('keyC'));        
+    }
 }

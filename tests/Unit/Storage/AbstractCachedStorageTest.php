@@ -8,7 +8,7 @@ use Sunhill\Properties\Tests\TestCase;
 class TestAbstractCachedStorage extends AbstractCachedStorage
 {
     
-    public $data = ['test_str'=>'ABC','test_int'=>123];
+    public $data = ['test_str'=>'ABC','test_int'=>123, 'test_array'=>['abc','def']];
     
     public $already_stored = false;
     
@@ -120,4 +120,29 @@ class AbstractCachedStorageTest extends TestCase
         $test->rollback();
         $this->assertEquals('ABC', $test->getValue('test_str'));
     }
+    
+    public function testArrayRead()
+    {
+        $test = new TestAbstractCachedStorage();
+        $test->already_stored = true;
+        $this->assertEquals('abc', $test->getIndexedValue('test_array', 0));
+    }
+    
+    public function testArrayAppend()
+    {
+        $test = new TestAbstractCachedStorage();
+        $test->setIndexedValue('test_array', 2, 'ghi');
+        $this->assertEquals('ghi', $test->getIndexedValue('test_array', 2));
+        $this->assertTrue($test->isDirty());        
+    }
+
+    public function testArrayChange()
+    {
+        $test = new TestAbstractCachedStorage();
+        $test->setIndexedValue('test_array', 1, 'ghi');
+        $this->assertEquals('ghi', $test->getIndexedValue('test_array', 1));
+        $this->assertTrue($test->isDirty());
+    }
+    
+    
 }
