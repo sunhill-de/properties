@@ -113,4 +113,21 @@ class FileTracerBackend extends AbstractTracerBackend
         $data = $this->getCache($tracee);
         $this->putValue($tracee, $stamp, $data->value);
     }
+
+    protected function doGetValueAt(string $path, int $timestamp)
+    {
+        $values = $this->readAllValues($path);
+        foreach ($values as $entry) {
+            if ($timestamp >= $entry->stamp) {
+                return $entry->value;
+            }
+        }
+        return $entry->value;
+    }
+    
+    protected function doGetRangeValues(string $path, int $start, int $end): array
+    {
+        
+    }
+    
 }

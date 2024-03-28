@@ -173,10 +173,12 @@ abstract class AbstractTracerBackend
         return $pair->stamp;        
     }
     
+    abstract protected function doGetValueAt(string $path, int $timestamp);
+    
     public function getValueAt(string $path,int $timestamp)
     {
         $this->checkPathTraced($path);
-        
+        return $this->doGetValueAt($path, $timestamp);
     }
     
     abstract protected function getFirstPair(string $path): \StdClass;
@@ -195,7 +197,9 @@ abstract class AbstractTracerBackend
         return $pair->stamp;        
     }
     
-    public function getRangeStatistics(string $path, int $start, int $end): \StdClass
+    abstract protected function doGetRangeValues(string $path, int $start, int $end): array;
+    
+    public function getRangeStatistics(string $path, int $start = 0, int $end = 0): \StdClass
     {
         
     }
