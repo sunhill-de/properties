@@ -40,7 +40,7 @@ class TypesTest extends TestCase
             $this->assertEquals($expect, $test->isValid($test_input));            
         }
     }
-    
+   
     static public function validateProvider()
     {
         return [
@@ -121,9 +121,9 @@ class TypesTest extends TestCase
             [TypeTime::class, [], '11:11', true],
             [TypeTime::class, [], '1:1', true],
             
-            [TypeVarchar::class,[],'Test',true],
-            [TypeVarchar::class,['MaxLen'=>2],'Test',true],
-            [TypeVarchar::class,['MaxLen'=>2,'LengthExceedPolicy'=>'invalid'],'Test',false],
+            [TypeVarchar::class,[],'Teststring',true],
+            [TypeVarchar::class,['MaxLen'=>2],'Teststring',true],
+            [TypeVarchar::class,['MaxLen'=>2,'LengthExceedPolicy'=>'invalid'],'Teststring',false],
             [TypeVarchar::class, [], function() { return new \StdClass(); }, false],
             
         ];
@@ -271,7 +271,7 @@ class TypesTest extends TestCase
             [TypeDate::class, [], 'ABC', 'except'],
             [TypeDate::class, [], '', 'except'],
             [TypeDate::class, [], 1686778521, '2023-06-14'],
-            
+           
             [TypeDatetime::class, [], '2018-02-01 11:11:11', '2018-02-01 11:11:11'],
             [TypeDatetime::class, [], '1.2.2018 11:11:11', '2018-02-01 11:11:11'],
             [TypeDateTime::class, [], 1686778521, '2023-06-14 21:35:21'],
@@ -289,7 +289,7 @@ class TypesTest extends TestCase
             [TypeInteger::class, [], 1.1, 'except'],
             [TypeInteger::class, [], 'A', 'except'],
             [TypeInteger::class, [], '1', 1],
-            
+           
             [TypeText::class, [], 'Lorem ipsum', 'Lorem ipsum'],
             [TypeText::class, [], function() { return new \StdClass(); }, 'except'],
             
@@ -297,9 +297,9 @@ class TypesTest extends TestCase
             [TypeTime::class, [], '11:11', '11:11:00', function($input) { return $input->format('H:i:s'); }],
             [TypeTime::class, [], '1:1', '01:01:00', function($input) { return $input->format('H:i:s'); }],
             
-            [TypeVarchar::class,[],'Test','Test'],
-            [TypeVarchar::class,['MaxLen'=>2],'Test','Te'],            
-            [TypeVarchar::class,['MaxLen'=>2,'LengthExceedPolicy'=>'invalid'],'Test','except']
+            [TypeVarchar::class,[],'Teststring','Teststring'],
+            [TypeVarchar::class,['MaxLen'=>2],'Teststring','Te'],            
+            [TypeVarchar::class,['MaxLen'=>2,'LengthExceedPolicy'=>'invalid'],'Teststring','except']
         ];
     }
     
