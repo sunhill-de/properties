@@ -199,9 +199,54 @@ abstract class AbstractTracerBackend
     
     abstract protected function doGetRangeValues(string $path, int $start, int $end): array;
     
+    protected function getRangeRaw(string $path, int &$start, int &$end): array
+    {
+        if ($start == 0) {
+            $start = $this->getFirstChange($path);
+        }
+        if ($end == 0) {
+            $end = time();
+        }
+        $range = $this->doGetRangeValues($path, $start, $end);
+        if ($start < $range[0]->stamp) {
+            $element = new \StdClass();
+            $element->stamp = $start;
+            $element->value = $this->getValueAt($path, $start);
+            array_unshift($range, $element);
+        }
+        if ($end > $range[count($range)-1]->value) {
+            $element = new \StdClass();
+            $element->stamp = $end;
+            $element->value = $this->getValueAt($path, $end);
+            array_push($range, $element);            
+        }
+        
+        return $range;
+    }
+    
     public function getRangeStatistics(string $path, int $start = 0, int $end = 0): \StdClass
     {
+        $result = new \StdClass();
         
+        $range = $this->getRangeRaw($path, $start, $end);
+        foreach ($range as $element) {
+            if (isset($result->min)) {
+                if ($element->value < $result->min) {
+                    $result->min = $element->value;
+                }
+            } else {
+                $result->min = $element->value;
+            }
+            if (isset($result->max)) {
+                if ($element->value > $result->max) {
+                    $result->max = $element->value;
+                }
+            } else {
+                $result->max = $element->value;
+            }
+        }
+        $result->range = $end - $start;
+        return $result;
     }
     
     public function getRangeValues(string $path, int $start, int $end, int $step): array
