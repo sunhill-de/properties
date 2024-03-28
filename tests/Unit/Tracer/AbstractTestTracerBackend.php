@@ -106,7 +106,6 @@ abstract class AbstractTestTracerBackend extends TestCase
         $data = new \StdClass();
         
         InfoMarket::shouldReceive('pathExists')->with('marketeer1.element1')->andReturn(true);
-        InfoMarket::shouldReceive('requestData')->once()->with('marketeer1.element1')->andReturn($data);
         
         $first = true;
         

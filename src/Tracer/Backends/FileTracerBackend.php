@@ -116,7 +116,7 @@ class FileTracerBackend extends AbstractTracerBackend
 
     protected function doGetValueAt(string $path, int $timestamp)
     {
-        $values = $this->readAllValues($path);
+        $values = array_reverse($this->readAllValues($path));
         foreach ($values as $entry) {
             if ($timestamp >= $entry->stamp) {
                 return $entry->value;
