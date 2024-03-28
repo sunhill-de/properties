@@ -127,7 +127,7 @@ class FileTracerBackend extends AbstractTracerBackend
     
     protected function doGetRangeValues(string $path, int $start, int $end): array
     {
-        $values = $this->readAvllValues($path);
+        $values = $this->readAllValues($path);
         $result = [];
         
         foreach ($values as $entry) {

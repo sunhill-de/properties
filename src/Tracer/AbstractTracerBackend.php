@@ -21,6 +21,8 @@ use Sunhill\Properties\Tracer\Exceptions\PathAlreadyTracedException;
 use Sunhill\Properties\Tracer\Exceptions\PathNotTracedException;
 use Sunhill\Properties\InfoMarket\Exceptions\PathNotFoundException;
 use Sunhill\Properties\Facades\InfoMarket;
+use Sunhill\Properties\Tracer\Exceptions\InvalidRangeException;
+use Sunhill\Properties\Properties\Exceptions\InvalidParameterException;
 
 abstract class AbstractTracerBackend
 {
@@ -199,14 +201,19 @@ abstract class AbstractTracerBackend
     
     abstract protected function doGetRangeValues(string $path, int $start, int $end): array;
     
-    protected function getRangeRaw(string $path, int &$start, int &$end): array
+    private function adjustRange(string $path, int &$start, int &$end)
     {
         if ($start == 0) {
             $start = $this->getFirstChange($path);
         }
         if ($end == 0) {
             $end = time();
-        }
+        }        
+    }
+    
+    protected function getRangeRaw(string $path, int &$start, int &$end): array
+    {
+        $this->adjustRange($path, $start, $end);
         $range = $this->doGetRangeValues($path, $start, $end);
         if ($start < $range[0]->stamp) {
             $element = new \StdClass();
@@ -229,6 +236,10 @@ abstract class AbstractTracerBackend
         $result = new \StdClass();
         
         $range = $this->getRangeRaw($path, $start, $end);
+        if ($start == $end) {
+            throw new InvalidRangeException("Begin and end of range are the same.");
+        }
+        $sum = 0;
         foreach ($range as $element) {
             if (isset($result->min)) {
                 if ($element->value < $result->min) {
@@ -244,13 +255,31 @@ abstract class AbstractTracerBackend
             } else {
                 $result->max = $element->value;
             }
+            if (isset($last_value)) {
+                $sum += $last_value * ($element->stamp - $last_stamp);
+            }
+            $last_value = $element->value;
+            $last_stamp = $element->stamp;
         }
         $result->range = $end - $start;
+        $result->avg = $sum / $result->range;
         return $result;
     }
     
     public function getRangeValues(string $path, int $start, int $end, int $step): array
     {
+        if ($step <= 0) {
+            throw new InvalidParameterException("step must't be 0 or below");
+        }
+        $this->adjustRange($path, $start, $end); 
+        $pointer = $start;
+        $result = [];
         
+        while ($pointer <= $end) {
+            $result[$pointer] = $this->doGetValueAt($path, $pointer);
+            $pointer += $step;
+        }
+        
+        return $result;
     }
 }

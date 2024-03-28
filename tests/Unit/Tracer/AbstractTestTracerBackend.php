@@ -151,7 +151,7 @@ abstract class AbstractTestTracerBackend extends TestCase
     public function testRangeStatisticsOverall()
     {
         $test = $this->getRangeBackend();
-        $statistics = $test->getRangeStatistics('marketeer1.element1');
+        $statistics = $test->getRangeStatistics('marketeer1.element1',0,6000);
         
         $this->assertEquals(5000, $statistics->range);
         $this->assertEquals(10, $statistics->min);
@@ -167,7 +167,7 @@ abstract class AbstractTestTracerBackend extends TestCase
         $this->assertEquals(4000, $statistics->range);
         $this->assertEquals(10, $statistics->min);
         $this->assertEquals(40, $statistics->max);
-        $this->assertEquals(28.75, $statistics->avg);
+        $this->assertEquals(23.75, $statistics->avg);
     }
     
     public function testRangeValues()
