@@ -20,6 +20,10 @@ use Sunhill\Properties\Facades\Properties;
 class AbstractRecordProperty extends AbstractProperty implements \Iterator
 {
  
+    /**
+     * Stores the actual elements
+     * @var array
+     */
     protected $elements = [];
     
     /**
@@ -28,6 +32,20 @@ class AbstractRecordProperty extends AbstractProperty implements \Iterator
     protected function flushElements()
     {
         $this->elements = [];
+    }
+    
+    /**
+     * Sotres the action traits
+     * @var array
+     */
+    protected $traits = [];
+    
+    /**
+     * Clears the actual traits list
+     */
+    protected function flushTraits()
+    {
+        $this->traits = [];
     }
     
     /**
@@ -64,14 +82,8 @@ class AbstractRecordProperty extends AbstractProperty implements \Iterator
         $element->setOwner($this);
         $this->elements[$name] = $element;
     }
-    
-    /**
-     * Adds a new element to the list and returns this element
-     * 
-     * @param AbstractProperty|string $element
-     * @return AbstractProperty
-     */
-    protected function addElement(string $name, $element): AbstractProperty
+
+    private function getElement($element): AbstractProperty
     {
         if (is_string($element)) {
             $element = $this->processStringElement($element);
@@ -82,8 +94,32 @@ class AbstractRecordProperty extends AbstractProperty implements \Iterator
                 throw new CantProcessPropertyException("Can't process the given parameter to a property.");
             }
         }
+        return $element;
+    }
+    
+    /**
+     * Adds a new element to the list and returns this element
+     * 
+     * @param AbstractProperty|string $element
+     * @return AbstractProperty
+     */
+    protected function addElement(string $name, $element): AbstractProperty
+    {
+        $element = $this->getElement($element);
         $this->doAddElement($name, $element);
         return $element;    
+    }
+    
+    private function doAddTrait($element)
+    {
+        $this->traits[] = $element;    
+    }
+    
+    protected function addTrait($element): AbstractProperty
+    {
+        $element = $this->getElement($element);
+        $this->doAddTrait($element);
+        return $element;
     }
     
     /**
@@ -143,9 +179,14 @@ class AbstractRecordProperty extends AbstractProperty implements \Iterator
     }
     
 // ************************ getElements ***********************************
+    private function getTraitElementNames()
+    {
+        return [];            
+    }
+    
     public function getElementNames()
     {
-        return array_keys($this->elements);
+        return array_merge($this->getOwnElementNames(), $this->getTraitElementNames());
     }
     
     public function getOwnElementNames()
@@ -155,7 +196,8 @@ class AbstractRecordProperty extends AbstractProperty implements \Iterator
     
     public function getElements()
     {
-        return array_values($this->elements);
+        $result = $this->getOwnElements();
+        return $result;
     }
     
     public function getOwnElements()
