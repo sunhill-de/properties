@@ -63,6 +63,7 @@ class TraitTest extends TestCase
         
         $this->assertTrue($test->hasElement('ownelement1'));
         $this->assertTrue($test->hasElement('elementA'));
+        $this->assertFalse($test->hasElement('nonexisting'));
     }
     
 }
