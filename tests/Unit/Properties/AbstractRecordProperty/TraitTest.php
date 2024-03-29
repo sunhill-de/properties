@@ -26,7 +26,7 @@ class TraitTest extends TestCase
         
         $elements = $test->getElementNames();
         
-        $this->assertEquals(['ownelement1','ownrecord','elementA'], $elements);        
+        $this->assertEquals(['ownelement1','ownrecord','elementA','elementB'], $elements);        
     }
     
     public function testGetOwnElementNames()

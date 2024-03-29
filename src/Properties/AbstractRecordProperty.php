@@ -179,14 +179,13 @@ class AbstractRecordProperty extends AbstractProperty implements \Iterator
     }
     
 // ************************ getElements ***********************************
-    private function getTraitElementNames()
-    {
-        return [];            
-    }
-    
     public function getElementNames()
     {
-        return array_merge($this->getOwnElementNames(), $this->getTraitElementNames());
+        $result = $this->getOwnElementNames();
+        foreach ($this->traits as $trait) {
+            $result = array_merge($result, $trait->getElementNames());
+        }
+        return $result;
     }
     
     public function getOwnElementNames()
@@ -197,6 +196,9 @@ class AbstractRecordProperty extends AbstractProperty implements \Iterator
     public function getElements()
     {
         $result = $this->getOwnElements();
+        foreach ($this->traits as $trait) {
+            $result = array_merge($result, $trait->getElements());
+        }
         return $result;
     }
     
@@ -207,7 +209,15 @@ class AbstractRecordProperty extends AbstractProperty implements \Iterator
     
     public function hasElement(string $name)
     {
-        return isset($this->elements[$name]);
+        if (isset($this->elements[$name])) {
+            return true;
+        }
+        foreach ($this->traits as $trait) {
+            if ($trait->hasElement($name)) {
+                return true;
+            }
+        }
+        return false;    
     }
     
 // ************************** transparent element handling *****************************
