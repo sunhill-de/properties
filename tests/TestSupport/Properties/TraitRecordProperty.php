@@ -8,7 +8,7 @@ class TraitRecordProperty extends AbstractRecordProperty
 {
     protected function initializeElements()
     {
-        $this->addElement('ownelement1', new NonAbstractProperty());
+        $this->addElement('ownelement1', new SimpleCharProperty());
         $this->addElement('ownrecord', new NonAbstractRecordProperty());
         $this->addTrait(new NonAbstractRecordProperty());
     }   

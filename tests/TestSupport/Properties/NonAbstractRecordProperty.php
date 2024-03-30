@@ -13,11 +13,11 @@ class NonAbstractRecordProperty extends AbstractRecordProperty
   
     protected function initializeElements()
     {
-        $element1 = new NonAbstractProperty();
+        $element1 = new SimpleCharProperty();
         $element1->setName('elementA');
         $element1->setOwner($this);
         
-        $element2 = new NonAbstractProperty();
+        $element2 = new SimpleCharProperty();
         $element2->setName('elementB');
         $element2->setOwner($this);
         
