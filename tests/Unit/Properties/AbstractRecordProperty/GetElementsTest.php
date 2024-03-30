@@ -1,52 +1,37 @@
 <?php
 
-use Sunhill\Properties\Tests\TestCase;
+uses(\Sunhill\Properties\Tests\TestCase::class);
 use Sunhill\Properties\Tests\TestSupport\Properties\NonAbstractRecordProperty;
+test('get element names', function () {
+    $test = new NonAbstractRecordProperty();
 
-class GetElementsTest extends TestCase
-{
-    
-    public function testGetElementNames()
-    {
-        $test = new NonAbstractRecordProperty();
-        
-        $elements = $test->getElementNames();
-        
-        $this->assertEquals(['elementA','elementB'], $elements);
-    }
-    
-    public function testGetOwnElementNames()
-    {
-        $test = new NonAbstractRecordProperty();
-        
-        $elements = $test->getOwnElementNames();
-        
-        $this->assertEquals(['elementA','elementB'], $elements);        
-    }
-    
-    public function testGetElements()
-    {
-        $test = new NonAbstractRecordProperty();
-        
-        $elements = $test->getElements();
-        
-        $this->assertEquals('elementA', $elements[0]->getName());        
-    }
-    
-    public function testGetOwnElements()
-    {
-        $test = new NonAbstractRecordProperty();
-        
-        $elements = $test->getOwnElements();
-        
-        $this->assertEquals('elementA', $elements[0]->getName());
-    }
+    $elements = $test->getElementNames();
 
-    public function testHasElement()
-    {
-        $test = new NonAbstractRecordProperty();
-        
-        $this->assertTrue($test->hasElement('elementA'));
-    }
-    
-}
+    expect($elements)->toEqual(['elementA','elementB']);
+});
+test('get own element names', function () {
+    $test = new NonAbstractRecordProperty();
+
+    $elements = $test->getOwnElementNames();
+
+    expect($elements)->toEqual(['elementA','elementB']);
+});
+test('get elements', function () {
+    $test = new NonAbstractRecordProperty();
+
+    $elements = $test->getElements();
+
+    expect($elements[0]->getName())->toEqual('elementA');
+});
+test('get own elements', function () {
+    $test = new NonAbstractRecordProperty();
+
+    $elements = $test->getOwnElements();
+
+    expect($elements[0]->getName())->toEqual('elementA');
+});
+test('has element', function () {
+    $test = new NonAbstractRecordProperty();
+
+    expect($test->hasElement('elementA'))->toBeTrue();
+});

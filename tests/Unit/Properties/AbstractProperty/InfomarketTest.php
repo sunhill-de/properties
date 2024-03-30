@@ -1,20 +1,14 @@
 <?php
 
-use Sunhill\Properties\Tests\TestCase;
+uses(\Sunhill\Properties\Tests\TestCase::class);
 use Sunhill\Properties\Tests\TestSupport\Properties\NonAbstractProperty;
 
-class InfomarketTest extends TestCase
-{
-     
-    public function testGetMetadata()
-    {
-        $test = new NonAbstractProperty();
-        
-        $metadata = $test->getMetadata();
-        
-        $this->assertEquals('ASAP', $metadata['update']);
-        $this->assertEquals('none', $metadata['unit']);
-        $this->assertEquals('none', $metadata['semantic']);
-    }
-    
- }
+test('get metadata', function () {
+    $test = new NonAbstractProperty();
+
+    $metadata = $test->getMetadata();
+
+    expect($metadata['update'])->toEqual('ASAP');
+    expect($metadata['unit'])->toEqual('none');
+    expect($metadata['semantic'])->toEqual('none');
+});

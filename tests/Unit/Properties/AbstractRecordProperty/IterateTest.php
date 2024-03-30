@@ -1,25 +1,19 @@
 <?php
 
-use Sunhill\Properties\Tests\TestCase;
+uses(\Sunhill\Properties\Tests\TestCase::class);
 use Sunhill\Properties\Tests\TestSupport\Properties\NonAbstractRecordProperty;
 
-class IterateTest extends TestCase
-{
-    
-    public function testIterate()
-    {
-        $test = new NonAbstractRecordProperty();
-        
-        $key_str = '';
-        $value_str = '';
-        
-        foreach ($test as $key => $value) {
-            $key_str .= $key;
-            $value_str .= $value->getName();
-        }
-        
-        $this->assertEquals('elementAelementB', $key_str);
-        $this->assertEquals('elementAelementB', $value_str);
+test('iterate', function () {
+    $test = new NonAbstractRecordProperty();
+
+    $key_str = '';
+    $value_str = '';
+
+    foreach ($test as $key => $value) {
+        $key_str .= $key;
+        $value_str .= $value->getName();
     }
-    
-}
+
+    expect($key_str)->toEqual('elementAelementB');
+    expect($value_str)->toEqual('elementAelementB');
+});

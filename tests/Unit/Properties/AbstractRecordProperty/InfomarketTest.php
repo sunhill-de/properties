@@ -1,20 +1,13 @@
 <?php
 
-namespace Sunhill\Properties\Tests\Unit\Properties\AbstractRecordProperty;
-
-use Sunhill\Properties\Tests\TestCase;
+uses(\Sunhill\Properties\Tests\TestCase::class);
 use Sunhill\Properties\Tests\TestSupport\Properties\NonAbstractRecordProperty;
 
-class InfomarketTest extends TestCase
-{
-    
-    public function testIterate()
-    {
-        $test = new NonAbstractRecordProperty();
 
-        $element = $test->requestItem(['elementB']);
-        
-        $this->assertEquals('elementB', $element->getName());
-    }
-    
-}
+test('iterate', function () {
+    $test = new NonAbstractRecordProperty();
+
+    $element = $test->requestItem(['elementB']);
+
+    expect($element->getName())->toEqual('elementB');
+});

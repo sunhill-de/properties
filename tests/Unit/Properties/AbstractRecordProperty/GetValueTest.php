@@ -1,35 +1,30 @@
 <?php
 
-use Sunhill\Properties\Tests\TestCase;
-use Sunhill\Properties\Tests\TestSupport\NonAbstractRecordProperty;
-use Sunhill\Properties\Tests\TestSupport\NonAbstractProperty;
-use Sunhill\Properties\Facades\Properties;
-use Sunhill\Properties\Properties\Exceptions\CantProcessPropertyException;
+uses(\Sunhill\Properties\Tests\TestCase::class);
+use Sunhill\Properties\Properties\Exceptions\PropertyDoesntExistException;
 use Sunhill\Properties\Properties\AbstractSimpleProperty;
 use Sunhill\Properties\Properties\AbstractRecordProperty;
-use Sunhill\Properties\Properties\Exceptions\PropertyDoesntExistException;
 
-class GetValueProperty extends AbstractSimpleProperty
-{
-    
+class GetValueProperty extends AbstractSimpleProperty {
+
     public $value = 5;
     
-    public function isValid($value): bool
+    function isValid($value) : bool
     {
         return true;
     }
     
-    public function getAccessType(): string
+    function getAccessType() : string
     {
         return 'integer';
     }
-
-    public function getValue()
+    
+    function getValue()
     {
         return $this->value;
     }
     
-    public function setValue($value)
+    function setValue($value)
     {
         $this->value = $value;
     }
@@ -37,12 +32,12 @@ class GetValueProperty extends AbstractSimpleProperty
 
 class GetValueRecordProperty extends AbstractRecordProperty
 {
-    public function isValid($test): bool
+    function isValid($test) : bool
     {
         return false;
     }
-    
-    protected function initializeElements()
+
+    function initializeElements()
     {
         $element1 = new GetValueProperty();
         $element1->setName('elementA');
@@ -55,42 +50,29 @@ class GetValueRecordProperty extends AbstractRecordProperty
         $this->elements['elementA'] = $element1;
         $this->elements['elementB'] = $element2;
     }
-        
 }
 
-class GetValueTest extends TestCase
-{
-    
-    public function testGetValue()
-    {
-        $test = new GetValueRecordProperty();
-        
-        $this->assertEquals(5, $test->elementA);
-    }
-    
-    public function testSetValue()
-    {
-        $test = new GetValueRecordProperty();
-        $test->elementA = 55;
-        
-        $this->assertEquals(55, $test->elementA);
-        $this->assertEquals(5, $test->elementB);        
-    }
-    
-    public function testGetUnkownValue()
-    {
-        $test = new GetValueRecordProperty();
-        $this->expectException(PropertyDoesntExistException::class);
-        
-        $a =  $test->elementZ;        
-    }
-    
-    public function testSetUnkownValue()
-    {
-        $test = new GetValueRecordProperty();
-        $this->expectException(PropertyDoesntExistException::class);
-        
-        $test->elementZ = 10;
-    }
-    
-}
+test('get value', function () {
+    $test = new GetValueRecordProperty();
+
+    expect($test->elementA)->toEqual(5);
+});
+test('set value', function () {
+    $test = new GetValueRecordProperty();
+    $test->elementA = 55;
+
+    expect($test->elementA)->toEqual(55);
+    expect($test->elementB)->toEqual(5);
+});
+test('get unkown value', function () {
+    $test = new GetValueRecordProperty();
+    $this->expectException(PropertyDoesntExistException::class);
+
+    $a =  $test->elementZ;
+});
+test('set unkown value', function () {
+    $test = new GetValueRecordProperty();
+    $this->expectException(PropertyDoesntExistException::class);
+
+    $test->elementZ = 10;
+});

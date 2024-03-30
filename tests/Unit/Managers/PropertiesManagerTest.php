@@ -1,8 +1,6 @@
 <?php
 
-namespace Sunhill\Properties\Tests\Unit\Managers;
-
-use Sunhill\Properties\Tests\TestCase;
+uses(\Sunhill\Properties\Tests\TestCase::class);
 use Sunhill\Properties\Managers\PropertiesManager;
 
 use Sunhill\Properties\Managers\Exceptions\PropertyClassDoesntExistException;
@@ -13,181 +11,158 @@ use Sunhill\Properties\Managers\Exceptions\UnitNameAlreadyRegisteredException;
 use Sunhill\Properties\Managers\Exceptions\UnitNotRegisteredException;
 use Sunhill\Properties\Tests\TestSupport\Properties\NonAbstractProperty;
 
-class PropertiesManagerTest extends TestCase
-{
- 
-    public function testRegisterProperty() 
-    {
-        $test = new PropertiesManager();
-        $test->registerProperty(NonAbstractProperty::class);
-        
-        $this->assertTrue(isset($this->getProtectedProperty($test, 'registered_properties')['NonAbstractProperty']));
-    }
 
-    public function testRegisterDoubleProperty()
-    {
-        $this->expectException(PropertyNameAlreadyRegisteredException::class);
-        
-        $test = new PropertiesManager();
-        $test->registerProperty(NonAbstractProperty::class);
-        $test->registerProperty(NonAbstractProperty::class);
-    }
-    
-    public function testRegisterDoublePropertyWithAlias()
-    {
-        $test = new PropertiesManager();
-        $test->registerProperty(NonAbstractProperty::class);
-        $test->registerProperty(NonAbstractProperty::class,'alias');
+test('register property', function () {
+    $test = new PropertiesManager();
+    $test->registerProperty(NonAbstractProperty::class);
 
-        $this->assertTrue(isset($this->getProtectedProperty($test, 'registered_properties')['NonAbstractProperty']));
-        $this->assertTrue(isset($this->getProtectedProperty($test, 'registered_properties')['alias']));
-        
-    }
-    
-    public function testRegisterPropertyWithNonAccessibleClass()
-    {
-        $this->expectException(PropertyClassDoesntExistException::class);
-        $test = new PropertiesManager();
-        
-        $test->registerProperty('something');        
-    }
-    
-    public function testRegisterPropertyWithNoPropertyClass()
-    {
-        $this->expectException(GivenClassNotAPropertyException::class);
-        $test = new PropertiesManager();
-        
-        $test->registerProperty(\StdClass::class);
-    }
- 
-    public function testPropertyRegistred()
-    {
-        $test = new PropertiesManager();
-        $test->registerProperty(NonAbstractProperty::class);
-        
-        $this->assertTrue($test->isPropertyRegistered('NonAbstractProperty'));
-        $this->assertTrue($test->isPropertyRegistered(NonAbstractProperty::class));
-        $this->assertTrue($test->isPropertyRegistered(new NonAbstractProperty()));
-        $this->assertFalse($test->isPropertyRegistered('nonexisting'));
-    }
-    
-    public function testGetNamespaceOfProperty_pass()
-    {
-        $test = new PropertiesManager();
-        $test->registerProperty(NonAbstractProperty::class);
-        
-        $this->assertEquals(NonAbstractProperty::class, $test->getNamespaceOfProperty('NonAbstractProperty'));
-        $this->assertEquals(NonAbstractProperty::class, $test->getNamespaceOfProperty(NonAbstractProperty::class));
-        $this->assertEquals(NonAbstractProperty::class, $test->getNamespaceOfProperty(new NonAbstractProperty()));
-    }
-    
-    public function testGetNamespaceOfProperty_fail()
-    {
-        $this->expectException(PropertyNotRegisteredException::class);
-        
-        $test = new PropertiesManager();
-        $test->registerProperty(NonAbstractProperty::class);
-        
-        $test->getNamespaceOfProperty('nonexisting');
-    }
-    
-    public function testGetNameOfProperty_pass()
-    {
-        $test = new PropertiesManager();
-        $test->registerProperty(NonAbstractProperty::class);
-        
-        $this->assertEquals('NonAbstractProperty', $test->getNameOfProperty('NonAbstractProperty'));
-        $this->assertEquals('NonAbstractProperty', $test->getNameOfProperty(NonAbstractProperty::class));
-        $this->assertEquals('NonAbstractProperty', $test->getNameOfProperty(new NonAbstractProperty()));
-    }
-    
-    public function testGetNameOfProperty_fail()
-    {
-        $this->expectException(PropertyNotRegisteredException::class);
-        
-        $test = new PropertiesManager();
-        $test->registerProperty(NonAbstractProperty::class);
-        
-        $test->getNameOfProperty('nonexisting');
-    }
-    
-    public function testRegisterUnit()
-    {
-        $test = new PropertiesManager();
-        $test->registerUnit('test_name','test_unit', 'test_group', 'test_basic');
-        
-        $this->assertTrue(isset($this->getProtectedProperty($test, 'registered_units')['test_name']));
-    }
-    
-    public function testRegisterDoubleUnit()
-    {
-        $this->expectException(UnitNameAlreadyRegisteredException::class);
-        
-        $test = new PropertiesManager();
-        $test->registerUnit('test_name','test_unit', 'test_group', 'test_basic');
-        $test->registerUnit('test_name','test_unit', 'test_group', 'test_basic');
-    }
-    
-    public function testUnitRegistred()
-    {
-        $test = new PropertiesManager();
-        $test->registerUnit('test_name','test_unit', 'test_group', 'test_basic');
-        
-        $this->assertTrue($test->isUnitRegistered('test_name'));
-        $this->assertFalse($test->isUnitRegistered('unknown'));
-    }
-    
-    public function testGetUnit()
-    {
-        $test = new PropertiesManager();
-        $test->registerUnit('test_name','test_unit', 'test_group', 'test_basic');        
-        
-        $this->assertEquals('test_unit', $test->getUnit('test_name'));
-    }
-    
-    public function testGetUnit_fail()
-    {
-        $this->expectException(UnitNotRegisteredException::class);
-        
-        $test = new PropertiesManager();
-        $test->registerUnit('test_name','test_unit', 'test_group', 'test_basic');
-        
-        $test->getUnit('unknown');
-    }
-    
-    public function testGetUnitGroup()
-    {
-        $test = new PropertiesManager();
-        $test->registerUnit('test_name','test_unit', 'test_group', 'test_basic');
+    expect(isset(getProtectedProperty($test, 'registered_properties')['NonAbstractProperty']))->toBeTrue();
+});
 
-        $this->assertEquals('test_group', $test->getUnitGroup('test_name'));
-    }
-    
-    public function testGetUnitBasic()
-    {
-        $test = new PropertiesManager();
-        $test->registerUnit('test_name','test_unit', 'test_group', 'test_basic');
-        
-        $this->assertEquals('test_basic', $test->getUnitBasic('test_name'));
-    }
-    
-    public function testCalculateToBasic()
-    {   
-        $test = new PropertiesManager();
-        $test->registerUnit('test_basic','test_basicunit', 'test_group');        
-        $test->registerUnit('test_name','test_unit', 'test_group', 'test_basic',
-            function($input) { return $input * 2; },
-            function($input) { return $input / 2; } );
-        $this->assertEquals(4, $test->calculateToBasic('test_name', 2));        
-    }
-    
-    public function testCalculateFromBasic()
-    {
-        $test = new PropertiesManager();
-        $test->registerUnit('test_basic','test_basicunit', 'test_group');
-        $test->registerUnit('test_name','test_unit', 'test_group', 'test_basic',
-            function($input) { return $input * 2; },
-            function($input) { return $input / 2; } );
-        $this->assertEquals(2, $test->calculateFromBasic('test_name', 4));        
-    }
-}
+test('register double property', function () {
+    $this->expectException(PropertyNameAlreadyRegisteredException::class);
+
+    $test = new PropertiesManager();
+    $test->registerProperty(NonAbstractProperty::class);
+    $test->registerProperty(NonAbstractProperty::class);
+});
+
+test('register double property with alias', function () {
+    $test = new PropertiesManager();
+    $test->registerProperty(NonAbstractProperty::class);
+    $test->registerProperty(NonAbstractProperty::class,'alias');
+
+    expect(isset(getProtectedProperty($test, 'registered_properties')['NonAbstractProperty']))->toBeTrue();
+    expect(isset(getProtectedProperty($test, 'registered_properties')['alias']))->toBeTrue();
+});
+
+test('register property with non accessible class', function () {
+    $this->expectException(PropertyClassDoesntExistException::class);
+    $test = new PropertiesManager();
+
+    $test->registerProperty('something');
+});
+
+test('register property with no property class', function () {
+    $this->expectException(GivenClassNotAPropertyException::class);
+    $test = new PropertiesManager();
+
+    $test->registerProperty(\StdClass::class);
+});
+
+test('property registred', function () {
+    $test = new PropertiesManager();
+    $test->registerProperty(NonAbstractProperty::class);
+
+    expect($test->isPropertyRegistered('NonAbstractProperty'))->toBeTrue();
+    expect($test->isPropertyRegistered(NonAbstractProperty::class))->toBeTrue();
+    expect($test->isPropertyRegistered(new NonAbstractProperty()))->toBeTrue();
+    expect($test->isPropertyRegistered('nonexisting'))->toBeFalse();
+});
+
+test('get namespace of property pass', function () {
+    $test = new PropertiesManager();
+    $test->registerProperty(NonAbstractProperty::class);
+
+    expect($test->getNamespaceOfProperty('NonAbstractProperty'))->toEqual(NonAbstractProperty::class);
+    expect($test->getNamespaceOfProperty(NonAbstractProperty::class))->toEqual(NonAbstractProperty::class);
+    expect($test->getNamespaceOfProperty(new NonAbstractProperty()))->toEqual(NonAbstractProperty::class);
+});
+
+test('get namespace of property fail', function () {
+    $this->expectException(PropertyNotRegisteredException::class);
+
+    $test = new PropertiesManager();
+    $test->registerProperty(NonAbstractProperty::class);
+
+    $test->getNamespaceOfProperty('nonexisting');
+});
+
+test('get name of property pass', function () {
+    $test = new PropertiesManager();
+    $test->registerProperty(NonAbstractProperty::class);
+
+    expect($test->getNameOfProperty('NonAbstractProperty'))->toEqual('NonAbstractProperty');
+    expect($test->getNameOfProperty(NonAbstractProperty::class))->toEqual('NonAbstractProperty');
+    expect($test->getNameOfProperty(new NonAbstractProperty()))->toEqual('NonAbstractProperty');
+});
+
+test('get name of property fail', function () {
+    $this->expectException(PropertyNotRegisteredException::class);
+
+    $test = new PropertiesManager();
+    $test->registerProperty(NonAbstractProperty::class);
+
+    $test->getNameOfProperty('nonexisting');
+});
+
+test('register unit', function () {
+    $test = new PropertiesManager();
+    $test->registerUnit('test_name','test_unit', 'test_group', 'test_basic');
+
+    expect(isset(getProtectedProperty($test, 'registered_units')['test_name']))->toBeTrue();
+});
+
+test('register double unit', function () {
+    $this->expectException(UnitNameAlreadyRegisteredException::class);
+
+    $test = new PropertiesManager();
+    $test->registerUnit('test_name','test_unit', 'test_group', 'test_basic');
+    $test->registerUnit('test_name','test_unit', 'test_group', 'test_basic');
+});
+
+test('unit registred', function () {
+    $test = new PropertiesManager();
+    $test->registerUnit('test_name','test_unit', 'test_group', 'test_basic');
+
+    expect($test->isUnitRegistered('test_name'))->toBeTrue();
+    expect($test->isUnitRegistered('unknown'))->toBeFalse();
+});
+
+test('get unit', function () {
+    $test = new PropertiesManager();
+    $test->registerUnit('test_name','test_unit', 'test_group', 'test_basic');
+
+    expect($test->getUnit('test_name'))->toEqual('test_unit');
+});
+
+test('get unit fail', function () {
+    $this->expectException(UnitNotRegisteredException::class);
+
+    $test = new PropertiesManager();
+    $test->registerUnit('test_name','test_unit', 'test_group', 'test_basic');
+
+    $test->getUnit('unknown');
+});
+
+test('get unit group', function () {
+    $test = new PropertiesManager();
+    $test->registerUnit('test_name','test_unit', 'test_group', 'test_basic');
+
+    expect($test->getUnitGroup('test_name'))->toEqual('test_group');
+});
+
+test('get unit basic', function () {
+    $test = new PropertiesManager();
+    $test->registerUnit('test_name','test_unit', 'test_group', 'test_basic');
+
+    expect($test->getUnitBasic('test_name'))->toEqual('test_basic');
+});
+
+test('calculate to basic', function () {
+    $test = new PropertiesManager();
+    $test->registerUnit('test_basic','test_basicunit', 'test_group');
+    $test->registerUnit('test_name','test_unit', 'test_group', 'test_basic',
+        function($input) { return $input * 2; },
+        function($input) { return $input / 2; } );
+    expect($test->calculateToBasic('test_name', 2))->toEqual(4);
+});
+
+test('calculate from basic', function () {
+    $test = new PropertiesManager();
+    $test->registerUnit('test_basic','test_basicunit', 'test_group');
+    $test->registerUnit('test_name','test_unit', 'test_group', 'test_basic',
+        function($input) { return $input * 2; },
+        function($input) { return $input / 2; } );
+    expect($test->calculateFromBasic('test_name', 4))->toEqual(2);
+});

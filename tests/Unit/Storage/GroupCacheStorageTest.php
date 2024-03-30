@@ -1,38 +1,30 @@
 <?php
 
-namespace Sunhill\Properties\Tests\Unit\Managers;
-
-use Sunhill\Properties\Tests\TestCase;
+uses(\Sunhill\Properties\Tests\TestCase::class);
 use Sunhill\Properties\Storage\Exceptions\FieldNotAvaiableException;
 use Sunhill\Properties\Tests\TestSupport\Storages\DummySimpleWriteableStorage;
 use Sunhill\Properties\Tests\TestSupport\Storages\DummyGroupCacheStorage;
 use Illuminate\Support\Facades\Cache;
 use Sunhill\Properties\Storage\Exceptions\CacheIDNotSetException;
 
-class GroupCacheStorageTest extends TestCase
-{
 
-    public function testReadValue()
-    {
-        Cache::flush();
-        
-        $test = new DummyGroupCacheStorage();
-        $test->setCacheID('teststorage');
-        $this->assertEquals('ValueA', $test->getValue('keyA'));
-        $this->assertEquals(1, $test::$call_count);
-        
-        $test2 = new DummyGroupCacheStorage();
-        $test2->setCacheID('teststorage');
-        $this->assertEquals('ValueB', $test2->getValue('keyB'));
-        $this->assertEquals(1, $test::$call_count);
-    }
-    
-    public function testNoCacheIDSet()
-    {
-        $this->expectException(CacheIDNotSetException::class);
-        
-        $test = new DummyGroupCacheStorage();
-        $test->getValue('keyA');
-        
-    }
-}
+test('read value', function () {
+    Cache::flush();
+
+    $test = new DummyGroupCacheStorage();
+    $test->setCacheID('teststorage');
+    expect($test->getValue('keyA'))->toEqual('ValueA');
+    expect($test::$call_count)->toEqual(1);
+
+    $test2 = new DummyGroupCacheStorage();
+    $test2->setCacheID('teststorage');
+    expect($test2->getValue('keyB'))->toEqual('ValueB');
+    expect($test::$call_count)->toEqual(1);
+});
+
+test('no cache i d set', function () {
+    $this->expectException(CacheIDNotSetException::class);
+
+    $test = new DummyGroupCacheStorage();
+    $test->getValue('keyA');
+});

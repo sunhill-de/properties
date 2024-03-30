@@ -1,42 +1,32 @@
 <?php
 
-namespace Sunhill\Properties\Tests\Unit\Managers;
-
-use Sunhill\Properties\Tests\TestCase;
+uses(\Sunhill\Properties\Tests\TestCase::class);
 use Sunhill\Properties\Storage\Exceptions\FieldNotAvaiableException;
 use Sunhill\Properties\Tests\TestSupport\Storages\DummySimpleWriteableStorage;
 
-class SimpleWriteableStorageTest extends TestCase
-{
 
-    public function testReadValue()
-    {
-        $test = new DummySimpleWriteableStorage();
-        $this->assertEquals('ValueA', $test->getValue('keyA'));
-    }
-    
-    public function testReadUnknownValue()
-    {
-        $this->expectException(FieldNotAvaiableException::class);
-        
-        $test = new DummySimpleWriteableStorage();
-        $help = $test->getValue('NonExisting');
-    }
-    
-    public function testOverwrite()
-    {
-        $test = new DummySimpleWriteableStorage();
-        $test->setValue('keyA','NewValue');
-        
-        $this->assertEquals('NewValue', $test->getValue('keyA'));
-    }
-        
-    public function testWritenew()
-    {
-        $test = new DummySimpleWriteableStorage();
-        $test->setValue('keyC','NewValue');
-        
-        $this->assertEquals('NewValue', $test->getValue('keyC'));
-    }
-    
-}
+test('read value', function () {
+    $test = new DummySimpleWriteableStorage();
+    expect($test->getValue('keyA'))->toEqual('ValueA');
+});
+
+test('read unknown value', function () {
+    $this->expectException(FieldNotAvaiableException::class);
+
+    $test = new DummySimpleWriteableStorage();
+    $help = $test->getValue('NonExisting');
+});
+
+test('overwrite', function () {
+    $test = new DummySimpleWriteableStorage();
+    $test->setValue('keyA','NewValue');
+
+    expect($test->getValue('keyA'))->toEqual('NewValue');
+});
+
+test('writenew', function () {
+    $test = new DummySimpleWriteableStorage();
+    $test->setValue('keyC','NewValue');
+
+    expect($test->getValue('keyC'))->toEqual('NewValue');
+});
