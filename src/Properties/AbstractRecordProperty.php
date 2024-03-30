@@ -16,6 +16,7 @@ use Sunhill\Properties\Properties\Exceptions\CantProcessPropertyException;
 use Sunhill\Properties\Properties\Exceptions\DuplicateElementNameException;
 use Sunhill\Properties\Properties\Exceptions\PropertyDoesntExistException;
 use Sunhill\Properties\Facades\Properties;
+use Sunhill\Properties\Storage\AbstractStorage;
 
 class AbstractRecordProperty extends AbstractProperty implements \Iterator
 {
@@ -46,6 +47,27 @@ class AbstractRecordProperty extends AbstractProperty implements \Iterator
     protected function flushTraits()
     {
         $this->traits = [];
+    }
+    
+    protected function setItemsStorage(AbstractStorage $storage)
+    {
+        foreach ($this->elements as $element) {
+            $element->setStorage($storage);
+        }
+    }
+    
+    protected function setTraitsStorage(AbstractStorage $storage)
+    {
+        foreach ($this->traits as $trait) {
+            $trait->setStorage($storage);
+        }
+    }
+    
+    public function setStorage(AbstractStorage $storage)
+    {
+        parent::setStorage($storage);
+        $this->setItemsStorage($storage);
+        $this->setTraitsStorage($storage);
     }
     
     /**
@@ -221,12 +243,24 @@ class AbstractRecordProperty extends AbstractProperty implements \Iterator
     }
     
 // ************************** transparent element handling *****************************
+    protected function doGetValue()
+    {
+        return $this;
+    }
+    
     public function __get(string $name)
     {
         if (!$this->hasElement($name) && !$this->handleUnkownRead($name)) {            
             throw new PropertyDoesntExistException("The property '$name' doesnt exist.");
         }
-        return $this->elements[$name]->getValue();
+        if (isset($this->elements[$name])) {
+            return $this->elements[$name]->getValue();
+        }
+        foreach ($this->traits as $trait) {
+            if ($trait->hasElement($name)) {
+                return $trait->$name;
+            }
+        }
     }
     
     protected function handleUnkownRead(string $name)
@@ -239,7 +273,16 @@ class AbstractRecordProperty extends AbstractProperty implements \Iterator
         if (!$this->hasElement($name) && !$this->handleUnkownWrite($name, $value)) {
             throw new PropertyDoesntExistException("The property '$name' doesnt exist.");
         }
-        $this->elements[$name]->setValue($value);
+        if (isset($this->elements[$name])) {
+            $this->elements[$name]->setValue($value);
+            return;
+        }
+        foreach ($this->traits as $trait) {
+            if ($trait->hasElement($name)) {
+                $trait->$name = $value;
+                return;
+            }
+        }
     }
     
     protected function handleUnkownWrite(string $name, $value)
