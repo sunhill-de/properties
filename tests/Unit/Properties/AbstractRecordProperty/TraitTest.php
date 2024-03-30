@@ -1,69 +1,81 @@
 <?php
 
-use Sunhill\Properties\Tests\TestCase;
+uses(\Sunhill\Properties\Tests\TestCase::class);
 use Sunhill\Properties\Tests\TestSupport\Properties\NonAbstractRecordProperty;
 use Sunhill\Properties\Tests\TestSupport\Properties\TraitRecordProperty;
-
-class TraitTest extends TestCase
-{
+use Sunhill\Properties\Tests\TestSupport\Storages\TestAbstractIDStorage;
+test('write and read properties', function () {
+    $test = new TraitRecordProperty();
+    $storage = new TestAbstractIDStorage();    
+    $test->setStorage($storage);
     
-    public function testTrait()
-    {
-        $test = new TraitRecordProperty();
+    $test->ownelement1 = 'ABC';
 
-        $test->ownelement1 = 'ABC';
+    expect($test->ownelement1)->toEqual('ABC');
+});
+
+    test('write and read record element', function() {
+        $test = new TraitRecordProperty();
+        $storage = new TestAbstractIDStorage();
+        $test->setStorage($storage);
+
         $test->ownrecord->elementA = 'DEF';
+
+        expect($test->ownrecord->elementA)->toEqual('DEF');        
+    });
+
+    test('write and read trait element', function() {
+        $test = new TraitRecordProperty();
+        $storage = new TestAbstractIDStorage();
+        $test->setStorage($storage);
+           
         $test->elementA = 'GHI';
         
-        $this->assertEquals('ABC', $test->ownelement1);
-        $this->assertEquals('DEF', $test->ownrecord->elementA);
-        $this->assertEquals('GHI', $test->elementA);
+        expect($test->elementA)->toEqual('GHI');
+    });
+            
+test('get element names', function () {
+    $test = new TraitRecordProperty();
+
+    $elements = $test->getElementNames();
+
+    expect($elements)->toEqual(['ownelement1','ownrecord','elementA','elementB']);
+});
+test('get own element names', function () {
+    $test = new TraitRecordProperty();
+
+    $elements = $test->getOwnElementNames();
+
+    expect($elements)->toEqual(['ownelement1','ownrecord']);
+});
+test('get elements', function () {
+    $test = new TraitRecordProperty();
+
+    $elements = $test->getElements();
+
+    expect($elements[0]->getName())->toEqual('ownelement1');
+    expect($elements[2]->getName())->toEqual('elementA');
+});
+
+test('get own elements', function () {
+    $test = new TraitRecordProperty();
+
+    $elements = $test->getOwnElements();
+
+    expect($elements[0]->getName())->toEqual('ownelement1');
+});
+
+test('has elements', function (string $element, bool $has_it = true) {
+    $test = new TraitRecordProperty();
+    if ($has_it) {
+        expect($test->hasElement($element))->toBeTrue();
+    } else {
+        expect($test->hasElement($element))->not->toBeTrue();        
     }
-    
-    public function testGetElementNames()
-    {
-        $test = new TraitRecordProperty();
-        
-        $elements = $test->getElementNames();
-        
-        $this->assertEquals(['ownelement1','ownrecord','elementA','elementB'], $elements);        
-    }
-    
-    public function testGetOwnElementNames()
-    {
-        $test = new TraitRecordProperty();
-        
-        $elements = $test->getOwnElementNames();
-        
-        $this->assertEquals(['ownelement1','ownrecord'], $elements);
-    }
-    
-    public function testGetElements()
-    {
-        $test = new TraitRecordProperty();
-        
-        $elements = $test->getElements();
-        
-        $this->assertEquals('ownelement1', $elements[0]->getName());
-        $this->assertEquals('elementA', $elements[2]->getName());
-    }
-    
-    public function testGetOwnElements()
-    {
-        $test = new TraitRecordProperty();
-        
-        $elements = $test->getOwnElements();
-        
-        $this->assertEquals('ownelement1', $elements[0]->getName());
-    }
-    
-    public function testHasElement()
-    {
-        $test = new TraitRecordProperty();
-        
-        $this->assertTrue($test->hasElement('ownelement1'));
-        $this->assertTrue($test->hasElement('elementA'));
-        $this->assertFalse($test->hasElement('nonexisting'));
-    }
-    
-}
+    expect($test->hasElement('elementA'))->toBeTrue();
+    expect($test->hasElement('nonexisting'))->toBeFalse();
+})->with([
+    'A own property'=>['ownelement1',true],
+    'A trait property'=>['elementA',true],
+    'A non existing property'=>['nonexisting',false]    
+]);
