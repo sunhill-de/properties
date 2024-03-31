@@ -75,7 +75,7 @@ abstract class CallbackStorage extends AbstractStorage
     
     protected function doGetElementCount(string $name): int
     {
-        $method = $this->getMethodName($name,'get',"The field :name doesn't exist or doesn't provide a element count method.");
+        $method = $this->getMethodName($name,'getcount',"The field :name doesn't exist or doesn't provide a element count method.");
         return $this->$method();        
     }
     

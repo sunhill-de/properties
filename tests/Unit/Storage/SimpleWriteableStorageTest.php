@@ -30,3 +30,19 @@ test('writenew', function () {
 
     expect($test->getValue('keyC'))->toEqual('NewValue');
 });
+
+test('an array count is returned', function() {
+   $test = new DummySimpleWriteableStorage();
+   expect($test->getElementCount('keyC'))->toEqual(2);
+});
+        
+test('an array element is returned', function() {
+   $test = new DummySimpleWriteableStorage();
+   expect($test->getIndexedValue('keyC', 1))->toEqual('DEF');
+});
+            
+test('an array element is writeable', function() {
+   $test = new DummySimpleWriteableStorage();
+   $test->setIndexedValue('keyC', 1,'XXX');
+   expect($test->values['keyC'][1])->toEqual('XXX');
+});

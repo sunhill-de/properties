@@ -26,3 +26,14 @@ test('array count', function () {
     $test = new DummySimpleStorage();
     expect($test->getElementCount('keyC'))->toEqual(2);
 });
+
+test('an array count is returned', function() {
+   $test = new DummySimpleStorage();
+   expect($test->getElementCount('keyC'))->toEqual(2);
+});
+        
+test('an array element is returned', function() {
+   $test = new DummySimpleStorage();
+   expect($test->getIndexedValue('keyC', 1))->toEqual('DEF');
+});
+            

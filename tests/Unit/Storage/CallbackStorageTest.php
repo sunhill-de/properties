@@ -10,12 +10,10 @@ test('read value', function () {
     expect($test->getValue('readonly'))->toEqual('ABC');
 });
 
-test('read unknown value', function () {
-    $this->expectException(FieldNotAvaiableException::class);
-
+it('fails when reading unknown value', function () {
     $test = new DummyCallbackStorage();
     $help = $test->getValue('NonExisting');
-});
+})->throws(FieldNotAvaiableException::class);
 
 test('get readable on readonly', function () {
     $test = new DummyCallbackStorage();
@@ -50,7 +48,7 @@ test('read read write', function () {
 test('write read write', function () {
     $test = new DummyCallbackStorage();
     $test->setValue('readwrite','ZZZ');
-    expect($test->readwrite)->toEqual('ZZZ');
+    expect($test->readwrite_val)->toEqual('ZZZ');
 });
 
 test('get readable on readwrite', function () {
@@ -71,11 +69,39 @@ test('get capabilities on restricted', function () {
     expect($test->getWriteCapability('restricted'))->toEqual('write_cap');
 });
 
-test('initialize', function () {
+    test('An uninitialized item is marked as uninitialized', function() {
+        $test = new DummyCallbackStorage();
+        
+        expect($test->getIsInitialized('uninitialized'))->toBeFalse();        
+    });
+    
+    
+test('An uninitialized item is initialized after a value is assigned', function () {
     $test = new DummyCallbackStorage();
 
-    expect($test->getIsInitialized('uninitialized'))->toBeFalse();
     $test->setValue('uninitialized','GHI');
     expect($test->getIsInitialized('uninitialized'))->toBeTrue();
-    expect($test->uninitialized)->toEqual('GHI');
+});
+
+test('An uninitialized item is initialized has a value after it is assigned', function () {
+    $test = new DummyCallbackStorage();
+        
+    $test->setValue('uninitialized','GHI');
+    expect($test->uninitialized_val)->toEqual('GHI');
+});
+    
+test('an array count is returned', function() {
+    $test = new DummyCallbackStorage();
+    expect($test->getElementCount('arrayitem'))->toEqual(3);
+});
+
+test('an array element is returned', function() {
+   $test = new DummyCallbackStorage();
+   expect($test->getIndexedValue('arrayitem', 1))->toEqual('DEF');
+});
+
+test('an array element is writeable', function() {
+    $test = new DummyCallbackStorage();
+    $test->setIndexedValue('arrayitem', 1,'XXX');
+    expect($test->arrayitem_val[1])->toEqual('XXX');
 });
