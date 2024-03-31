@@ -195,10 +195,48 @@ abstract class AbstractStorage
         return $value;
     }
     
+    /**
+     * Returns how many entries the array element has.
+     * Note: This routine does not check if it is an array at all, this has to be done on a higher level
+     * 
+     * @param string $name
+     * @return int
+     */
     public function getElementCount(string $name): int
     {
         $this->prepareGetValue($name);
         return $this->doGetElementCount($name);    
+    }
+    
+    abstract protected function doGetOffsetExists(string $name, $index): bool; 
+    
+    /**
+     * Returns if the entry with the given index exists
+     * Note: This routine does not check if it is an array at all, this has to be done on a higher level
+     *
+     * @param string $name
+     * @return int
+     */
+    public function getOffsetExists(string $name, $index): bool
+    {
+        $this->prepareGetValue($name);
+        return $this->doGetOffsetExists($name, $index);
+    }
+    
+    protected function doGetKeys(string $name): array
+    {
+        $result = [];
+        $index = 0;
+        while ($index < $this->getElementCount($name)) {
+            $result[] = $index++;
+        }
+        return $result;
+    }
+    
+    public function getKeys(string $name): array
+    {
+        $this->prepareGetValue($name);
+        return $this->doGetKeys($name);        
     }
     
     /**

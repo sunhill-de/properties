@@ -116,7 +116,12 @@ abstract class AbstractCachedStorage extends AbstractStorage
     {
         return count($this->values[$name]);
     }
-        
+ 
+    protected function doGetOffsetExists(string $name, $index): bool
+    {
+        return isset($this->values[$name][$index]);
+    }
+    
     /**
      * Prepares the retrievement of the value
      * 

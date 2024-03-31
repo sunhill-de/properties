@@ -48,6 +48,11 @@ class TestAbstractStorage extends AbstractStorage
         return null;
     }
     
+    protected function doGetOffsetExists(string $name, $index): bool
+    {
+        return isset($this->values[$name][$index]);
+    }
+    
     public function getIsWriteable(string $name): bool
     {
         return true;

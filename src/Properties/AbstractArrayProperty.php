@@ -80,7 +80,10 @@ abstract class AbstractArrayProperty extends AbstractProperty implements \ArrayA
         return $this;
     }
  
-    abstract protected function doOffsetSet(mixed $offset, mixed $value): void;
+    protected function doOffsetSet(mixed $offset, mixed $value): void
+    {
+        $this->getStorage()->setIndexedValue($this->getName(), $offset, $this->formatForStorage($this->formatFromInput($value)));        
+    }
     
     protected function checkElementAgainstAllowed($value, string $type)
     {
@@ -116,14 +119,48 @@ abstract class AbstractArrayProperty extends AbstractProperty implements \ArrayA
         $this->doOffsetSet($offset, $value);
     }
      
-    abstract protected function doOffsetGet(mixed $offset): mixed;
+    protected function doOffsetGet(mixed $offset): mixed
+    {
+        if (!$this->getStorage()->getIsInitialized($this->getName())) {
+            $this->handleUninitialized();
+        }        
+        return $this->formatFromStorage($this->getStorage()->getIndexedValue($this->getName(),$offset));
+    }
     
     public function offsetGet(mixed $offset): mixed
     {
         return $this->doOffsetget($offset);
     }
     
+    public function count(): int
+    {
+        if (!$this->getStorage()->getIsInitialized($this->getName())) {
+            $this->handleUninitialized();
+        } 
+        return $this->getStorage()->getElementCount($this->getName());
+    }
     
+    public function offsetExists(mixed $offset): bool
+    {
+        if (!$this->getStorage()->getIsInitialized($this->getName())) {
+            $this->handleUninitialized();
+        } 
+        return $this->getStorage()->getOffsetExists($this->getName());
+    }
+    
+    public function offsetUnset(mixed $offset): void
+    {
+        if (!$this->getStorage()->getIsInitialized($this->getName())) {
+            $this->handleUninitialized();
+        }        
+        $this->getStorage()->doOffsetUnset($this->getName());
+    }
+    
+   public function isValid($test): bool
+    {
+        return false;
+    }
+        
     public function getAccessType(): string
     {
         return 'array';

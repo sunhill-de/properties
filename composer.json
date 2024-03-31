@@ -30,7 +30,8 @@
 		"orchestra/testbench" : "^8.5",
         "pestphp/pest-plugin-laravel": "2.x-dev",
         "pestphp/pest": "^2.34",
-        "pestphp/pest-plugin-drift": "^2.5"
+        "pestphp/pest-plugin-drift": "^2.5",
+        "mockery/mockery": "1.7.x-dev"
 	},
         "extra" : {
                 "laravel" : {

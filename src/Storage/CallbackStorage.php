@@ -157,4 +157,13 @@ abstract class CallbackStorage extends AbstractStorage
         return false;
     }
     
+    protected function doGetOffsetExists(string $name, $index): bool
+    {
+        $method = 'getoffsetexists_'.$name;
+        if (method_exists($this, $method)) {
+            return $this->$method();
+        }
+        return false;
+    }
+    
 }
