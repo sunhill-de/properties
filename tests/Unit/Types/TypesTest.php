@@ -13,6 +13,7 @@ use Sunhill\Properties\Types\TypeText;
 use Sunhill\Properties\Types\TypeEnum;
 use Sunhill\Properties\Tests\TestSupport\Storages\TestAbstractStorage;
 use Sunhill\Properties\Types\TypeCalculated;
+use Sunhill\Properties\Storage\AbstractStorage;
 function getTestType($type, $setters)
 {
     $test = new $type();
@@ -122,8 +123,12 @@ test('read storage', function ($type, $setters, $test_value, $expect) {
     $test = getTestType($type, $setters);
     $test->setName('test');
 
-    $storage = new TestAbstractStorage();
-    $storage->values['test'] = $test_value;
+    $storage = Mockery::mock(AbstractStorage::class);
+    $storage->shouldReceive('getIsReadable')->with('test')->andReturn(true);
+    $storage->shouldReceive('getReadCapability')->with('test')->andReturn(null);
+    $storage->shouldReceive('getIsInitialized')->with('test')->andReturn(true);
+    $storage->shouldReceive('getValue')->with('test')->andReturn($test_value);
+    
     $test->setStorage($storage);
 
     if (is_callable($expect)) {
@@ -159,8 +164,11 @@ test('read storage human', function ($type, $setters, $test_value, $expect) {
     $test = getTestType($type, $setters);
     $test->setName('test');
 
-    $storage = new TestAbstractStorage();
-    $storage->values['test'] = $test_value;
+    $storage = Mockery::mock(AbstractStorage::class);
+    $storage->shouldReceive('getIsReadable')->with('test')->andReturn(true);
+    $storage->shouldReceive('getReadCapability')->with('test')->andReturn(null);
+    $storage->shouldReceive('getIsInitialized')->with('test')->andReturn(true);
+    $storage->shouldReceive('getValue')->with('test')->andReturn($test_value);
     $test->setStorage($storage);
 
     if (is_callable($expect)) {
@@ -195,22 +203,23 @@ dataset('readStorageHumanProvider', function () {
         
     ];
 });
-test('write storage', function ($type, $setters, $test_input, $expect, $expect_mod = null) {
+
+test('write storage succeeds', function ($type, $setters, $test_input, $expect, $expect_mod = null) {
     $test = getTestType($type, $setters);
     $test->setName('test');
 
-    $storage = new TestAbstractStorage();
+    $storage = Mockery::mock(AbstractStorage::class);
+    $storage->shouldReceive('getIsWriteable')->with('test')->andReturn(true);
+    $storage->shouldReceive('getModifyCapability')->with('test')->andReturn(null);
+    $storage->shouldReceive('getIsInitialized')->with('test')->andReturn(true);
+    $storage->shouldReceive('setValue')->with('test',$expect)->once();
     $test->setStorage($storage);
-    if ($expect == 'except') {
-        $this->expectException(InvalidValueException::class);
-    }
 
     if (is_callable($test_input)) {
         $test->setValue($test_input());
     } else {
         $test->setValue($test_input);
     }
-    expect($storage->values['test'])->toEqual($expect);
 })->with('writeStorageProvider')->group('write');
 dataset('writeStorageProvider', function () {
     return [
@@ -233,9 +242,6 @@ dataset('writeStorageProvider', function () {
         [TypeDate::class, [], '2018-2-1', '2018-02-01'],
         [TypeDate::class, [], 1686778521.3, '2023-06-14'],
         [TypeDate::class, [], '2018-2', '2018-02-01'],
-        [TypeDate::class, [], false, 'except'],
-        [TypeDate::class, [], 'ABC', 'except'],
-        [TypeDate::class, [], '', 'except'],
         [TypeDate::class, [], 1686778521, '2023-06-14'],
        
         [TypeDatetime::class, [], '2018-02-01 11:11:11', '2018-02-01 11:11:11'],
@@ -248,16 +254,11 @@ dataset('writeStorageProvider', function () {
         [TypeFloat::class, [], 1.1, 1.1],
         [TypeFloat::class, [], "1", 1],
         [TypeFloat::class, [], "1.1", 1.1],
-        [TypeFloat::class, [], "A", 'except'],
-        [TypeFloat::class, [], "1.1.1", 'except'],
         
         [TypeInteger::class, [], 1, 1],
-        [TypeInteger::class, [], 1.1, 'except'],
-        [TypeInteger::class, [], 'A', 'except'],
         [TypeInteger::class, [], '1', 1],
        
         [TypeText::class, [], 'Lorem ipsum', 'Lorem ipsum'],
-        [TypeText::class, [], function() { return new \StdClass(); }, 'except'],
         
         [TypeTime::class, [], '11:11:11', '11:11:11'],
         [TypeTime::class, [], '11:11', '11:11:00'],
@@ -265,6 +266,36 @@ dataset('writeStorageProvider', function () {
         
         [TypeVarchar::class,[],'Teststring','Teststring'],
         [TypeVarchar::class,['MaxLen'=>2],'Teststring','Te'],            
-        [TypeVarchar::class,['MaxLen'=>2,'LengthExceedPolicy'=>'invalid'],'Teststring','except']
     ];
 });
+
+    it('fails when writing to storage', function ($type, $setters, $test_input) {
+        $test = getTestType($type, $setters);
+        $test->setName('test');
+        
+        $storage = Mockery::mock(AbstractStorage::class);
+        $storage->shouldReceive('getIsWriteable')->with('test')->andReturn(true);
+        $storage->shouldReceive('getModifyCapability')->with('test')->andReturn(null);
+        $storage->shouldReceive('getIsInitialized')->with('test')->andReturn(true);
+        $test->setStorage($storage);
+        
+        if (is_callable($test_input)) {
+            $test->setValue($test_input());
+        } else {
+            $test->setValue($test_input);
+        }
+    })->with('writeStorageFailsProvider')->group('write')->throws(InvalidValueException::class);
+    dataset('writeStorageFailsProvider', function () {
+        return [
+            'A boolean as date'=>[TypeDate::class, [], false],
+            'A string as date'=>[TypeDate::class, [], 'ABC'],
+            'An empty string as date'=>[TypeDate::class, [], ''],
+            'A string as float'=>[TypeFloat::class, [], "A"],
+            'A invalid float as float'=>[TypeFloat::class, [], "1.1.1"],
+            'A float as integer'=>[TypeInteger::class, [], 1.1],
+            'A string as integer'=>[TypeInteger::class, [], 'A'],
+            'A class as text'=>[TypeText::class, [], function() { return new \StdClass(); }],
+            'A too long string for varchar'=>[TypeVarchar::class,['MaxLen'=>2,'LengthExceedPolicy'=>'invalid'],'Teststring']
+            ];
+    });
+    
