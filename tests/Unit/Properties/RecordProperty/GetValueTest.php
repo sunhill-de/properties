@@ -4,6 +4,7 @@ uses(\Sunhill\Properties\Tests\TestCase::class);
 use Sunhill\Properties\Properties\Exceptions\PropertyDoesntExistException;
 use Sunhill\Properties\Properties\AbstractSimpleProperty;
 use Sunhill\Properties\Properties\AbstractRecordProperty;
+use Sunhill\Properties\Properties\RecordProperty;
 
 class GetValueProperty extends AbstractSimpleProperty {
 
@@ -30,7 +31,7 @@ class GetValueProperty extends AbstractSimpleProperty {
     }
 }
 
-class GetValueRecordProperty extends AbstractRecordProperty
+class GetValueRecordProperty extends RecordProperty
 {
     function isValid($test) : bool
     {

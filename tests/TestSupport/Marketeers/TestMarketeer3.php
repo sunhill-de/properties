@@ -5,14 +5,7 @@ namespace Sunhill\Properties\Tests\TestSupport\Marketeers;
 use Sunhill\Properties\InfoMarket\Marketeer;
 use Sunhill\Properties\Storage\SimpleStorage;
 use Sunhill\Properties\Storage\SimpleWriteableStorage;
-
-class TestStorage3 extends SimpleWriteableStorage
-{
-    protected function readValues(): array
-    {
-        return ['stringkey'=>'ValueA','floatkey'=>3.2,'intkey'=>3,'boolkey'=>1,'textkey'=>'Lorep ipsum','datekey'=>'2023-12-24','timekey'=>'11:12:13','datetimekey'=>'2023-12-24 11:12:13'];
-    }
-}
+use Sunhill\Properties\Tests\TestSupport\Storages\TestStorage3;
 
 class TestMarketeer3 extends Marketeer
 {

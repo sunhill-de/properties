@@ -4,14 +4,7 @@ namespace Sunhill\Properties\Tests\TestSupport\Marketeers;
 
 use Sunhill\Properties\InfoMarket\Marketeer;
 use Sunhill\Properties\Storage\SimpleStorage;
-
-class TestStorage1 extends SimpleStorage
-{
-    protected function readValues(): array
-    {
-        return ['element1'=>'ValueA','element2'=>'valueB'];
-    }
-}
+use Sunhill\Properties\Tests\TestSupport\Storages\TestStorage1;
 
 class TestMarketeer1 extends Marketeer
 {

@@ -2,9 +2,9 @@
 
 namespace Sunhill\Properties\Tests\TestSupport\Properties;
 
-use Sunhill\Properties\Properties\AbstractRecordProperty;
+use Sunhill\Properties\Properties\RecordProperty;
 
-class TraitRecordProperty extends AbstractRecordProperty
+class TraitRecordProperty extends RecordProperty
 {
     protected function initializeElements()
     {

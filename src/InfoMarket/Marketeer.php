@@ -16,9 +16,9 @@
 
 namespace Sunhill\Properties\InfoMarket;
 
-use Sunhill\Properties\Properties\AbstractRecordProperty;
+use Sunhill\Properties\Properties\RecordProperty;
 
-class Marketeer extends AbstractRecordProperty
+class Marketeer extends RecordProperty
 {
     
 }

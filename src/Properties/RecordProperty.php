@@ -1,7 +1,7 @@
 <?php
 /**
- * @file AbstractRecordProperty.php
- * Defines an abstract property as base for all record like properties
+ * @file RecordProperty.php
+ * Defines an property as base for all record like properties
  * Lang de,en
  * Reviewstatus: 2024-02-04
  * Localization: complete
@@ -18,7 +18,7 @@ use Sunhill\Properties\Properties\Exceptions\PropertyDoesntExistException;
 use Sunhill\Properties\Facades\Properties;
 use Sunhill\Properties\Storage\AbstractStorage;
 
-class AbstractRecordProperty extends AbstractProperty implements \Iterator
+class RecordProperty extends AbstractProperty implements \Iterator
 {
  
     /**

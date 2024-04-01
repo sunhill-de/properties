@@ -2,9 +2,9 @@
 
 namespace Sunhill\Properties\Tests\TestSupport\Properties;
 
-use Sunhill\Properties\Properties\AbstractRecordProperty;
+use Sunhill\Properties\Properties\RecordProperty;
 
-class NonAbstractRecordProperty extends AbstractRecordProperty
+class NonAbstractRecordProperty extends RecordProperty
 {
     public function isValid($test): bool
     {
