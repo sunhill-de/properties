@@ -12,6 +12,7 @@ use Sunhill\Properties\Types\TypeTime;
 use Sunhill\Properties\Types\TypeText;
 use Sunhill\Properties\Types\TypeEnum;
 use Sunhill\Properties\Tests\TestSupport\Storages\TestAbstractStorage;
+use Sunhill\Properties\Types\TypeCalculated;
 function getTestType($type, $setters)
 {
     $test = new $type();
