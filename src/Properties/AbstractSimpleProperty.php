@@ -1,7 +1,7 @@
 <?php
 /**
  * @file AbstractSimpleProperty.php
- * Defines an abstract property as base for all properties that are a simple type (not array, not record)
+ * Defines a property as base for all properties that are a simple type (not array, not record)
  * Lang de,en
  * Reviewstatus: 2024-02-04
  * Localization: complete

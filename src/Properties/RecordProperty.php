@@ -17,6 +17,8 @@ use Sunhill\Properties\Properties\Exceptions\DuplicateElementNameException;
 use Sunhill\Properties\Properties\Exceptions\PropertyDoesntExistException;
 use Sunhill\Properties\Facades\Properties;
 use Sunhill\Properties\Storage\AbstractStorage;
+use Sunhill\Properties\Properties\Exceptions\StorageAlreadySetException;
+use Sunhill\Properties\Storage\StaticStorage;
 
 class RecordProperty extends AbstractProperty implements \Iterator
 {
@@ -102,6 +104,9 @@ class RecordProperty extends AbstractProperty implements \Iterator
             throw new DuplicateElementNameException("The element name '$name' is already in use.");
         }
         $element->setOwner($this);
+        if (!is_null($this->storage)) {
+            $element->setStorage($this->storage);
+        }
         $this->elements[$name] = $element;
     }
 
@@ -130,6 +135,18 @@ class RecordProperty extends AbstractProperty implements \Iterator
         $element = $this->getElement($element);
         $this->doAddElement($name, $element);
         return $element;    
+    }
+   
+    /**
+     * Adds a new element to the list and returns this element. 
+     * For now a public alias for addElement()
+     * @param string $name
+     * @param unknown $element
+     * @return AbstractProperty
+     */
+    public function appendElement(string $name, $element): AbstractProperty
+    {
+        return $this->addElement($name, $element);
     }
     
     private function doAddTrait($element)
@@ -305,5 +322,11 @@ class RecordProperty extends AbstractProperty implements \Iterator
         return parent::passItemRequest($name, $path);
     }
     
-    
+    public function static()
+    {
+        if (!is_null($this->storage)) {
+            throw new StorageAlreadySetException('static() called and a storage was already set.');
+        }
+        $this->setStorage(new StaticStorage());
+    }
 }
