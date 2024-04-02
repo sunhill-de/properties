@@ -38,6 +38,9 @@ class Market
         if (is_a($marketeer, Marketeer::class)) {
             return $marketeer;
         }
+        if (is_object($marketeer)) {
+            throw new CantProcessMarketeerException("The given marketeer is not a marketeer class.");            
+        }
         if (class_exists($marketeer)) {
             return new $marketeer();
         }
