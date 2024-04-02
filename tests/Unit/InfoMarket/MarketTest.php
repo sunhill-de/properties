@@ -2,8 +2,30 @@
 
 uses(\Sunhill\Properties\Tests\TestCase::class);
 use Sunhill\Properties\InfoMarket\Exceptions\PathNotFoundException;
+use Sunhill\Properties\InfoMarket\Exceptions\CantProcessMarketeerException;
+use Sunhill\Properties\InfoMarket\Market;
+use Sunhill\Properties\Tests\TestSupport\Marketeers\TestMarketeer1;
 
 uses(\Sunhill\Properties\Tests\TestSupport\Markets\GetMarket::class);
+
+it('fails with invalid arguments for registerMarketeer', function($marketeer) {
+    $test = new Market();
+    if (is_callable($marketeer)) {
+        $marketeer = $marketeer();
+    }
+    $test->registerMarketeer($marketeer, 'test');
+})->with([
+    12,'ABC',function() { return new \StdClass(); }
+])->throws(CantProcessMarketeerException::class);
+
+it('passes with right arguments for registerMarketeer', function($marketeer) {
+    $test = new Market();
+    if (is_callable($marketeer)) {
+        $marketeer = $marketeer();
+    }
+    $test->registerMarketeer($marketeer, 'test');
+    expect(true)->toBeTrue();
+})->with([TestMarketeer1::class, function() { return new TestMarketeer1(); }]);
 
 test('path exists', function () {
     $test = $this->getMarket();
