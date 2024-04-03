@@ -337,5 +337,6 @@ class RecordProperty extends AbstractProperty implements \Iterator
             throw new StorageAlreadySetException('static() called and a storage was already set.');
         }
         $this->setStorage(new StaticStorage());
+        return $this;
     }
 }
