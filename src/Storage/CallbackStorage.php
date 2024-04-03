@@ -152,7 +152,7 @@ abstract class CallbackStorage extends AbstractStorage
     {
         $method = 'getinitialized_'.$name;
         if (method_exists($this, $method)) {
-            return true;
+            return $this->$method();
         }
         $method = 'get_'.$name;
         if (method_exists($this, $method)) {
