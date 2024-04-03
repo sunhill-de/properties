@@ -23,5 +23,20 @@ class SampleCallbackStorage extends CallbackStorage
     {
         $this->sample_integer = $value;
     }
-        
+    
+    protected $sample_array = ['ABC', 'DEF'];
+    
+    public function get_sample_array($index)
+    {
+        return $this->sample_array[$index];    
+    }
+    
+    public function set_sample_array($index, $value)
+    {
+        if (is_null($index)) {
+            $this->sample_array[] = $value;   
+        } else {
+            $this->sample_array[$index] = $value;
+        }
+    }
 }
