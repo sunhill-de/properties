@@ -19,6 +19,7 @@ use Sunhill\Properties\Facades\Properties;
 use Sunhill\Properties\Storage\AbstractStorage;
 use Sunhill\Properties\Properties\Exceptions\StorageAlreadySetException;
 use Sunhill\Properties\Storage\StaticStorage;
+use Ramsey\Collection\AbstractArray;
 
 class RecordProperty extends AbstractProperty implements \Iterator
 {
@@ -265,13 +266,21 @@ class RecordProperty extends AbstractProperty implements \Iterator
         return $this;
     }
     
+    protected function dispatchGetElement(AbstractProperty $element)
+    {
+        if (is_a($element, AbstractArrayProperty::class)) {
+            return $element;
+        }
+        return $element->getValue();        
+    }
+    
     public function __get(string $name)
     {
         if (!$this->hasElement($name) && !$this->handleUnkownRead($name)) {            
             throw new PropertyDoesntExistException("The property '$name' doesnt exist.");
         }
         if (isset($this->elements[$name])) {
-            return $this->elements[$name]->getValue();
+            return $this->dispatchGetElement($this->elements[$name]);
         }
         foreach ($this->traits as $trait) {
             if ($trait->hasElement($name)) {
