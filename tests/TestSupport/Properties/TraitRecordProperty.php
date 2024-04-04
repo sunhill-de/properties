@@ -9,7 +9,9 @@ class TraitRecordProperty extends RecordProperty
     protected function initializeElements()
     {
         $this->addElement('ownelement1', new SimpleCharProperty());
-        $this->addElement('ownrecord', new NonAbstractRecordProperty());
+        $record = new NonAbstractRecordProperty();
+        $record->setName('child');
+        $this->addElement('ownrecord', $record);
         $this->addTrait(new NonAbstractRecordProperty());
     }   
     

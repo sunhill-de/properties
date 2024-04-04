@@ -161,6 +161,18 @@ class RecordProperty extends AbstractProperty implements \Iterator
         $this->doAddTrait($element);
         return $element;
     }
+   
+    public function getOwningRecord(string $name)
+    {
+        if (isset($this->elements[$name])) {
+            return $this;
+        }
+        foreach ($this->traits as $trait) {
+            if ($owner = $trait->getOwningRecord($name)) {
+                return $owner;
+            }
+        }
+    }
     
     /**
      * constructor just calls initializeElements()
@@ -274,6 +286,11 @@ class RecordProperty extends AbstractProperty implements \Iterator
         return $element->getValue();        
     }
     
+    protected function getTraitValue($trait, string $name)
+    {
+        return $trait->$name;    
+    }
+    
     public function __get(string $name)
     {
         if (!$this->hasElement($name) && !$this->handleUnkownRead($name)) {            
@@ -284,7 +301,7 @@ class RecordProperty extends AbstractProperty implements \Iterator
         }
         foreach ($this->traits as $trait) {
             if ($trait->hasElement($name)) {
-                return $trait->$name;
+                return $this->getTraitValue($trait, $name);
             }
         }
     }
@@ -292,6 +309,11 @@ class RecordProperty extends AbstractProperty implements \Iterator
     protected function handleUnkownRead(string $name)
     {
         return false;    
+    }
+    
+    protected function setTraitValue($trait, string $name, $value)
+    {
+        $trait->$name = $value;    
     }
     
     public function __set(string $name, $value)
@@ -305,7 +327,7 @@ class RecordProperty extends AbstractProperty implements \Iterator
         }
         foreach ($this->traits as $trait) {
             if ($trait->hasElement($name)) {
-                $trait->$name = $value;
+                $this->setTraitValue($trait, $name, $value);
                 return;
             }
         }

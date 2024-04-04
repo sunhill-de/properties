@@ -72,10 +72,16 @@ test('has elements', function (string $element, bool $has_it = true) {
     } else {
         expect($test->hasElement($element))->not->toBeTrue();        
     }
-    expect($test->hasElement('elementA'))->toBeTrue();
-    expect($test->hasElement('nonexisting'))->toBeFalse();
 })->with([
     'A own property'=>['ownelement1',true],
     'A trait property'=>['elementA',true],
     'A non existing property'=>['nonexisting',false]    
 ]);
+
+test('getOwningRecord() works as expected', function($element,$expect) {
+    $test = new TraitRecordProperty();
+    $test->setName('owner');
+    expect($test->getOwningRecord($element)->getName())->toBe($expect);    
+})->with([['ownelement1','owner'],['elementA','']]);
+
+
