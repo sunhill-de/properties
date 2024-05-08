@@ -88,12 +88,26 @@ test('get name of property pass', function () {
 });
 
 test('get name of property fail', function () {
-    $this->expectException(PropertyNotRegisteredException::class);
-
     $test = new PropertiesManager();
     $test->registerProperty(NonAbstractProperty::class);
 
     $test->getNameOfProperty('nonexisting');
+})->throws(PropertyNotRegisteredException::class);
+
+test('property has method pass', function()
+{
+    $test = new PropertiesManager();
+    $test->registerProperty(NonAbstractProperty::class);
+    
+    expect($test->propertyHasMethod('NonAbstractProperty','setName'))->toBe(true);
+});
+
+test('property has method fail', function()
+{
+    $test = new PropertiesManager();
+    $test->registerProperty(NonAbstractProperty::class);
+    
+    expect($test->propertyHasMethod('NonAbstractProperty','nonexistantmethod'))->toBe(false);
 });
 
 test('register unit', function () {

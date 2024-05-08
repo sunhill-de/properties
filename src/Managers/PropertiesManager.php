@@ -156,6 +156,19 @@ class PropertiesManager
         $key = $this->searchOrThrow($property);
         return $key;        
     }
+
+    /**
+     * Testss if the given property has a method with the given name
+     * 
+     * @param unknown $property
+     * @param unknown $method
+     * @return boolean
+     */
+    public function propertyHasMethod($property, $method)
+    {
+        $namespace = $this->getNamespaceOfProperty($property);
+        return method_exists($namespace, $method);
+    }
     
     /**
      * Stores the currently registered units.
