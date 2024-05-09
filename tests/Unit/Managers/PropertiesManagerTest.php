@@ -110,6 +110,15 @@ test('property has method fail', function()
     expect($test->propertyHasMethod('NonAbstractProperty','nonexistantmethod'))->toBe(false);
 });
 
+test('createProperty() works', function()  
+{
+    $test = new PropertiesManager();
+    $test->registerProperty(NonAbstractProperty::class);
+    
+    $help = $test->createProperty('NonAbstractProperty');
+    expect(is_a($help,NonAbstractProperty::class))->toBe(true);
+});
+
 test('register unit', function () {
     $test = new PropertiesManager();
     $test->registerUnit('test_name','test_unit', 'test_group', 'test_basic');

@@ -160,6 +160,12 @@ class PropertiesManager
         return method_exists($namespace, $method);
     }
     
+    public function createProperty($property)
+    {
+        $namespace = $this->getNamespaceOfProperty($property);
+        return new $namespace();
+    }
+    
     /**
      * Stores the currently registered units.
      *
