@@ -28,4 +28,5 @@ Homestead.json
 /.settings/
 *.lock
 .buildpath
+DEADJOE
 /tests/temp/*
