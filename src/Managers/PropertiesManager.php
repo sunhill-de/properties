@@ -17,16 +17,6 @@
  */
 namespace Sunhill\Properties\Managers;
 
-use Sunhill\Properties\Facades\Storage;
-use Sunhill\Properties\Query\BasicQuery;
-use Sunhill\Properties\Managers\Exceptions\InvalidAttributeIDException;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
-use Sunhill\Properties\Properties\Exceptions\InvalidNameException;
-use Sunhill\Properties\Managers\Exceptions\InvalidTypeException;
-use Sunhill\Properties\Managers\Exceptions\NotAnORMClassException;
-use Sunhill\Properties\Facades\Classes;
 use Sunhill\Properties\Managers\Exceptions\PropertyClassDoesntExistException;
 use Sunhill\Properties\Properties\AbstractProperty;
 use Sunhill\Properties\Managers\Exceptions\GivenClassNotAPropertyException;
