@@ -7,35 +7,41 @@ use Sunhill\Properties\Objects\ObjectDescriptor;
 use Sunhill\Properties\Facades\Properties;
 use Sunhill\Properties\Types\TypeInteger;
 use Sunhill\Properties\Objects\Exceptions\MethodNotDefinedException;
+use Sunhill\Properties\Properties\RecordProperty;
+use Sunhill\Properties\Properties\AbstractProperty;
 
 uses(TestCase::class);
 
-test('Object descriptor calls property manager', function()
+test('Object descriptor calls back record methods', function()
 {
-    $test = new ObjectDescriptor();
-    Properties::shouldReceive('propertyExists')->once()->with('integer')->andReturn(true);
-    Properties::shouldReceive('propertyHasMethod')->once()->with('integer','setName')->andReturn(true);
-    Properties::shouldReceive('propertyHasMethod')->once()->with('integer','setMinimum')->andReturn(true);
-    Properties::shouldReceive('propertyHasMethod')->once()->with('integer','setMaximum')->andReturn(true);
-    $test->integer('testint')->setMinimum(10)->setMaximum(20);
-    expect($test->testint->name)->toBe('testint');
-    expect($test->testint->setMimimum)->toBe(10);
-    expect($test->testint->setMaximum)->toBe(20);
+    $property = \Mockery::mock(AbstractProperty::class);
+    $property->shouldReceive('setMinimum')->with(10)->once();
+    $record = \Mockery::mock(RecordProperty::class);
+    $record->shouldReceive('appendElement')->once()->with('testint','integer')->andReturn($property);
+    
+    $test = new ObjectDescriptor($record);    
+    $test->integer('testint')->setMinimum(10);
 });
 
-test('Object descriptor calls own methods', function()
+test('Object descriptor embed calls record methods', function()
 {
-    $test = new ObjectDescriptor();
-    Properties::shouldReceive('propertyExists')->once()->with('integer')->andReturn(true);
-    Properties::shouldReceive('propertyHasMethod')->once()->with('integer','embed')->andReturn(false);
-    $test->integer('testint')->embed();
-    expect($test->testint->inclusion)->toBe('embedded');
+    $property = \Mockery::mock(AbstractProperty::class);
+    $property->shouldReceive('setMinimum')->with(10)->once();
+    $record = \Mockery::mock(RecordProperty::class);
+    $record->shouldReceive('embedElement')->once()->with('testint','integer')->andReturn($property);
+    
+    $test = new ObjectDescriptor($record);
+    $test->embed('integer','testint')->setMinimum(10);
 });
 
-it('raises exception when neither property method nor own method exist', function()
+test('Object descriptor include calls record methods', function()
 {
-    $test = new ObjectDescriptor();
-    Properties::shouldReceive('propertyExists')->once()->with('integer')->andReturn(true);
-    Properties::shouldReceive('propertyHasMethod')->once()->with('integer','setNonexisting')->andReturn(false);
-    $test->integer('testint')->setNonexisting('something');
-})->throws(MethodNotDefinedException::class);
+    $property = \Mockery::mock(AbstractProperty::class);
+    $property->shouldReceive('setMinimum')->with(10)->once();
+    $record = \Mockery::mock(RecordProperty::class);
+    $record->shouldReceive('includeElement')->once()->with('testint','integer')->andReturn($property);
+    
+    $test = new ObjectDescriptor($record);
+    $test->include('integer','testint')->setMinimum(10);
+});
+
