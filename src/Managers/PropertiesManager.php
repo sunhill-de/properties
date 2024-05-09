@@ -160,6 +160,12 @@ class PropertiesManager
         return method_exists($namespace, $method);
     }
     
+    /**
+     * Creates a property of the given type
+     * 
+     * @param unknown $property
+     * @return unknown
+     */
     public function createProperty($property)
     {
         $namespace = $this->getNamespaceOfProperty($property);
