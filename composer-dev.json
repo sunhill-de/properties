@@ -29,12 +29,12 @@
                 ],
      "minimum-stability" : "dev",
      "require" : {
-                "laravel/framework" : "^10.0",
+                "laravel/framework" : "^11.0",
                 "sunhill/basic": "*",
                 "sunhill/pm":"*"
      },
      "require-dev" : {
-                "orchestra/testbench" : "^8.5",
+        "orchestra/testbench" : "^9.0",
         "pestphp/pest-plugin-laravel": "2.x-dev",
         "pestphp/pest": "^2.34",
         "pestphp/pest-plugin-drift": "^2.5",
