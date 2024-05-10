@@ -1,9 +1,10 @@
 <?php
 
 uses(\Sunhill\Properties\Tests\TestCase::class);
-use Sunhill\Properties\Tests\TestSupport\Properties\NonAbstractRecordProperty;
+
 use Sunhill\Properties\Tests\TestSupport\Properties\TraitRecordProperty;
 use Sunhill\Properties\Tests\TestSupport\Storages\TestAbstractIDStorage;
+
 test('write and read properties', function () {
     $test = new TraitRecordProperty();
     $storage = new TestAbstractIDStorage();    
@@ -51,7 +52,7 @@ test('get own element names', function () {
 test('get elements', function () {
     $test = new TraitRecordProperty();
 
-    $elements = $test->getElements();
+    $elements = $test->getElementValues();
 
     expect($elements[0]->getName())->toEqual('ownelement1');
     expect($elements[2]->getName())->toEqual('elementA');
@@ -60,7 +61,7 @@ test('get elements', function () {
 test('get own elements', function () {
     $test = new TraitRecordProperty();
 
-    $elements = $test->getOwnElements();
+    $elements = $test->getOwnElementValues();
 
     expect($elements[0]->getName())->toEqual('ownelement1');
 });

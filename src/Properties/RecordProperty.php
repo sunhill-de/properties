@@ -21,7 +21,7 @@ use Sunhill\Properties\Properties\Exceptions\StorageAlreadySetException;
 use Sunhill\Properties\Storage\StaticStorage;
 use Ramsey\Collection\AbstractArray;
 
-class RecordProperty extends AbstractProperty implements \Iterator
+class RecordProperty extends AbstractRecordProperty
 {
  
     /**
@@ -111,7 +111,7 @@ class RecordProperty extends AbstractProperty implements \Iterator
         $this->elements[$name] = $element;
     }
 
-    private function getElement($element): AbstractProperty
+    private function getElementProperty($element): AbstractProperty
     {
         if (is_string($element)) {
             $element = $this->processStringElement($element);
@@ -133,7 +133,7 @@ class RecordProperty extends AbstractProperty implements \Iterator
      */
     protected function addElement(string $name, $element): AbstractProperty
     {
-        $element = $this->getElement($element);
+        $element = $this->getElementProperty($element);
         $this->doAddElement($name, $element);
         return $element;    
     }
@@ -157,7 +157,7 @@ class RecordProperty extends AbstractProperty implements \Iterator
     
     protected function addTrait($element): AbstractProperty
     {
-        $element = $this->getElement($element);
+        $element = $this->getElementProperty($element);
         $this->doAddTrait($element);
         return $element;
     }
@@ -186,50 +186,7 @@ class RecordProperty extends AbstractProperty implements \Iterator
     {
         
     }
-    
-    public function getAccessType(): string
-    {
-        return 'record';
-    }
-    
-    /**
-     * A direct assign to a record property is always invalid
-     * {@inheritDoc}
-     * @see \Sunhill\Properties\Properties\AbstractProperty::isValid()
-     */
-    public function isValid($input): bool
-    {
-        return false;
-    }
-    
-// ****************************** Iterator **************************************
-    protected $current = 0;
-    
-    public function current(): mixed
-    {
-        return $this->elements[$this->key()];
-    }
-    
-    public function key(): mixed
-    {
-        return array_keys($this->elements)[$this->current];        
-    }
-    
-    public function next(): void
-    {
-        $this->current++;
-    }
-    
-    public function rewind(): void
-    {
-        $this->current = 0;
-    }
-    
-    public function valid(): bool
-    {
-        return $this->current < count($this->elements);
-    }
-    
+        
 // ************************ getElements ***********************************
     public function getElementNames()
     {
@@ -256,10 +213,24 @@ class RecordProperty extends AbstractProperty implements \Iterator
     
     public function getOwnElements()
     {
+        return $this->elements;
+    }
+    
+    public function getElementValues()
+    {
+        $result = $this->getOwnElementValues();
+        foreach ($this->traits as $trait) {
+            $result = array_merge($result, $trait->getElementValues());
+        }
+        return $result;    
+    }
+    
+    public function getOwnElementValues()
+    {
         return array_values($this->elements);
     }
     
-    public function hasElement(string $name)
+    public function hasElement(string $name): bool
     {
         if (isset($this->elements[$name])) {
             return true;
@@ -271,88 +242,33 @@ class RecordProperty extends AbstractProperty implements \Iterator
         }
         return false;    
     }
-    
-// ************************** transparent element handling *****************************
-    protected function doGetValue()
-    {
-        return $this;
-    }
-    
+  
     protected function dispatchGetElement(AbstractProperty $element)
     {
         if (is_a($element, AbstractArrayProperty::class)) {
             return $element;
         }
-        return $element->getValue();        
+        return $element->getValue();
     }
     
-    protected function getTraitValue($trait, string $name)
+    protected function getTraitElement($trait, string $name)
     {
-        return $trait->$name;    
+        return $trait->getElement($name);
     }
     
-    public function __get(string $name)
+    public function getElement(string $name): AbstractProperty
     {
-        if (!$this->hasElement($name) && !$this->handleUnkownRead($name)) {            
-            throw new PropertyDoesntExistException("The property '$name' doesnt exist.");
-        }
         if (isset($this->elements[$name])) {
-            return $this->dispatchGetElement($this->elements[$name]);
+            return $this->elements[$name];
         }
         foreach ($this->traits as $trait) {
             if ($trait->hasElement($name)) {
-                return $this->getTraitValue($trait, $name);
+                return $this->getTraitElement($trait, $name);
             }
-        }
+        }        
     }
-    
-    protected function handleUnkownRead(string $name)
-    {
-        return false;    
-    }
-    
-    protected function setTraitValue($trait, string $name, $value)
-    {
-        $trait->$name = $value;    
-    }
-    
-    public function __set(string $name, $value)
-    {
-        if (!$this->hasElement($name) && !$this->handleUnkownWrite($name, $value)) {
-            throw new PropertyDoesntExistException("The property '$name' doesnt exist.");
-        }
-        if (isset($this->elements[$name])) {
-            $this->elements[$name]->setValue($value);
-            return;
-        }
-        foreach ($this->traits as $trait) {
-            if ($trait->hasElement($name)) {
-                $this->setTraitValue($trait, $name, $value);
-                return;
-            }
-        }
-    }
-    
-    protected function handleUnkownWrite(string $name, $value)
-    {
-        return false;
-    }
-    
+        
 // ***************************** Infomarket *******************************************
-    /**
-     * Try to pass the request to a child element. If none is found return null
-     * @param string $name
-     * @param array $path
-     * @return NULL
-     */
-    protected function passItemRequest(string $name, array $path)
-    {
-        if ($this->hasElement($name)) {
-            return $this->elements[$name]->requestItem($path);
-        }
-        return parent::passItemRequest($name, $path);
-    }
-    
     public function static()
     {
         if (!is_null($this->storage)) {
