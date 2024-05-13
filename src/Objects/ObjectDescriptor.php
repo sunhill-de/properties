@@ -24,14 +24,14 @@ class ObjectDescriptor
         return $this->owner->appendElement($params[0], $name);
     }
     
-    public function embed(string $property, string $name): AbstractProperty
+    public function embed(string $property): AbstractProperty
     {
-        return $this->owner->embedElement($name, $property);
+        return $this->owner->embedElement($property);
     }
     
-    public function include(string $property, string $name): AbstractProperty
+    public function include(string $property): AbstractProperty
     {
-        return $this->owner->includeElement($name, $property);        
+        return $this->owner->includeElement($property);        
     }
     
 }

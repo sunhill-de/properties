@@ -28,10 +28,10 @@ test('Object descriptor embed calls record methods', function()
     $property = \Mockery::mock(AbstractProperty::class);
     $property->shouldReceive('setMinimum')->with(10)->once();
     $record = \Mockery::mock(RecordProperty::class);
-    $record->shouldReceive('embedElement')->once()->with('testint','integer')->andReturn($property);
+    $record->shouldReceive('embedElement')->once()->with('integer')->andReturn($property);
     
     $test = new ObjectDescriptor($record);
-    $test->embed('integer','testint')->setMinimum(10);
+    $test->embed('integer')->setMinimum(10);
 });
 
 test('Object descriptor include calls record methods', function()
@@ -39,9 +39,9 @@ test('Object descriptor include calls record methods', function()
     $property = \Mockery::mock(AbstractProperty::class);
     $property->shouldReceive('setMinimum')->with(10)->once();
     $record = \Mockery::mock(RecordProperty::class);
-    $record->shouldReceive('includeElement')->once()->with('testint','integer')->andReturn($property);
+    $record->shouldReceive('includeElement')->once()->with('integer')->andReturn($property);
     
     $test = new ObjectDescriptor($record);
-    $test->include('integer','testint')->setMinimum(10);
+    $test->include('integer')->setMinimum(10);
 });
 
