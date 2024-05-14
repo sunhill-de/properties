@@ -16,8 +16,8 @@ test('appendElement() works', function()
 {
     $test = new EmptyPersistantRecord();
     $integer = \Mockery::mock(TypeInteger::class);
-    $integer->shouldReceive('setOwner')->with($test)->andReturn($integer);
-    Properties::shouldReceive('getNamespaceOfProperty')->with('integer')->andReturn($integer);
+    $integer->shouldReceive('setOwner')->andReturn($integer);
+    Properties::shouldReceive('createProperty')->with('integer')->andReturn($integer);
     $test->appendElement('testint','integer');
     
     expect($test->hasElement('testint'))->toBe(true);
@@ -40,9 +40,9 @@ test('embedElement() works', function()
            ]
        );
     
-    Properties::shouldReceive('getNamespaceOfProperty')->with('integer')->andReturn($integer);
-    Properties::shouldReceive('getNamespaceOfProperty')->with('varchar')->andReturn($varchar);
-    Properties::shouldReceive('getNamespaceOfProperty')->with('TestRecord')->andReturn($record);
+    Properties::shouldReceive('createProperty')->with('integer')->andReturn($integer);
+    Properties::shouldReceive('createProperty')->with('varchar')->andReturn($varchar);
+    Properties::shouldReceive('createProperty')->with('TestRecord')->andReturn($record);
     
     $test->embedElement('TestRecord');
     
@@ -69,9 +69,9 @@ test('embedElement() fails with duplicate', function()
         ]
         );
     
-    Properties::shouldReceive('getNamespaceOfProperty')->with('integer')->andReturn($integer);
-    Properties::shouldReceive('getNamespaceOfProperty')->with('varchar')->andReturn($varchar);
-    Properties::shouldReceive('getNamespaceOfProperty')->with('TestRecord')->andReturn($record);
+    Properties::shouldReceive('createProperty')->with('integer')->andReturn($integer);
+    Properties::shouldReceive('createProperty')->with('varchar')->andReturn($varchar);
+    Properties::shouldReceive('createProperty')->with('TestRecord')->andReturn($record);
     
     $test->embedElement('TestRecord');
     $test->embedElement('TestRecord');    
@@ -82,7 +82,7 @@ test('embedElement() fails when called with wrong datatype', function()
     $test = new EmptyPersistantRecord();
     
     $integer = \Mockery::mock(TypeInteger::class);
-    Properties::shouldReceive('getNamespaceOfProperty')->with('integer')->andReturn($integer);
+    Properties::shouldReceive('createProperty')->with('integer')->andReturn($integer);
     
     $test->embedElement('integer');    
 })->throws(TypeCannotBeEmbeddedException::class);
@@ -104,9 +104,9 @@ test('includeElement() works', function()
         ]
         );
     
-    Properties::shouldReceive('getNamespaceOfProperty')->with('integer')->andReturn($integer);
-    Properties::shouldReceive('getNamespaceOfProperty')->with('varchar')->andReturn($varchar);
-    Properties::shouldReceive('getNamespaceOfProperty')->with('TestRecord')->andReturn($record);
+    Properties::shouldReceive('createProperty')->with('integer')->andReturn($integer);
+    Properties::shouldReceive('createProperty')->with('varchar')->andReturn($varchar);
+    Properties::shouldReceive('createProperty')->with('TestRecord')->andReturn($record);
     
     $test->includeElement('TestRecord');
     
@@ -133,9 +133,9 @@ test('includeElement() fails when already included', function()
         ]
         );
     
-    Properties::shouldReceive('getNamespaceOfProperty')->with('integer')->andReturn($integer);
-    Properties::shouldReceive('getNamespaceOfProperty')->with('varchar')->andReturn($varchar);
-    Properties::shouldReceive('getNamespaceOfProperty')->with('TestRecord')->andReturn($record);
+    Properties::shouldReceive('createProperty')->with('integer')->andReturn($integer);
+    Properties::shouldReceive('createProperty')->with('varchar')->andReturn($varchar);
+    Properties::shouldReceive('createProperty')->with('TestRecord')->andReturn($record);
     
     $test->includeElement('TestRecord');    
     $test->includeElement('TestRecord');
@@ -146,7 +146,7 @@ test('includeElement() fails when called with wrong datatype', function()
     $test = new EmptyPersistantRecord();
     
     $integer = \Mockery::mock(TypeInteger::class);
-    Properties::shouldReceive('getNamespaceOfProperty')->with('integer')->andReturn($integer);
+    Properties::shouldReceive('createProperty')->with('integer')->andReturn($integer);
     
     $test->embedElement('integer');    
 })->throws(TypeCannotBeEmbeddedException::class);
@@ -165,9 +165,9 @@ test('embedElement() fails when duplicate name', function()
             'testint'=>$integer,
         ]
         );
-    Properties::shouldReceive('getNamespaceOfProperty')->with('integer')->andReturn($integer);
-    Properties::shouldReceive('getNamespaceOfProperty')->with('varchar')->andReturn($varchar);
-    Properties::shouldReceive('getNamespaceOfProperty')->with('EmbedRecord')->andReturn($record1);
+    Properties::shouldReceive('createProperty')->with('integer')->andReturn($integer);
+    Properties::shouldReceive('createProperty')->with('varchar')->andReturn($varchar);
+    Properties::shouldReceive('createProperty')->with('EmbedRecord')->andReturn($record1);
     
     $test->appendElement('testint','integer');
     $test->embedElement('EmbedRecord');    
@@ -187,9 +187,9 @@ test('includeElement() fails when duplicate name', function()
             'testint'=>$integer,
         ]
         );
-    Properties::shouldReceive('getNamespaceOfProperty')->with('integer')->andReturn($integer);
-    Properties::shouldReceive('getNamespaceOfProperty')->with('varchar')->andReturn($varchar);
-    Properties::shouldReceive('getNamespaceOfProperty')->with('EmbedRecord')->andReturn($record1);
+    Properties::shouldReceive('createProperty')->with('integer')->andReturn($integer);
+    Properties::shouldReceive('createProperty')->with('varchar')->andReturn($varchar);
+    Properties::shouldReceive('createProperty')->with('EmbedRecord')->andReturn($record1);
     
     $test->appendElement('testint','integer');
     $test->includeElement('EmbedRecord');
@@ -217,16 +217,16 @@ test('getElement*() works', function()
             'charval2'=>$varchar
         ]
         );
-    Properties::shouldReceive('getNamespaceOfProperty')->with('integer')->andReturn($integer);
-    Properties::shouldReceive('getNamespaceOfProperty')->with('varchar')->andReturn($varchar);
-    Properties::shouldReceive('getNamespaceOfProperty')->with('EmbedRecord')->andReturn($record1);
-    Properties::shouldReceive('getNamespaceOfProperty')->with('IncludeRecord')->andReturn($record2);
+    Properties::shouldReceive('createProperty')->with('integer')->andReturn($integer);
+    Properties::shouldReceive('createProperty')->with('varchar')->andReturn($varchar);
+    Properties::shouldReceive('createProperty')->with('EmbedRecord')->andReturn($record1);
+    Properties::shouldReceive('createProperty')->with('IncludeRecord')->andReturn($record2);
     
     $test->appendElement('testint','integer');
     $test->embedElement('EmbedRecord');
     $test->embedElement('IncludeRecord');
 
-    $names = $test->getElemenmtNames();
+    $names = $test->getElementNames();
     sort($names);
     expect($names)->toBe(['charval1','charval2','intval1','intval2','testint']);
 });
