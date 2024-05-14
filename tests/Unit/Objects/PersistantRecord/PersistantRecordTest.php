@@ -9,6 +9,7 @@ use Sunhill\Properties\Properties\AbstractRecordProperty;
 use Sunhill\Properties\Types\TypeVarchar;
 use Sunhill\Properties\Objects\Exceptions\TypeAlreadyEmbeddedException;
 use Sunhill\Properties\Properties\Exceptions\DuplicateElementNameException;
+use Sunhill\Properties\Storage\AbstractStorage;
 
 uses(TestCase::class);
 
@@ -230,3 +231,12 @@ test('getElement*() works', function()
     sort($names);
     expect($names)->toBe(['charval1','charval2','intval1','intval2','testint']);
 });
+
+test('Method is passed to the storage', function($method) {
+     $storage = \Mockery::mock(AbstractStorage::class);
+     $storage->shouldReceive($method)->once()->andReturn(true);
+     $test = new EmptyPersistantRecord();
+     $test->setStorage($storage);
+     
+     $test->$method('dummy');
+})->with(['isDirty','commit','rollback','migrate','upgrade','degrade','query']);

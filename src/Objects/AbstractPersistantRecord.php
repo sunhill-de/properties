@@ -153,17 +153,37 @@ class AbstractPersistantRecord extends AbstractRecordProperty
     
     public function isDirty(): bool
     {
-        
+        return $this->getStorage()->isDirty();
     }
     
     public function commit()
     {
-        
+        return $this->getStorage()->commit();        
     }
     
     public function rollback()
     {
-        
+        return $this->getStorage()->rollback();        
+    }
+    
+    public function migrate()
+    {
+        return $this->getStorage()->migrate();
+    }
+    
+    public function upgrade(string $target_class)
+    {
+        return $this->getStorage()->upgrade($target_class);        
+    }
+    
+    public function degrade(string $target_class)
+    {
+        return $this->getStorage()->degrade($target_class);        
+    }
+    
+    public function query()
+    {
+        return $this->getStorage()->query();        
     }
 }
 
