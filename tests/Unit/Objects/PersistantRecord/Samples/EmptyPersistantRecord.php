@@ -8,9 +8,15 @@ use Sunhill\Properties\Objects\ObjectDescriptor;
 class EmptyPersistantRecord extends AbstractPersistantRecord
 {
     
-    protected function initializeProperties(ObjectDescriptor $descriptor)
+    protected static function initiaölizeProperties(ObjectDescriptor $descriptor)
     {
         
     }
     
+    public static $handle_inheritance = 'include';
+    
+    protected static function handleInheritance(): string
+    {
+        return self::$handle_inheritance;    
+    }
 }
