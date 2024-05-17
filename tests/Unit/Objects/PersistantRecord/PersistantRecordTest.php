@@ -19,7 +19,7 @@ test('appendElement() works', function()
     $integer = \Mockery::mock(TypeInteger::class);
     $integer->shouldReceive('setOwner')->andReturn($integer);
     Properties::shouldReceive('createProperty')->with('integer')->andReturn($integer);
-    $test->appendElement('testint','integer');
+    $test->appendElement('testint','integer','teststorage');
     
     expect($test->hasElement('testint'))->toBe(true);
 });

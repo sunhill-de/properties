@@ -19,4 +19,12 @@ class EmptyPersistantRecord extends AbstractPersistantRecord
     {
         return self::$handle_inheritance;    
     }
+
+    protected static function setupInfos()
+    {
+        static::addInfo('name', 'EmptyPersistantRecord');
+        static::addInfo('description', 'A base test class for an persitant record.', true);
+        static::addInfo('storage_id', 'teststorage');
+    }
+        
 }
