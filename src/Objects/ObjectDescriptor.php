@@ -11,9 +11,16 @@ class ObjectDescriptor
     
     protected $owner;
     
+    protected $source = '';
+    
     public function __construct($owner)
     {
         $this->owner = $owner;    
+    }
+    
+    public function setSourceStorage(string $source)
+    {
+        $this->source = $source;    
     }
     
     public function __call(string $name,$params)
@@ -21,7 +28,7 @@ class ObjectDescriptor
         if (!isset($params[0])) {
             throw new NameNotGivenException("The property '$name' has no name");
         }
-        return $this->owner->appendElement($params[0], $name);
+        return $this->owner->appendElement($params[0], $name, $this->source);
     }
     
     public function embed(string $property): AbstractProperty
@@ -31,7 +38,7 @@ class ObjectDescriptor
     
     public function include(string $property): AbstractProperty
     {
-        return $this->owner->includeElement($property);        
+        return $this->owner->includeElement($property, $this->source);        
     }
     
 }
