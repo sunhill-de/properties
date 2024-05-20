@@ -16,308 +16,192 @@ use Sunhill\Properties\Tests\Unit\Objects\PersistantRecord\Samples\GrandChildRec
 use Sunhill\Properties\Tests\Unit\Objects\PersistantRecord\Samples\EmptyChildRecord;
 use Sunhill\Properties\Tests\Unit\Objects\PersistantRecord\Samples\EmptyGrandChildRecord;
 use Sunhill\Properties\Properties\AbstractProperty;
+use Sunhill\Properties\Objects\ObjectDescriptor;
 
 uses(TestCase::class);
 
-test('Parent has element while including', function()
+test('Parent called initializeProperties() with include', function()
 {
-    Properties::shouldReceive('createProperty')->with('ParentRecord')->andReturn(new ParentRecord());
-    ParentRecord::$handle_inheritance = 'include';
-   $test = new ParentRecord();
-   
-   expect($test->hasElement('parentint'))->toBe(true);
-   expect($test->hasElement('nonexisting'))->toBe(false);
-   expect($test->hasElement('childvarchar'))->toBe(false);
-   expect($test->hasElement('grandchildfloat'))->toBe(false);
-});
+    $descriptor = \Mockery::mock(ObjectDescriptor::class);
+    $descriptor->shouldReceive('setSourceStorage')->once()->with('parentstorage');
+    Properties::shouldReceive('getHirachyOfRecord')->with(ParentRecord::class)->once()->andReturn([ParentRecord::class]);
+    Properties::shouldReceive('getStorageIDOfRecord')->with(ParentRecord::class)->once()->andReturn('parentstorage');    
+    Properties::shouldReceive('getObjectDescriptorForRecord')->andReturn($descriptor);
 
-test('Parent exports element while including', function()
-{
-    Properties::shouldReceive('createProperty')->with('ParentRecord')->andReturn(new ParentRecord());
     ParentRecord::$handle_inheritance = 'include';
+    ParentRecord::$called_parent = 0;
+    ChildRecord::$called_child = 0;
+    GrandChildRecord::$called_grandchild = 0;
     $test = new ParentRecord();
-    $elements = $test->exportElements();
-   
-    expect(isset($elements['parentrecords']))->toBe(true);
-    expect(isset($elements['parentrecords']['parentint']))->toBe(true);
-    expect($elements['parentrecords']['parentint'])->toBe('simple');
+    
+    expect(ParentRecord::$called_parent)->toBe(1);
 });
 
-test('Child has element while including', function()
+test('Child called initializeProperties() with include', function()
 {
-    Properties::shouldReceive('createProperty')->with('ParentRecord')->andReturn(new ParentRecord());
-    Properties::shouldReceive('createProperty')->with('ChildRecord')->andReturn(new ChildRecord());
+    $descriptor = \Mockery::mock(ObjectDescriptor::class);
+    $descriptor->shouldReceive('setSourceStorage')->twice();
+    Properties::shouldReceive('getHirachyOfRecord')->with(ChildRecord::class)->once()->andReturn([ChildRecord::class,ParentRecord::class]);
+    Properties::shouldReceive('getStorageIDOfRecord')->with(ChildRecord::class)->twice()->andReturn('childstorage');
+    Properties::shouldReceive('getObjectDescriptorForRecord')->andReturn($descriptor);
+    
     ParentRecord::$handle_inheritance = 'include';
+    ParentRecord::$called_parent = 0;
+    ChildRecord::$called_child = 0;
+    GrandChildRecord::$called_grandchild = 0;
     $test = new ChildRecord();
-    expect($test->hasElement('parentint'))->toBe(true);
-    expect($test->hasElement('childvarchar'))->toBe(true);
-    expect($test->hasElement('grandchildfloat'))->toBe(false);
-});
-
-test('Child exports element while including', function()
-{
-    Properties::shouldReceive('createProperty')->with('ParentRecord')->andReturn(new ParentRecord());
-    ParentRecord::$handle_inheritance = 'include';
-    Properties::shouldReceive('createProperty')->with('ChildRecord')->andReturn(new ChildRecord());
-    $test = new ChildRecord();
-    $elements = $test->exportElements();
     
-    expect(isset($elements['parentrecords']))->toBe(true);
-    expect(isset($elements['parentrecords']['parentint']))->toBe(true);
-    expect($elements['parentrecords']['parentint'])->toBe('simple');
-    expect(isset($elements['parentrecords']['childvarchar']))->toBe(true);
-    expect($elements['parentrecords']['childvarchar'])->toBe('simple');
+    expect(ParentRecord::$called_parent)->toBe(1);
+    expect(ChildRecord::$called_child)->toBe(1);
 });
 
-test('Empty child has element while including', function()
+test('EmptyChild called initializeProperties() with include', function()
 {
-    Properties::shouldReceive('createProperty')->with('ParentRecord')->andReturn(new ParentRecord());
-    Properties::shouldReceive('createProperty')->with('EmptyChildRecord')->andReturn(new EmptyChildRecord());
+    $descriptor = \Mockery::mock(ObjectDescriptor::class);
+    $descriptor->shouldReceive('setSourceStorage')->twice()->with('emptychildstorage');
+    Properties::shouldReceive('getHirachyOfRecord')->with(EmptyChildRecord::class)->once()->andReturn([EmptyChildRecord::class,ParentRecord::class]);
+    Properties::shouldReceive('getStorageIDOfRecord')->with(EmptyChildRecord::class)->twice()->andReturn('emptychildstorage');
+    Properties::shouldReceive('getObjectDescriptorForRecord')->andReturn($descriptor);
+    
     ParentRecord::$handle_inheritance = 'include';
+    ParentRecord::$called_parent = 0;
+    GrandChildRecord::$called_grandchild = 0;
     $test = new EmptyChildRecord();
-    expect($test->hasElement('parentint'))->toBe(true);
-    expect($test->hasElement('childvarchar'))->toBe(false);
-    expect($test->hasElement('grandchildfloat'))->toBe(false);
-});
-
-test('Empty child exports element while including', function()
-{
-    Properties::shouldReceive('createProperty')->with('ParentRecord')->andReturn(new ParentRecord());
-    Properties::shouldReceive('createProperty')->with('EmptyChildRecord')->andReturn(new EmptyChildRecord());
-    ParentRecord::$handle_inheritance = 'include';
-    $test = new EmptyChildRecord();
-    $elements = $test->exportElements();
     
-    expect(isset($elements['parentrecords']))->toBe(true);
-    expect(isset($elements['parentrecords']['parentint']))->toBe(true);
-    expect($elements['parentrecords']['parentint'])->toBe('simple');
+    expect(ParentRecord::$called_parent)->toBe(1);
 });
 
-test('Grandchild has element while including', function()
+test('GrandChild called initializeProperties() with include', function()
 {
-    Properties::shouldReceive('createProperty')->with('ParentRecord')->andReturn(new ParentRecord());
-    Properties::shouldReceive('createProperty')->with('ChildRecord')->andReturn(new ChildRecord());
-    Properties::shouldReceive('createProperty')->with('GrandChildRecord')->andReturn(new GrandChildRecord());
+    $descriptor = \Mockery::mock(ObjectDescriptor::class);
+    $descriptor->shouldReceive('setSourceStorage')->with('grandchildstorage');
+    Properties::shouldReceive('getHirachyOfRecord')->with(GrandChildRecord::class)->once()->andReturn([GrandChildRecord::class,ChildRecord::class,ParentRecord::class]);
+    Properties::shouldReceive('getStorageIDOfRecord')->with(GrandChildRecord::class)->andReturn('grandchildstorage');
+    Properties::shouldReceive('getObjectDescriptorForRecord')->andReturn($descriptor);
+    
     ParentRecord::$handle_inheritance = 'include';
+    ParentRecord::$called_parent = 0;
+    ChildRecord::$called_child = 0;
+    GrandChildRecord::$called_grandchild = 0;
     $test = new GrandChildRecord();
-    expect($test->hasElement('parentint'))->toBe(true);
-    expect($test->hasElement('childvarchar'))->toBe(true);
-    expect($test->hasElement('grandchildfloat'))->toBe(true);
-});
-
-test('Grandchild exports element while including', function()
-{
-    Properties::shouldReceive('createProperty')->with('ParentRecord')->andReturn(new ParentRecord());
-    Properties::shouldReceive('createProperty')->with('ChildRecord')->andReturn(new ChildRecord());
-    Properties::shouldReceive('createProperty')->with('GrandChildRecord')->andReturn(new GrandChildRecord());
-    ParentRecord::$handle_inheritance = 'include';
-    $test = new GrandChildRecord();
-    $elements = $test->exportElements();
     
-    expect(isset($elements['parentrecords']))->toBe(true);
-    expect(isset($elements['parentrecords']['parentint']))->toBe(true);
-    expect($elements['parentrecords']['parentint'])->toBe('simple');
-    expect(isset($elements['parentrecords']['childvarchar']))->toBe(true);
-    expect($elements['parentrecords']['childvarchar'])->toBe('simple');
-    expect(isset($elements['parentrecords']['grandchildfloat']))->toBe(true);
-    expect($elements['parentrecords']['grandchildfloat'])->toBe('simple');
+    expect(ParentRecord::$called_parent)->toBe(1);
+    expect(ChildRecord::$called_child)->toBe(1);
+    expect(GrandChildRecord::$called_grandchild)->toBe(1);
 });
 
-test('Empty Grandchild has element while including', function()
+test('EmptyGrandChild called initializeProperties() with include', function()
 {
-    Properties::shouldReceive('createProperty')->with('ParentRecord')->andReturn(new ParentRecord());
-    Properties::shouldReceive('createProperty')->with('EmptyChildRecord')->andReturn(new EmptyChildRecord());
-    Properties::shouldReceive('createProperty')->with('EmptyGrandChildRecord')->andReturn(new EmptyGrandChildRecord());
-    ParentRecord::$handle_inheritance = 'include';
-    $test = new EmptyGrandChildRecord();
-    expect($test->hasElement('parentint'))->toBe(true);
-    expect($test->hasElement('childvarchar'))->toBe(false);
-    expect($test->hasElement('grandchildfloat'))->toBe(true);
-});
-
-test('Empty grandchild exports element while including', function()
-{
-    Properties::shouldReceive('createProperty')->with('ParentRecord')->andReturn(new ParentRecord());
-    Properties::shouldReceive('createProperty')->with('EmptyChildRecord')->andReturn(new EmptyChildRecord());
-    Properties::shouldReceive('createProperty')->with('EmptyGrandChildRecord')->andReturn(new EmptyGrandChildRecord());
-    ParentRecord::$handle_inheritance = 'include';
-    $test = new EmptyGrandChildRecord();
-    $elements = $test->exportElements();
+    $descriptor = \Mockery::mock(ObjectDescriptor::class);
+    $descriptor->shouldReceive('setSourceStorage')->with('emptygrandchildstorage');
+    Properties::shouldReceive('getHirachyOfRecord')->with(EmptyGrandChildRecord::class)->once()->andReturn([EmptyGrandChildRecord::class,EmptyChildRecord::class,ParentRecord::class]);
+    Properties::shouldReceive('getStorageIDOfRecord')->with(EmptyGrandChildRecord::class)->andReturn('emptygrandchildstorage');
+    Properties::shouldReceive('getObjectDescriptorForRecord')->andReturn($descriptor);
     
-    expect(isset($elements['parentrecords']))->toBe(true);
-    expect(isset($elements['parentrecords']['parentint']))->toBe(true);
-    expect($elements['parentrecords']['parentint'])->toBe('simple');
-    expect(isset($elements['parentrecords']['grandchildfloat']))->toBe(true);
-    expect($elements['parentrecords']['grandchildfloat'])->toBe('simple');
+    ParentRecord::$handle_inheritance = 'include';
+    ParentRecord::$called_parent = 0;
+    EmptyGrandChildRecord::$called_emptygrandchild = 0;
+    $test = new EmptyGrandChildRecord();
+    
+    expect(ParentRecord::$called_parent)->toBe(1);
+    expect(EmptyGrandChildRecord::$called_emptygrandchild)->toBe(1);
 });
 
-test('Parent has element while embedding', function()
+test('Parent called initializeProperties() with embed', function()
 {
-    Properties::shouldReceive('createProperty')->with('ParentRecord')->andReturn(new ParentRecord());
-    Properties::shouldReceive('createProperty')->with('ChildRecord')->andReturn(new ChildRecord());
-    Properties::shouldReceive('createProperty')->with('GrandChildRecord')->andReturn(new GrandChildRecord());
-    Properties::shouldReceive('createProperty')->with('EmptyChildRecord')->andReturn(new EmptyChildRecord());
-    Properties::shouldReceive('createProperty')->with('EmptyGrandChildRecord')->andReturn(new EmptyGrandChildRecord());
+    $descriptor = \Mockery::mock(ObjectDescriptor::class);
+    $descriptor->shouldReceive('setSourceStorage')->once()->with('parentstorage');
+    Properties::shouldReceive('getHirachyOfRecord')->with(ParentRecord::class)->once()->andReturn([ParentRecord::class]);
+    Properties::shouldReceive('getStorageIDOfRecord')->with(ParentRecord::class)->once()->andReturn('parentstorage');
+    Properties::shouldReceive('getObjectDescriptorForRecord')->andReturn($descriptor);
+    
     ParentRecord::$handle_inheritance = 'embed';
+    ParentRecord::$called_parent = 0;
+    ChildRecord::$called_child = 0;
+    GrandChildRecord::$called_grandchild = 0;
     $test = new ParentRecord();
-    expect($test->hasElement('parentint'))->toBe(true);
-    expect($test->hasElement('nonexisting'))->toBe(false);
-    expect($test->hasElement('childvarchar'))->toBe(false);
-    expect($test->hasElement('grandchildfloat'))->toBe(false);
-});
-
-test('parent exports element while embedding', function()
-{
-    Properties::shouldReceive('createProperty')->with('ParentRecord')->andReturn(new ParentRecord());
-    Properties::shouldReceive('createProperty')->with('ChildRecord')->andReturn(new ChildRecord());
-    Properties::shouldReceive('createProperty')->with('GrandChildRecord')->andReturn(new GrandChildRecord());
-    Properties::shouldReceive('createProperty')->with('EmptyChildRecord')->andReturn(new EmptyChildRecord());
-    Properties::shouldReceive('createProperty')->with('EmptyGrandChildRecord')->andReturn(new EmptyGrandChildRecord());
-    ParentRecord::$handle_inheritance = 'embed';
-    $test = new ParentRecord();
-    $elements = $test->exportElements();
     
-    expect(isset($elements['parentrecords']))->toBe(true);
-    expect(isset($elements['parentrecords']['parentint']))->toBe(true);
-    expect($elements['parentrecords']['parentint'])->toBe('simple');
+    expect(ParentRecord::$called_parent)->toBe(1);
 });
 
-test('Child has element while embedding', function()
+test('Child called initializeProperties() with embed', function()
 {
-    Properties::shouldReceive('createProperty')->with('ParentRecord')->andReturn(new ParentRecord());
-    Properties::shouldReceive('createProperty')->with('ChildRecord')->andReturn(new ChildRecord());
-    Properties::shouldReceive('createProperty')->with('GrandChildRecord')->andReturn(new GrandChildRecord());
-    Properties::shouldReceive('createProperty')->with('EmptyChildRecord')->andReturn(new EmptyChildRecord());
-    Properties::shouldReceive('createProperty')->with('EmptyGrandChildRecord')->andReturn(new EmptyGrandChildRecord());
+    $descriptor = \Mockery::mock(ObjectDescriptor::class);
+    $descriptor->shouldReceive('setSourceStorage')->with('childstorage')->once();
+    $descriptor->shouldReceive('setSourceStorage')->with('parentstorage')->once();
+    Properties::shouldReceive('getHirachyOfRecord')->with(ChildRecord::class)->once()->andReturn([ChildRecord::class,ParentRecord::class]);
+    Properties::shouldReceive('getStorageIDOfRecord')->with(ChildRecord::class)->once()->andReturn('childstorage');
+    Properties::shouldReceive('getStorageIDOfRecord')->with(ParentRecord::class)->once()->andReturn('parentstorage');
+    Properties::shouldReceive('getObjectDescriptorForRecord')->andReturn($descriptor);
+    
     ParentRecord::$handle_inheritance = 'embed';
+    ParentRecord::$called_parent = 0;
+    ChildRecord::$called_child = 0;
+    GrandChildRecord::$called_grandchild = 0;
     $test = new ChildRecord();
-    expect($test->hasElement('parentint'))->toBe(true);
-    expect($test->hasElement('childvarchar'))->toBe(true);
-    expect($test->hasElement('grandchildfloat'))->toBe(false);
-});
-
-test('child exports element while embedding', function()
-{
-    Properties::shouldReceive('createProperty')->with('ParentRecord')->andReturn(new ParentRecord());
-    Properties::shouldReceive('createProperty')->with('ChildRecord')->andReturn(new ChildRecord());
-    Properties::shouldReceive('createProperty')->with('GrandChildRecord')->andReturn(new GrandChildRecord());
-    Properties::shouldReceive('createProperty')->with('EmptyChildRecord')->andReturn(new EmptyChildRecord());
-    Properties::shouldReceive('createProperty')->with('EmptyGrandChildRecord')->andReturn(new EmptyGrandChildRecord());
-    ParentRecord::$handle_inheritance = 'embed';
-    $test = new ChildRecord();
-    $elements = $test->exportElements();
     
-    expect(isset($elements['parentrecords']))->toBe(true);
-    expect(isset($elements['parentrecords']['parentint']))->toBe(true);
-    expect($elements['parentrecords']['parentint'])->toBe('simple');
-    expect(isset($elements['childrecords']))->toBe(true);
-    expect(isset($elements['childrecords']['childvarchar']))->toBe(true);
-    expect($elements['childrecords']['childvarchar'])->toBe('simple');
+    expect(ParentRecord::$called_parent)->toBe(1);
+    expect(ChildRecord::$called_child)->toBe(1);
 });
 
-
-test('Empty child has element while embedding', function()
+test('EmptyChild called initializeProperties() with embed', function()
 {
-    Properties::shouldReceive('createProperty')->with('ParentRecord')->andReturn(new ParentRecord());
-    Properties::shouldReceive('createProperty')->with('ChildRecord')->andReturn(new ChildRecord());
-    Properties::shouldReceive('createProperty')->with('GrandChildRecord')->andReturn(new GrandChildRecord());
-    Properties::shouldReceive('createProperty')->with('EmptyChildRecord')->andReturn(new EmptyChildRecord());
-    Properties::shouldReceive('createProperty')->with('EmptyGrandChildRecord')->andReturn(new EmptyGrandChildRecord());
+    $descriptor = \Mockery::mock(ObjectDescriptor::class);
+    $descriptor->shouldReceive('setSourceStorage')->with('emptychildstorage')->once();
+    $descriptor->shouldReceive('setSourceStorage')->with('parentstorage')->once();
+    Properties::shouldReceive('getHirachyOfRecord')->with(EmptyChildRecord::class)->once()->andReturn([EmptyChildRecord::class,ParentRecord::class]);
+    Properties::shouldReceive('getStorageIDOfRecord')->with(EmptyChildRecord::class)->once()->andReturn('emptychildstorage');
+    Properties::shouldReceive('getStorageIDOfRecord')->with(ParentRecord::class)->once()->andReturn('parentstorage');
+    Properties::shouldReceive('getObjectDescriptorForRecord')->andReturn($descriptor);
+    
     ParentRecord::$handle_inheritance = 'embed';
+    ParentRecord::$called_parent = 0;
+    GrandChildRecord::$called_grandchild = 0;
     $test = new EmptyChildRecord();
-    expect($test->hasElement('parentint'))->toBe(true);
-    expect($test->hasElement('childvarchar'))->toBe(false);
-    expect($test->hasElement('grandchildfloat'))->toBe(false);
-});
-
-test('Empty child exports element while embedding', function()
-{
-    Properties::shouldReceive('createProperty')->with('ParentRecord')->andReturn(new ParentRecord());
-    Properties::shouldReceive('createProperty')->with('ChildRecord')->andReturn(new ChildRecord());
-    Properties::shouldReceive('createProperty')->with('GrandChildRecord')->andReturn(new GrandChildRecord());
-    Properties::shouldReceive('createProperty')->with('EmptyChildRecord')->andReturn(new EmptyChildRecord());
-    Properties::shouldReceive('createProperty')->with('EmptyGrandChildRecord')->andReturn(new EmptyGrandChildRecord());
-    ParentRecord::$handle_inheritance = 'embed';
-    $test = new EmptyChildRecord();
-    $elements = $test->exportElements();
     
-    expect(isset($elements['parentrecords']))->toBe(true);
-    expect(isset($elements['parentrecords']['parentint']))->toBe(true);
-    expect($elements['parentrecords']['parentint'])->toBe('simple');
-    expect(isset($elements['childrecords']))->toBe(true);
+    expect(ParentRecord::$called_parent)->toBe(1);
 });
 
-
-test('Grandchild has element while embedding', function()
+test('GrandChild called initializeProperties() with embed', function()
 {
-    Properties::shouldReceive('createProperty')->with('ParentRecord')->andReturn(new ParentRecord());
-    Properties::shouldReceive('createProperty')->with('ChildRecord')->andReturn(new ChildRecord());
-    Properties::shouldReceive('createProperty')->with('GrandChildRecord')->andReturn(new GrandChildRecord());
-    Properties::shouldReceive('createProperty')->with('EmptyChildRecord')->andReturn(new EmptyChildRecord());
-    Properties::shouldReceive('createProperty')->with('EmptyGrandChildRecord')->andReturn(new EmptyGrandChildRecord());
+    $descriptor = \Mockery::mock(ObjectDescriptor::class);
+    $descriptor->shouldReceive('setSourceStorage')->with('childstorage')->once();
+    $descriptor->shouldReceive('setSourceStorage')->with('parentstorage')->once();
+    $descriptor->shouldReceive('setSourceStorage')->with('grandchildstorage')->once();
+    Properties::shouldReceive('getHirachyOfRecord')->with(GrandChildRecord::class)->once()->andReturn([GrandChildRecord::class,ChildRecord::class,ParentRecord::class]);
+    Properties::shouldReceive('getStorageIDOfRecord')->with(ParentRecord::class)->andReturn('parentstorage');
+    Properties::shouldReceive('getStorageIDOfRecord')->with(ChildRecord::class)->andReturn('childstorage');
+    Properties::shouldReceive('getStorageIDOfRecord')->with(GrandChildRecord::class)->andReturn('grandchildstorage');
+    Properties::shouldReceive('getObjectDescriptorForRecord')->andReturn($descriptor);
+    
     ParentRecord::$handle_inheritance = 'embed';
+    ParentRecord::$called_parent = 0;
+    ChildRecord::$called_child = 0;
+    GrandChildRecord::$called_grandchild = 0;
     $test = new GrandChildRecord();
-    expect($test->hasElement('parentint'))->toBe(true);
-    expect($test->hasElement('childvarchar'))->toBe(true);
-    expect($test->hasElement('grandchildfloat'))->toBe(true);
-});
-
-test('grandchild exports element while embedding', function()
-{
-    Properties::shouldReceive('createProperty')->with('ParentRecord')->andReturn(new ParentRecord());
-    Properties::shouldReceive('createProperty')->with('ChildRecord')->andReturn(new ChildRecord());
-    Properties::shouldReceive('createProperty')->with('GrandChildRecord')->andReturn(new GrandChildRecord());
-    Properties::shouldReceive('createProperty')->with('EmptyChildRecord')->andReturn(new EmptyChildRecord());
-    Properties::shouldReceive('createProperty')->with('EmptyGrandChildRecord')->andReturn(new EmptyGrandChildRecord());
-    ParentRecord::$handle_inheritance = 'embed';
-    $test = new GrandChildRecord();
-    $elements = $test->exportElements();
     
-    expect(isset($elements['parentrecords']))->toBe(true);
-    expect(isset($elements['parentrecords']['parentint']))->toBe(true);
-    expect($elements['parentrecords']['parentint'])->toBe('simple');
-    expect(isset($elements['childrecords']))->toBe(true);
-    expect(isset($elements['childrecords']['childvarchar']))->toBe(true);
-    expect($elements['childrecords']['childvarchar'])->toBe('simple');
-    expect(isset($elements['grandchildrecords']))->toBe(true);
-    expect(isset($elements['grandchildrecords']['grandchildfloat']))->toBe(true);
-    expect($elements['grandchildrecords']['grandchildfloat'])->toBe('simple');
+    expect(ParentRecord::$called_parent)->toBe(1);
+    expect(ChildRecord::$called_child)->toBe(1);
+    expect(GrandChildRecord::$called_grandchild)->toBe(1);
 });
 
-
-test('Empty Grandchild has element while embedding', function()
+test('EmptyGrandChild called initializeProperties() with embed', function()
 {
-    Properties::shouldReceive('createProperty')->with('ParentRecord')->andReturn(new ParentRecord());
-    Properties::shouldReceive('createProperty')->with('ChildRecord')->andReturn(new ChildRecord());
-    Properties::shouldReceive('createProperty')->with('GrandChildRecord')->andReturn(new GrandChildRecord());
-    Properties::shouldReceive('createProperty')->with('EmptyChildRecord')->andReturn(new EmptyChildRecord());
-    Properties::shouldReceive('createProperty')->with('EmptyGrandChildRecord')->andReturn(new EmptyGrandChildRecord());
-    ParentRecord::$handle_inheritance = 'embed';
-    $test = new EmptyGrandChildRecord();
-    expect($test->hasElement('parentint'))->toBe(true);
-    expect($test->hasElement('childvarchar'))->toBe(false);
-    expect($test->hasElement('grandchildfloat'))->toBe(true);
-});
-
-test('Empty grandchild exports element while embedding', function()
-{
-    Properties::shouldReceive('createProperty')->with('ParentRecord')->andReturn(new ParentRecord());
-    Properties::shouldReceive('createProperty')->with('ChildRecord')->andReturn(new ChildRecord());
-    Properties::shouldReceive('createProperty')->with('GrandChildRecord')->andReturn(new GrandChildRecord());
-    Properties::shouldReceive('createProperty')->with('EmptyChildRecord')->andReturn(new EmptyChildRecord());
-    Properties::shouldReceive('createProperty')->with('EmptyGrandChildRecord')->andReturn(new EmptyGrandChildRecord());
-    ParentRecord::$handle_inheritance = 'embed';
-    $test = new EmptyGrandChildRecord();
-    $elements = $test->exportElements();
+    $descriptor = \Mockery::mock(ObjectDescriptor::class);
+    $descriptor->shouldReceive('setSourceStorage')->with('emptychildstorage')->once();
+    $descriptor->shouldReceive('setSourceStorage')->with('parentstorage')->once();
+    $descriptor->shouldReceive('setSourceStorage')->with('emptygrandchildstorage')->once();
+    Properties::shouldReceive('getHirachyOfRecord')->with(EmptyGrandChildRecord::class)->once()->andReturn([EmptyGrandChildRecord::class,EmptyChildRecord::class,ParentRecord::class]);
+    Properties::shouldReceive('getStorageIDOfRecord')->with(ParentRecord::class)->andReturn('parentstorage');
+    Properties::shouldReceive('getStorageIDOfRecord')->with(EmptyChildRecord::class)->andReturn('emptychildstorage');
+    Properties::shouldReceive('getStorageIDOfRecord')->with(EmptyGrandChildRecord::class)->andReturn('emptygrandchildstorage');
+    Properties::shouldReceive('getObjectDescriptorForRecord')->andReturn($descriptor);
     
-    expect(isset($elements['parentrecords']))->toBe(true);
-    expect(isset($elements['parentrecords']['parentint']))->toBe(true);
-    expect($elements['parentrecords']['parentint'])->toBe('simple');
-    expect(isset($elements['childrecords']))->toBe(true);
-    expect(isset($elements['childrecords']['childvarchar']))->toBe(false);
-    expect(isset($elements['grandchildrecords']))->toBe(true);
-    expect(isset($elements['grandchildrecords']['grandchildfloat']))->toBe(true);
-    expect($elements['grandchildrecords']['grandchildfloat'])->toBe('simple');
+    ParentRecord::$handle_inheritance = 'embed';
+    ParentRecord::$called_parent = 0;
+    EmptyGrandChildRecord::$called_emptygrandchild = 0;
+    $test = new EmptyGrandChildRecord();
+    
+    expect(ParentRecord::$called_parent)->toBe(1);
+    expect(EmptyGrandChildRecord::$called_emptygrandchild)->toBe(1);
 });
-
-

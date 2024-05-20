@@ -11,22 +11,11 @@ use Sunhill\Properties\Types\TypeVarchar;
 class EmptyGrandChildRecord extends EmptyChildRecord
 {
 
-    public function __construct()
-    {
-        $float = \Mockery::mock(TypeVarchar::class);
-        $float->shouldReceive('setOwner')->andReturn($float);
-        Properties::shouldReceive('createProperty')->with('float')->andReturn($float);
-        $this->appendElement('grandchildfloat','float');        
+    public static $called_emptygrandchild = 0;
     
-        // Call constructor afterwars to get getInheritedElement() to work
-        AbstractPersistantRecord::__construct();
-    }
-    
-    protected static function setupInfos()
+    protected static function initializeProperties(ObjectDescriptor $descriptor)
     {
-        static::addInfo('name', 'EmptyGrandChildRecord');
-        static::addInfo('description', 'A test abstract record as grandchild.', true);
-        static::addInfo('storage_id', 'emptygrandchildrecords');
+        static::$called_emptygrandchild++;
     }
     
 }

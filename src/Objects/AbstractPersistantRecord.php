@@ -30,18 +30,59 @@ class AbstractPersistantRecord extends AbstractRecordProperty
     {
     }
 
+    /**
+     * Returns if the current record has an own initalizeProperties() method
+     * 
+     * @param string $source
+     * @return bool
+     */
     protected function hasOwnProperties(string $source): bool
     {
-        return true;    
+        $reflector = new \ReflectionMethod($source, 'initializeProperties');
+        return ($reflector->getDeclaringClass()->getName() == $source); 
     }
 
+    /**
+     * Returns the name of the storage that belongs to the according record class
+     * 
+     * @param string $class
+     * @return string
+     */
+    protected function getSourceStorage(string $class): string
+    {
+        if (static::handleInheritance() == 'include') {
+            return Properties::getStorageIDOfRecord($this::class);   
+        } else {
+            return Properties::getStorageIDOfRecord($class);
+        }
+    }
+    
+    /**
+     * Collects all properties from the given class and adds it to the current record. Sets the storage_id depending
+     * on the result of getSourceStorage()
+     * 
+     * @param string $class
+     * @param ObjectDescriptor $descriptor
+     */
+    protected function collectPropertiesFrom(string $class, ObjectDescriptor $descriptor)
+    {
+        $descriptor->setSourceStorage($this->getSourceStorage($class));
+        if ($this->hasOwnProperties($class)) {
+            $class::initializeProperties($descriptor);
+        }
+    }
+    
     /**
      * This method is called by the construtor and calls for every member of the ancestor list the method
      * initializeProperties
      */
     protected function collectProperties()
     {
-        
+        $descriptor = Properties::getObjectDescriptorForRecord($this);
+        $hirachy = Properties::getHirachyOfRecord($this::class);
+        foreach ($hirachy as $ancestor) {
+            $this->collectPropertiesFrom($ancestor, $descriptor);
+        }
     }
     
     public function getElementNames()
@@ -212,34 +253,73 @@ class AbstractPersistantRecord extends AbstractRecordProperty
         return $this->getStorage()->isDirty();
     }
     
+    /**
+     * Passes the request to the according storage and tells it to commit any changes made to it.
+     * 
+     * {@inheritDoc}
+     * @see \Sunhill\Properties\Properties\AbstractProperty::commit()
+     */
     public function commit()
     {
         return $this->getStorage()->commit();        
     }
     
+    /**
+     * Passes the request to the according stoarga and tells it to rollback any changes that was made to it since
+     * the last commit.
+     * 
+     * {@inheritDoc}
+     * @see \Sunhill\Properties\Properties\AbstractProperty::rollback()
+     */
     public function rollback()
     {
         return $this->getStorage()->rollback();        
     }
     
+    /**
+     * Does all necessary steps to initialize a storage for the persistant record. That could be for exampke create 
+     * database tables, etc. The request is passed to the according storage
+     * 
+     * @return unknown
+     */
     public function migrate()
     {
         return $this->getStorage()->migrate();
     }
     
+    /**
+     * Upgrades the persistant record to a higher record of the same hirachy path. The request is passed to the
+     * according storage
+     * 
+     * @param string $target_class
+     * @return unknown
+     */
     public function upgrade(string $target_class)
     {
         return $this->getStorage()->upgrade($target_class);        
     }
     
+    /**
+     * Degrades the persistant record to a lower record of the same hirachy path. The request is passed to the
+     * according storage
+     * 
+     * @param string $target_class
+     * @return unknown
+     */
     public function degrade(string $target_class)
     {
         return $this->getStorage()->degrade($target_class);        
     }
     
+    /**
+     * Passes a query request to the according storage
+     * 
+     * @return unknown
+     */
     public function query()
     {
         return $this->getStorage()->query();        
     }
+    
 }
 
