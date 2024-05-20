@@ -24,6 +24,9 @@ use Sunhill\Properties\Managers\Exceptions\PropertyNameAlreadyRegisteredExceptio
 use Sunhill\Properties\Managers\Exceptions\PropertyNotRegisteredException;
 use Sunhill\Properties\Managers\Exceptions\UnitNameAlreadyRegisteredException;
 use Sunhill\Properties\Managers\Exceptions\UnitNotRegisteredException;
+use Sunhill\Properties\Objects\AbstractPersistantRecord;
+use Sunhill\Properties\Objects\ObjectDescriptor;
+use Sunhill\Properties\Properties\AbstractRecordProperty;
 
 /**
  * The PropertiesManager is accessed via the Properties facade. It's a singelton class
@@ -300,5 +303,42 @@ class PropertiesManager
         return $calc($value);        
     }
     
+    /**
+     * Helper function for AbstractPersistantRecord. Implemented for unit testability
+     * 
+     * @param unknown $record
+     * @return array
+     */
+    public function getHirachyOfRecord($record): array
+    {
+        $result = [];
+        while ($record !== AbstractPersistantRecord::class) {
+            $result[] = $record;
+            $record = get_parent_class($record);
+        }
+        return $result;
+    }
+    
+    /**
+     * Helper function for AbstractPersistantRecord. Implemented for unit testability
+     * 
+     * @param unknown $record
+     * @return string
+     */
+    public function getStorageIDOfRecord($record): string
+    {
+        return $record::getInfo('storage_id');
+    }
+
+    /**
+     * Helper function for AbstractPersistantRecord. Implemented for unit testability
+     * 
+     * @param AbstractPersistantRecord $record
+     * @return ObjectDescriptor
+     */
+    public function getObjectDescriptorForRecord(AbstractPersistantRecord $record): ObjectDescriptor
+    {
+        return new ObjectDescriptor($record);
+    }
 }
  

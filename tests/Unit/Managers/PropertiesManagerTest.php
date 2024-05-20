@@ -10,7 +10,9 @@ use Sunhill\Properties\Managers\Exceptions\PropertyNameAlreadyRegisteredExceptio
 use Sunhill\Properties\Managers\Exceptions\UnitNameAlreadyRegisteredException;
 use Sunhill\Properties\Managers\Exceptions\UnitNotRegisteredException;
 use Sunhill\Properties\Tests\TestSupport\Properties\NonAbstractProperty;
-
+use Sunhill\Properties\Tests\Unit\Managers\Samples\First;
+use Sunhill\Properties\Tests\Unit\Managers\Samples\Second;
+use Sunhill\Properties\Tests\Unit\Managers\Samples\Third;
 
 test('register property', function () {
     $test = new PropertiesManager();
@@ -189,3 +191,31 @@ test('calculate from basic', function () {
         function($input) { return $input / 2; } );
     expect($test->calculateFromBasic('test_name', 4))->toEqual(2);
 });
+
+test('getHirarchOfRecord() works with first', function()
+{
+    $test = new PropertiesManager();
+    $list = $test->getHirachyOfRecord(First::class);
+    expect($list)->toBe([First::class]);
+});
+    
+test('getHirarchOfRecord() works with second', function()
+{
+    $test = new PropertiesManager();
+    $list = $test->getHirachyOfRecord(Second::class);
+    expect($list)->toBe([Second::class,First::class]);
+});
+
+test('getHirarchOfRecord() works with third', function()
+{
+    $test = new PropertiesManager();
+    $list = $test->getHirachyOfRecord(Third::class);
+    expect($list)->toBe([Third::class,Second::class,First::class]);
+});
+
+test('getStorageID() calls getInfo()', function() 
+{
+   $test = new PropertiesManager();
+   expect($test->getStorageIDOfRecord(First::class))->toBe('teststorage');
+});
+
