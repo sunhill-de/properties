@@ -27,6 +27,8 @@ use Sunhill\Properties\Managers\Exceptions\UnitNotRegisteredException;
 use Sunhill\Properties\Objects\AbstractPersistantRecord;
 use Sunhill\Properties\Objects\ObjectDescriptor;
 use Sunhill\Properties\Properties\AbstractRecordProperty;
+use Sunhill\Properties\Storage\AbstractStorage;
+use Sunhill\Properties\Objects\Mysql\MysqlStorage;
 
 /**
  * The PropertiesManager is accessed via the Properties facade. It's a singelton class
@@ -339,6 +341,14 @@ class PropertiesManager
     public function getObjectDescriptorForRecord(AbstractPersistantRecord $record): ObjectDescriptor
     {
         return new ObjectDescriptor($record);
+    }
+    
+    public function getStorageForProperty($property): AbstractStorage
+    {
+        $namespace = $this->getNamespaceOfProperty($property);
+        if (is_a($namespace, AbstractPersistantRecord::class,true)) {
+            return new MysqlStorage($property);
+        }
     }
 }
  

@@ -13,6 +13,7 @@ use Sunhill\Properties\Tests\TestSupport\Properties\NonAbstractProperty;
 use Sunhill\Properties\Tests\Unit\Managers\Samples\First;
 use Sunhill\Properties\Tests\Unit\Managers\Samples\Second;
 use Sunhill\Properties\Tests\Unit\Managers\Samples\Third;
+use Sunhill\Properties\Storage\AbstractStorage;
 
 test('register property', function () {
     $test = new PropertiesManager();
@@ -219,3 +220,9 @@ test('getStorageID() calls getInfo()', function()
    expect($test->getStorageIDOfRecord(First::class))->toBe('teststorage');
 });
 
+test('getStorageForProperty()', function()
+{
+    $test = new PropertiesManager();
+    $test->registerProperty(First::class);
+    expect(is_a($test->getStorageForProperty(First::class), AbstractStorage::class))->toBe(true);    
+});
