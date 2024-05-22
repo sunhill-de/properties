@@ -58,7 +58,7 @@ abstract class AbstractArrayProperty extends AbstractProperty implements \ArrayA
             return $this->setAllowedElementTypes_name($type_or_types);
         }
         if (is_scalar($type_or_types)) {
-            throw new InvalidParameterException("The passed non scalar parameter could not be processed.");
+            throw new InvalidParameterException("The passed scalar parameter could not be processed.");
         } else {
             throw new InvalidParameterException("The passed non scalar parameter could not be processed.");
         }        
@@ -80,6 +80,11 @@ abstract class AbstractArrayProperty extends AbstractProperty implements \ArrayA
         return $this;
     }
  
+    public function getAllowedElementTypes(): array
+    {
+        return $this->allowed_element_types;    
+    }
+    
     protected function doOffsetSet(mixed $offset, mixed $value): void
     {
         $this->getStorage()->setIndexedValue($this->getName(), $offset, $this->formatForStorage($this->formatFromInput($value)));        
