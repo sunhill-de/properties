@@ -75,10 +75,45 @@ abstract class AbstractPersistantStorage extends AbstractIDStorage
         return $id;
     }
     
+    /**
+     * Returns all the previous values that are modified meanwhile
+     * 
+     * @return array
+     */
+    protected function collectShadowValues(array $storage_descriptor): array
+    {
+        $result = [];
+        foreach ($this->shadows as $key => $value) {
+            if (array_key_exists($key, $storage_descriptor)) {
+                $result[$key] = $value;
+            }
+        }
+        return $result;
+    }
+    
+    /**
+     * Returns all new values that are modified meanwhile
+     * 
+     * @return array
+     */
+    protected function collectNewValues(array $storage_descriptor): array
+    {
+        $result = [];
+        foreach ($this->shadows as $key => $value) {
+            if (array_key_exists($key, $storage_descriptor)) {
+                $result[$key] = $this->getValue($key);
+            }
+        }
+        return $result;        
+    }
+    
     protected function updateToStorage(int $id, string $storage_id, array $storage_descriptor, AbstractStorageAtom $atom)
     {
-        $values = $this->collectValues($storage_descriptor);
-        $atom->updateRecord($id, $storage_id, $storage_descriptor, $values);        
+        $oldvalues = $this->collectShadowValues($storage_descriptor);
+        $newvalues = $this->collectNewValues($storage_descriptor);
+        if (!empty($newvalues)) {
+            $atom->updateRecord($id, $storage_id, $storage_descriptor, $oldvalues, $newvalues);
+        }
     }
     
     protected function updateToID(int $id)

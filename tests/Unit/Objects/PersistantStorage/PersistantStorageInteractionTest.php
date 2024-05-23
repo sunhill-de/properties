@@ -42,7 +42,7 @@ test('simple store test', function()
     $test->commit();
 });
 
-test('simple update test', function()
+test('simple update test, changed', function()
 {
     $record = \Mockery::mock(AbstractPersistantRecord::class);
     $record->shouldReceive('exportElements')->atLeast(1)->andReturn([
@@ -50,13 +50,31 @@ test('simple update test', function()
     ]);
     $atom = \Mockery::mock(AbstractStorageAtom::class);
     $atom->shouldReceive('updateDirectory')->once()->with(1);
-    $atom->shouldReceive('updateRecord')->once()->with(1, 'simplestorage',['simplefield'=>123]);
+    $atom->shouldReceive('updateRecord')->once()->with(1, 'simplestorage',['simplefield'=>new TypeInteger()],['simplefield'=>123],['simplefield'=>321]);
+    
+    $test = new DummyPersistantStorage($record);
+    $test->atom = $atom;
+    setProtectedProperty($test, 'shadows', ['simplefield'=>123]);
+    $test->setValue('simplefield', 321);
+    $test->setID(1);
+    $test->commit();    
+});
+
+test('simple update test, unchanged', function()
+{
+    $record = \Mockery::mock(AbstractPersistantRecord::class);
+    $record->shouldReceive('exportElements')->atLeast(1)->andReturn([
+        'simplestorage'=>['simplefield'=>new TypeInteger()]
+    ]);
+    $atom = \Mockery::mock(AbstractStorageAtom::class);
+    $atom->shouldReceive('updateDirectory')->never();
+    $atom->shouldReceive('updateRecord')->never();
     
     $test = new DummyPersistantStorage($record);
     $test->atom = $atom;
     $test->setValue('simplefield', 321);
     $test->setID(1);
-    $test->commit();    
+    $test->commit();
 });
 
 test('simple delete test', function()
@@ -125,7 +143,7 @@ test('complex store test', function()
     $test->commit();
 });
 
-test('complex update test', function()
+test('complex update test some change', function()
 {
     $integer = \Mockery::mock(TypeInteger::class);
     $array = \Mockery::mock(ArrayProperty::class);
@@ -139,14 +157,69 @@ test('complex update test', function()
     
     $atom = \Mockery::mock(AbstractStorageAtom::class);
     $atom->shouldReceive('updateDirectory')->once()->with(1);
-    $atom->shouldReceive('updateRecord')->once()->with(1, 'simplestorage',['simplefield'=>$integer,'simplearray'=>$array],['simplefield'=>123,'simplearray'=>[1,2,3]]);
-    $atom->shouldReceive('updateRecord')->once()->with(1, 'anotherstorage',['someinteger'=>$integer],['someinteger'=>234]);
+    $atom->shouldReceive('updateRecord')->once()->with(1, 'simplestorage',['simplefield'=>$integer,'simplearray'=>$array],['simplefield'=>321],['simplefield'=>123]);
     
     $test = new DummyPersistantStorage($record);
     $test->atom = $atom;
     $test->setValue('simplefield', 123);
     $test->setValue('someinteger', 234);
     $test->setValue('simplearray', [1,3,4]);
+    setProtectedProperty($test, 'shadows', ['simplefield'=>321]);
+    $test->setID(1);
+    
+    $test->commit();
+});
+
+test('complex update test array change', function()
+{
+    $integer = \Mockery::mock(TypeInteger::class);
+    $array = \Mockery::mock(ArrayProperty::class);
+    $array->shouldReceive('getAllowedElementTypes')->andReturn(TypeInteger::class);
+    
+    $record = \Mockery::mock(AbstractPersistantRecord::class);
+    $record->shouldReceive('exportElements')->atLeast(1)->andReturn([
+        'simplestorage'=>['simplefield'=>$integer,'simplearray'=>$array],
+        'anotherstorage'=>['someinteger'=>$integer]
+    ]);
+    
+    $atom = \Mockery::mock(AbstractStorageAtom::class);
+    $atom->shouldReceive('updateDirectory')->once()->with(1);
+    $atom->shouldReceive('updateRecord')->once()->with(1, 'simplestorage',['simplefield'=>$integer,'simplearray'=>$array],['simplearray'=>[2,3,4]],['simplearray'=>[1,3,4]]);
+    
+    $test = new DummyPersistantStorage($record);
+    $test->atom = $atom;
+    $test->setValue('simplefield', 123);
+    $test->setValue('someinteger', 234);
+    $test->setValue('simplearray', [1,3,4]);
+    setProtectedProperty($test, 'shadows', ['simplearray'=>[2,3,4]]);
+    $test->setID(1);
+    
+    $test->commit();
+});
+
+test('complex update test both storages change', function()
+{
+    $integer = \Mockery::mock(TypeInteger::class);
+    $array = \Mockery::mock(ArrayProperty::class);
+    $array->shouldReceive('getAllowedElementTypes')->andReturn(TypeInteger::class);
+    
+    $record = \Mockery::mock(AbstractPersistantRecord::class);
+    $record->shouldReceive('exportElements')->atLeast(1)->andReturn([
+        'simplestorage'=>['simplefield'=>$integer,'simplearray'=>$array],
+        'anotherstorage'=>['someinteger'=>$integer]
+    ]);
+    
+    $atom = \Mockery::mock(AbstractStorageAtom::class);
+    $atom->shouldReceive('updateDirectory')->once()->with(1);
+    $atom->shouldReceive('updateRecord')->once()->with(1, 'simplestorage',['simplefield'=>$integer,'simplearray'=>$array],['simplearray'=>[2,3,4]],['simplearray'=>[1,3,4]]);
+    $atom->shouldReceive('updateRecord')->once()->with(1, 'anotherstorage',['someinteger'=>$integer],['someinteger'=>321],['someinteger'=>432]);
+    
+    $test = new DummyPersistantStorage($record);
+    $test->atom = $atom;
+    $test->setValue('simplefield', 123);
+    $test->setValue('someinteger', 432);
+    $test->setValue('simplearray', [1,3,4]);
+    setProtectedProperty($test, 'shadows', ['simplearray'=>[2,3,4],'someinteger'=>321]);
     $test->setID(1);
     
     $test->commit();
