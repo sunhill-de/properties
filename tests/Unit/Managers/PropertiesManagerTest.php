@@ -224,5 +224,6 @@ test('getStorageForProperty()', function()
 {
     $test = new PropertiesManager();
     $test->registerProperty(First::class);
-    expect(is_a($test->getStorageForProperty(First::class), AbstractStorage::class))->toBe(true);    
+    $first = new First();
+    expect(is_a($test->getStorageForProperty($first), AbstractStorage::class))->toBe(true);    
 });
