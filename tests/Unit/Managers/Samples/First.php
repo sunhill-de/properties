@@ -21,5 +21,8 @@ class First extends AbstractPersistantRecord
         }
     }
     
-    
+    public static function handleInheritance(): string
+    {
+        return 'include';
+    }
 }
