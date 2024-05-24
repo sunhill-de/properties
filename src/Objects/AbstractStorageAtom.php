@@ -6,6 +6,7 @@ use Sunhill\Properties\Objects\Exceptions\StorageAtomTypeNotDefinedException;
 use Sunhill\Properties\Objects\Exceptions\IDNotFoundException;
 use Sunhill\Properties\Objects\Exceptions\InvalidPrefixCalledException;
 use Sunhill\Properties\Objects\Exceptions\InvalidPostfixCalledException;
+use Illuminate\Support\Str;
 
 abstract class AbstractStorageAtom
 {
@@ -19,7 +20,7 @@ abstract class AbstractStorageAtom
 
     public function __call($method, $params)
     {
-        if (!substr($method,0,strlen(static::$prefix)) == static::$prefix) {
+        if (!Str::startsWith($method, static::$prefix)) {
             throw new InvalidPrefixCalledException("The method '$method' has an invalid prefix.");
         }
         $postfix = substr($method,strlen(static::$prefix));
